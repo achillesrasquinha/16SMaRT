@@ -30,6 +30,8 @@ jobs:
 
           vdb-config --restore-defaults
 
+          vdb-config -i & read -t 3; kill $!
+
           fasterq-dump -h
 
           pip install -r requirements-dev.txt

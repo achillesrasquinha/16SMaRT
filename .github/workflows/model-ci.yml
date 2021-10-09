@@ -24,8 +24,10 @@ jobs:
           tar xzvf $HOME/sra-toolkit.tar.gz -C $HOME
           export PATH=$PATH:$HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64/bin
 
+          fasterq-dump -h
+
           pip install -r requirements-dev.txt
           python setup.py develop
       - name: Run Pipeline
         run: |
-          python -m geomeat.data.get_data
+          bpyutils -m geomeat.data.get_data

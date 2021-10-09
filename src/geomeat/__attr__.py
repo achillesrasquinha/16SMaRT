@@ -72,7 +72,7 @@ __version__                 = read(osp.join(pardir(__file__), "VERSION"))
 __build__                   = get_revision(pardir(__file__, 2), short = True, raise_err = False)
 __author__                  = "Rebecca Furbeck, Achilles Rasquinha"
 __email__                   = "rafurbeck@gmail.como"
-__description__             = "Meta Analysis for Geo Meat"
+__description__             = "A meta-analysis for meat across geographies."
 __keywords__                = ['meta', 'analysis', 'geo', 'meat']
 __url__                     = "1"
 __license__                 = "MIT License"

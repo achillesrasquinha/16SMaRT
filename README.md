@@ -3,7 +3,7 @@
   <h1>
       geomeat
   </h1>
-  <h4>Meta Analysis for Geo Meat</h4>
+  <h4>A meta-analysis for meat across geographies.</h4>
 </div>
 
 <p align="center">
@@ -59,7 +59,7 @@ Check out [installation](docs/source/installation.md) for more details.
 $ geomeat
 Usage: geomeat [OPTIONS] COMMAND [ARGS]...
 
-  Meta Analysis for Geo Meat
+  A meta-analysis for meat across geographies.
 
 Options:
   --version   Show the version and exit.

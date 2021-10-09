@@ -11,7 +11,7 @@ default_context:
   pypy: "y"
   travis: "n"
   appveyor: "n"
-  description: "Meta Analysis for Geo Meat"
+  description: "A meta-analysis for meat across geographies."
   author: "Rebecca Furbeck, Achilles Rasquinha"
   email: "rafurbeck@gmail.como"
   keywords: "meta analysis geo meat"

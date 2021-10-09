@@ -27,4 +27,4 @@ Release v\ |version|. (:ref:`Installation <installation>`)
 .. image:: https://img.shields.io/badge/donate-💵-f44336.svg?style=flat-square
     :target: https://paypal.me/achillesrasquinha
 
-Meta Analysis for Geo Meat
+A meta-analysis for meat across geographies.

@@ -9,4 +9,4 @@ def get_data():
     with open(path_data) as f:
         data  = csv.reader(f)
         for row in data:
-            print(row)
+            pass

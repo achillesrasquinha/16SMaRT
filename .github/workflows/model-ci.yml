@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 env:
   SRA_TOOLKIT_VERSION: "2.11.2"
+  PIP_ARGS: "--use-deprecated=legacy-resolver"
 
 jobs:
   train:
@@ -22,6 +23,8 @@ jobs:
           wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz
           tar xzvf $HOME/sra-toolkit.tar.gz -C $HOME
           export PATH=$PATH:$HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64/bin
+
+          
 
           pip install -r requirements-dev.txt
           python setup.py develop

@@ -1,4 +1,2 @@
-
 git+https://github.com/achillesrasquinha/bpyutils.git
-
 git+https://github.com/achillesrasquinha/deeply.git

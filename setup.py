@@ -33,7 +33,7 @@ def parse_requirements(filename, session = None):
         return line
 
     def check_line(line):
-        return line and not line.startswith("#")
+        return line and not line.startswith("#") and not line.startswith("git")
 
     return [
         FakeRequirement(sanitize_line(line)) for line in open(filename) if check_line(line)
@@ -73,8 +73,7 @@ def get_dependencies(type_ = None):
     
     return requirements
 
-PKGINFO    = get_package_info()
-
+PKGINFO = get_package_info()
 
 def remove_cache():
     userdir = osp.expanduser("~")

@@ -1,13 +1,14 @@
-FROM  python:3.9-alpine
+FROM  python:3.9
 
 LABEL maintainer=achillesrasquinha@gmail.com
 
 ENV GEOMEAT_PATH=/usr/local/src/geomeat
 
-RUN apk add --no-cache \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
         bash \
-        git \
-    && mkdir -p $GEOMEAT_PATH
+        git && \
+    mkdir -p $GEOMEAT_PATH
 
 COPY . $GEOMEAT_PATH
 COPY ./docker/entrypoint.sh /entrypoint.sh

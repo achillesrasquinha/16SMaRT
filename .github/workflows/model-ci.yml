@@ -3,7 +3,7 @@ name: Model CI
 on: [push, pull_request]
 
 env:
-  SRA_TOOLKIT_VERSION: "2.11.2"
+  SRA_TOOLKIT_VERSION: "2.9.5"
   PIP_ARGS: "--use-deprecated=legacy-resolver"
 
 jobs:
@@ -25,12 +25,11 @@ jobs:
           export PATH=$PATH:$HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64/bin
 
           wget https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi
-          
           export VDB_CONFIG=$HOME/.ncbi/default.kfg
 
-          vdb-config --restore-defaults
+          # vdb-config --restore-defaults
 
-          vdb-config -i & sleep 3; kill $!
+          # vdb-config -i & read -t 3; kill $!;
 
           fasterq-dump -h
 

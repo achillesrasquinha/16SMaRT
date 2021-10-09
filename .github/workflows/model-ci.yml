@@ -1,0 +1,23 @@
+name: Model CI
+
+on: [push, pull_request]
+
+jobs:
+  train:
+    name: Train
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/achillesrasquinha/dl
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Show ref
+        run: |
+          echo "Checking out $GITHUB_REF..."
+      - name: Install dependencies
+        run: |
+          pip install -r requirements-dev.txt
+          python setup.py develop
+      - name: Run Pipeline
+        run: |
+          python -m geomeat.data.get_data

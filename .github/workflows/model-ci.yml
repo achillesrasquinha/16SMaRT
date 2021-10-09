@@ -30,7 +30,7 @@ jobs:
 
           vdb-config --restore-defaults
 
-          vdb-config -i & read -t 3; kill $!
+          vdb-config -i & sleep 3; kill $!
 
           fasterq-dump -h
 

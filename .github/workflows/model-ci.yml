@@ -2,6 +2,9 @@ name: Model CI
 
 on: [push, pull_request]
 
+env:
+  SRA_TOOLKIT_VERSION: "2.11.2"
+
 jobs:
   train:
     name: Train
@@ -16,6 +19,12 @@ jobs:
           echo "Checking out $GITHUB_REF..."
       - name: Install dependencies
         run: |
+          wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz
+          tar xzvf $HOME/sra-toolkit.tar.gz
+          export PATH=$PATH:$HOME/sra-toolkit/bin
+
+          fastq-dump --help
+
           pip install -r requirements-dev.txt
           python setup.py develop
       - name: Run Pipeline

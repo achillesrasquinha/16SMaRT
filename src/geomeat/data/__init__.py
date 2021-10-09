@@ -1,2 +1,12 @@
+import os.path as osp
+import csv
+
+from geomeat.config import PATH
+
 def get_data():
-    pass
+    path_data = osp.join(PATH["DATA"], "data.csv")
+    
+    with open(path_data) as f:
+        data  = csv.reader(f)
+        for row in data:
+            print(row)

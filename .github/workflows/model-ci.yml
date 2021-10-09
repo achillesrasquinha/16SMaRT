@@ -3,7 +3,7 @@ name: Model CI
 on: [push, pull_request]
 
 env:
-  SRA_TOOLKIT_VERSION: "2.9.5"
+  SRA_TOOLKIT_VERSION: "2.9.6"
   PIP_ARGS: "--use-deprecated=legacy-resolver"
 
 jobs:

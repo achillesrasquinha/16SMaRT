@@ -44,7 +44,7 @@ jobs:
           python setup.py develop
       - name: Run Pipeline
         run: |
-          bpyutils -m geomeat.data.get_data
+          bpyutils -m geomeat.data.get_data -p "check=True"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:

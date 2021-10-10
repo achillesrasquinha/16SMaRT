@@ -19,7 +19,9 @@ RUN apt-get --allow-releaseinfo-change update && \
     wget -nv https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi && \
     export VDB_CONFIG=$HOME/.ncbi/default.kfg && \
     # FastQC
-    apt-get install -y --no-install-recommends fastqc && \
+    apt-get install -y --no-install-recommends \
+        openjdk-11-jre-headless \
+        fastqc && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64

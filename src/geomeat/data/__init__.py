@@ -4,10 +4,15 @@ from glob import glob
 from functools import partial
 
 from geomeat.config import PATH
-from bpyutils.util.types  import lmap
-from bpyutils.util.system import ShellEnvironment, makedirs, popen
-from geomeat.const import N_JOBS
+from geomeat.const  import N_JOBS
+from geomeat import __name__ as NAME
+
+from bpyutils.util.types   import lmap
+from bpyutils.util.system  import ShellEnvironment, makedirs, popen
+from bpyutils.util.environ import getenv
 from bpyutils import parallel
+
+_PREFIX = NAME.upper()
 
 def _fetch_sra_to_fastq(meta, output_dir):
     sra, layout = meta["sra"], meta["layout"]
@@ -26,6 +31,8 @@ def _fastq_quality_check(fastq_file, output_dir, fastqc_dir):
             threads = N_JOBS, out_dir = fastqc_dir, fastq_file = fastq_file))
 
 def get_data(check = False, data_dir = None):
+    data_dir   = data_dir or getenv("DATA_DIR", prefix = _PREFIX)
+    
     path_data  = osp.join(PATH["DATA"], "sample.csv" if check else "data.csv")
     output_dir = osp.abspath(data_dir or osp.join(PATH["CACHE"], "data"))
     makedirs(output_dir, exist_ok = True)

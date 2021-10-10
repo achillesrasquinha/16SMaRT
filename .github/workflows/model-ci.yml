@@ -10,7 +10,6 @@ env:
   PIP_ARGS: "--use-deprecated=legacy-resolver"
   GEOMEAT_JOBS: 16
   # system variables
-  PATH: $PATH:$HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64/bin
 
 jobs:
   train:
@@ -28,7 +27,7 @@ jobs:
         run: |
           wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz
           tar xzvf $HOME/sra-toolkit.tar.gz -C $HOME
-          export 
+          cp $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64/bin/* /usr/local/bin
 
           wget https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi
           export VDB_CONFIG=$HOME/.ncbi/default.kfg

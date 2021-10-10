@@ -30,7 +30,7 @@ def _fetch_sra_to_fastq(meta, output_dir):
 
 def _fastq_quality_check(fastq_file, output_dir, fastqc_dir):
     with ShellEnvironment(cwd = output_dir) as shell:
-        shell("fastqc --quiet --threads {threads} {fastq_file} -o {out_dir}".format(
+        shell("fastqc -q --threads {threads} {fastq_file} -o {out_dir}".format(
             threads = N_JOBS, out_dir = fastqc_dir, fastq_file = fastq_file))
 
 def get_data(check = False, data_dir = None):

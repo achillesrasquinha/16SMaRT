@@ -9,7 +9,6 @@ env:
   # package variables
   PIP_ARGS: "--use-deprecated=legacy-resolver"
   GEOMEAT_JOBS: 16
-  GEOMEAT_DATA_DIR: $HOME/data
   # system variables
 
 jobs:
@@ -44,9 +43,9 @@ jobs:
           python setup.py develop
       - name: Run Pipeline
         run: |
-          bpyutils -m geomeat.data.get_data -p "check=True" --verbose
+          bpyutils -m geomeat.data.get_data -p "check=True; data_dir=./data" --verbose
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: multiqc-output
-          path: $GEOMEAT_DATA_DIR/multiqc_report.html
+          path: ./data/multiqc_report.html

@@ -5,7 +5,7 @@ LABEL maintainer=achillesrasquinha@gmail.com
 ENV SRA_TOOLKIT_VERSION=2.9.6 \
     GEOMEAT_PATH=/usr/local/src/geomeat
 
-RUN apt-get update && \
+RUN apt-get --allow-releaseinfo-change update && \
     apt-get install -y --no-install-recommends \
         bash \
         git \

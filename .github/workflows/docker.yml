@@ -3,6 +3,10 @@ name: Docker
 on: [push, pull_request]
 
 env:
+  ENVIRONMENT: test
+  VERBOSE: true
+  TERM: xterm
+  
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_REGISTRY: ghcr.io
   DOCKER_USERNAME: ${{ github.actor }}

@@ -1,17 +1,15 @@
-FROM  python:3.9
+FROM  qiime2/core
 
 LABEL maintainer=achillesrasquinha@gmail.com
 
 ENV SRA_TOOLKIT_VERSION=2.9.6 \
-    QIIME_VERSION=2021.8 \
-    GEOMEAT_PATH=/usr/local/src/geomeat \
-    MINICONDA_PATH=/miniconda \
-    CONDA_ENV=geomeat-env
+    GEOMEAT_PATH=/usr/local/src/geomeat
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         bash \
-        git && \
+        git \
+        wget && \
     mkdir -p $GEOMEAT_PATH && \
     # SRA Toolkit configuration
     wget -nv https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz && \
@@ -24,21 +22,7 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends fastqc && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
-        $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 && \
-    # miniconda
-    mkdir -p $MINICONDA_PATH && \
-    wget -nv https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O $MINICONDA_PATH/miniconda.sh && \
-    bash $MINICONDA_PATH/miniconda.sh -bup $MINICONDA_PATH && \
-    ln -s $MINICONDA_PATH/bin/conda /usr/local/bin/conda && \
-    rm $MINICONDA_PATH/miniconda.sh && \
-    # qiime2
-    wget -nv https://data.qiime2.org/distro/core/qiime2-$QIIME_VERSION-py38-linux-conda.yml -O $HOME/qiime2.yml && \
-    conda env create --name $CONDA_ENV --file $HOME/qiime2.yml && \
-    echo "conda activate $CONDA_ENV" >> ~/.bashrc && \
-    rm $HOME/qiime2.yml
-
-SHELL ["/bin/bash", "--login", "-c"]
-
+        $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64
 COPY . $GEOMEAT_PATH
 COPY ./docker/entrypoint.sh /entrypoint.sh
 

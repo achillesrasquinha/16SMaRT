@@ -5,7 +5,8 @@ LABEL maintainer=achillesrasquinha@gmail.com
 ENV SRA_TOOLKIT_VERSION=2.9.6 \
     QIIME_VERSION=2021.8 \
     GEOMEAT_PATH=/usr/local/src/geomeat \
-    MINICONDA_PATH=/miniconda
+    MINICONDA_PATH=/miniconda \
+    CONDA_ENV=geomeat-env
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -32,9 +33,11 @@ RUN apt-get update && \
     rm $MINICONDA_PATH/miniconda.sh && \
     # qiime2
     wget -nv https://data.qiime2.org/distro/core/qiime2-$QIIME_VERSION-py38-linux-conda.yml -O $HOME/qiime2.yml && \
-    conda env create --name qiime2 --file $HOME/qiime2.yml && \
-    conda activate qiime2 && \
+    conda env create --name $CONDA_ENV --file $HOME/qiime2.yml && \
+    echo "conda activate $CONDA_ENV" >> ~/.bashrc && \
     rm $HOME/qiime2.yml
+
+SHELL ["/bin/bash", "--login", "-c"]
 
 COPY . $GEOMEAT_PATH
 COPY ./docker/entrypoint.sh /entrypoint.sh

@@ -18,7 +18,7 @@ def _fetch_sra_to_fastq(meta, output_dir):
     sra, layout = meta["sra"], meta["layout"]
 
     with ShellEnvironment(cwd = output_dir) as shell:
-        shell("prefetch {sra}".format(sra = sra))
+        shell("prefetch -O {out_dir} {sra}".format(out_dir = output_dir, sra = sra))
         shell("vdb-validate {dir}".format(dir = osp.join(output_dir, sra)))
 
         args = "--split-files" if layout == "paired" else "" 

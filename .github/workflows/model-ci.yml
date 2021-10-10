@@ -9,7 +9,7 @@ env:
   # package variables
   PIP_ARGS: "--use-deprecated=legacy-resolver"
   GEOMEAT_JOBS: 16
-  GEOMEAT_DATA_DIR: "$HOME/data"
+  GEOMEAT_DATA_DIR: $HOME/data
   # system variables
 
 jobs:

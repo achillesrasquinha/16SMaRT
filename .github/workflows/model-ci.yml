@@ -32,8 +32,6 @@ jobs:
           wget https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi
           export VDB_CONFIG=$HOME/.ncbi/default.kfg
 
-          echo "/repository/user/main/public/root = \"GEOMEAT_DATA_DIR\"" >> $VDB_CONFIG
-
           apt-get update && apt-get install -y --no-install-recommends fastqc
 
           wget https://github.com/FelixKrueger/TrimGalore/archive/$TRIM_GALORE_VERSION.tar.gz -O $HOME/trim-galore.tar.gz

@@ -20,13 +20,13 @@ def _fetch_sra_to_fastq(meta, output_dir):
     sra, layout = meta["sra"], meta["layout"]
 
     with ShellEnvironment(cwd = output_dir) as shell:
-        shell("prefetch -O {out_dir} {sra}".format(out_dir = output_dir, sra = sra))
-        print(os.listdir(output_dir))
-        shell("vdb-validate {dir}".format(dir = osp.join(output_dir, sra)))
+        sra_dir = osp.join(output_dir, sra)
+        shell("prefetch -O {out_dir} {sra}".format(out_dir = sra_dir, sra = sra))
+        shell("vdb-validate {dir}".format(dir = sra_dir))
 
         args = "--split-files" if layout == "paired" else "" 
         shell("fasterq-dump --threads {threads} --progress {args} {sra}".format(
-            threads = N_JOBS, args = args, sra = sra))
+            threads = N_JOBS, args = args, sra = sra), cwd = sra_dir)
 
 def _fastq_quality_check(fastq_file, output_dir, fastqc_dir):
     with ShellEnvironment(cwd = output_dir) as shell:

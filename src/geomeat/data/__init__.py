@@ -10,7 +10,9 @@ from geomeat import __name__ as NAME
 from bpyutils.util.types   import lmap
 from bpyutils.util.system  import ShellEnvironment, makedirs, popen
 from bpyutils.util.environ import getenv
-from bpyutils import parallel
+from bpyutils import parallel, log
+
+logger  = log.get_logger(name = __name__)
 
 _PREFIX = NAME.upper()
 
@@ -36,6 +38,8 @@ def get_data(check = False, data_dir = None):
     path_data  = osp.join(PATH["DATA"], "sample.csv" if check else "data.csv")
     output_dir = osp.abspath(data_dir or osp.join(PATH["CACHE"], "data"))
     makedirs(output_dir, exist_ok = True)
+
+    logger.info("Loading data into directory: %s" % output_dir)
     
     with open(path_data) as f:
         reader = csv.reader(f)

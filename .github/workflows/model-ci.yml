@@ -5,6 +5,7 @@ on: [push, pull_request]
 env:
   # ci variables
   SRA_TOOLKIT_VERSION: "2.9.6"
+  TRIM_GALORE_VERSION: "0.6.6"
   # package variables
   PIP_ARGS: "--use-deprecated=legacy-resolver"
   GEOMEAT_JOBS: 16
@@ -32,7 +33,12 @@ jobs:
           wget https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi
           export VDB_CONFIG=$HOME/.ncbi/default.kfg
 
+          echo "/repository/user/main/public/root = \"GEOMEAT_DATA_DIR\"" >> $VDB_CONFIG
+
           apt-get update && apt-get install -y --no-install-recommends fastqc
+
+          wget https://github.com/FelixKrueger/TrimGalore/archive/$TRIM_GALORE_VERSION.tar.gz -O $HOME/trim-galore.tar.gz
+          tar xvzf $HOME/trim-galore.tar.gz
 
           pip install -r requirements-dev.txt
           python setup.py develop

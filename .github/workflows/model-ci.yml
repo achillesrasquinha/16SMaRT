@@ -34,8 +34,8 @@ jobs:
 
           apt-get update && apt-get install -y --no-install-recommends fastqc
 
-          wget https://github.com/FelixKrueger/TrimGalore/archive/$TRIM_GALORE_VERSION.tar.gz -O $HOME/trim-galore.tar.gz
-          tar xvzf $HOME/trim-galore.tar.gz
+          # wget https://github.com/FelixKrueger/TrimGalore/archive/$TRIM_GALORE_VERSION.tar.gz -O $HOME/trim-galore.tar.gz
+          # tar xvzf $HOME/trim-galore.tar.gz
 
           pip install -r requirements-dev.txt
           python setup.py develop

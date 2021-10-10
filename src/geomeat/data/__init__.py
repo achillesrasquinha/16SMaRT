@@ -25,12 +25,12 @@ def _fetch_sra_to_fastq(meta, output_dir):
         shell("vdb-validate {dir}".format(dir = sra_dir))
 
         args = "--split-files" if layout == "paired" else "" 
-        shell("fasterq-dump --threads {threads} --progress {args} {sra}".format(
+        shell("fasterq-dump --threads {threads} {args} {sra}".format(
             threads = N_JOBS, args = args, sra = sra), cwd = sra_dir)
 
 def _fastq_quality_check(fastq_file, output_dir, fastqc_dir):
     with ShellEnvironment(cwd = output_dir) as shell:
-        shell("fastqc --threads {threads} {fastq_file} -o {out_dir}".format(
+        shell("fastqc --quiet --threads {threads} {fastq_file} -o {out_dir}".format(
             threads = N_JOBS, out_dir = fastqc_dir, fastq_file = fastq_file))
 
 def get_data(check = False, data_dir = None):
@@ -56,7 +56,7 @@ def get_data(check = False, data_dir = None):
                 )
             , data)
 
-    fastq_files = glob("%s/*.fastq" % output_dir)
+    fastq_files = glob("%s/**/*.fastq" % output_dir)
 
     fastqc_dir  = osp.join(output_dir, "fastqc")
     makedirs(fastqc_dir, exist_ok = True)

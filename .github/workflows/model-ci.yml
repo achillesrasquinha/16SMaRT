@@ -5,6 +5,10 @@ on: [push, pull_request]
 env:
   SRA_TOOLKIT_VERSION: "2.9.6"
   PIP_ARGS: "--use-deprecated=legacy-resolver"
+  
+  DATA_DIR: "$HOME/data"
+  
+  GEOMEAT_JOBS: 16
 
 jobs:
   train:
@@ -27,14 +31,15 @@ jobs:
           wget https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi
           export VDB_CONFIG=$HOME/.ncbi/default.kfg
 
-          # vdb-config --restore-defaults
-
-          # vdb-config -i & read -t 3; kill $!;
-
-          fasterq-dump -h
+          apt-get update && apt-get install -y --no-install-recommends fastqc
 
           pip install -r requirements-dev.txt
           python setup.py develop
       - name: Run Pipeline
         run: |
-          bpyutils -m geomeat.data.get_data
+          bpyutils -m geomeat.data.get_data -p "check=True; data_dir=$DATA_DIR"
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: multiqc-output
+          path: $DATA_DIR/multiqc_report.html

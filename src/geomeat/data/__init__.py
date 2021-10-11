@@ -1,8 +1,8 @@
 import os, os.path as osp
 import csv
-from glob import glob
 from functools import partial
 import gzip
+from posixpath import basename
 import shutil
 
 from geomeat.config  import PATH
@@ -10,9 +10,9 @@ from geomeat.const   import N_JOBS
 from geomeat._compat import iteritems
 from geomeat import __name__ as NAME
 
-from bpyutils.util._dict   import dict_from_list, AutoDict
+from bpyutils.util._dict   import dict_from_list, AutoDict, merge_dict
 from bpyutils.util.types   import lmap, lfilter
-from bpyutils.util.system  import ShellEnvironment, makedirs, popen, make_temp_dir
+from bpyutils.util.system  import ShellEnvironment, makedirs, popen, make_temp_dir, get_files
 from bpyutils.util.environ import getenv
 from bpyutils import parallel, log
 
@@ -89,8 +89,8 @@ def get_data(check = False, data_dir = None):
             )
         , data)
 
-    fastq_files = glob("%s/**/*.fastq" % data_dir)
-
+    fastq_files = get_files(data_dir, "*.fastq")
+    
     fastqc_dir  = osp.join(data_dir, "fastqc")
     makedirs(fastqc_dir, exist_ok = True)
 
@@ -123,7 +123,7 @@ def _get_qime_compat_format(basename):
         format_ = "_S001_L001_R1_001"
     return format_
 
-def preprocess_data(check = False, data_dir = None):
+def _convert_to_qza(check = False, data_dir = None, force = False):
     data_dir    =  get_data_dir(data_dir)
     study_group = AutoDict(list)
     extension   = ".fastq.gz"
@@ -138,7 +138,7 @@ def preprocess_data(check = False, data_dir = None):
         for d in data:
             sra_id  = d["sra"]
             sra_dir = osp.join(data_dir, sra_id)
-            sources = glob("%s/*%s" % (sra_dir, extension))
+            sources = get_files(sra_dir, "*%s" % extension)
 
             output_path = osp.join(sra_dir, "%s.qza" % sra_id)
 
@@ -154,5 +154,55 @@ def preprocess_data(check = False, data_dir = None):
                     shutil.copy2(source, target)
 
                 sample_data_type = "PairedEndSequencesWithQuality" if d["layout"] == "paired" else "SequencesWithQuality"
-                    
-                _fastq_to_qza(tmp_dir, output_path, sample_data_type)
+
+                if not osp.exists(output_path) or force:
+                    _fastq_to_qza(tmp_dir, output_path, sample_data_type)
+
+def _qiime_trim_qza(kwargs):
+    with ShellEnvironment() as shell:
+        shell("qiime cutadapt trim-paired \
+                --i-demultiplexed-sequences {input_path} \
+                --p-cores {jobs} \
+                --p-front-f {primer_f} \
+                --p-front-r {primer_r} \
+                --no-indels \
+                --o-trimmed-sequences {output_path}".format(**merge_dict(kwargs, dict(jobs = N_JOBS))))
+
+        input_path  = kwargs["output_path"]
+        basename, _ = osp.splitext(input_path)
+        output_path = "%s.qzv" % basename
+
+        shell("qiime demux summarize \
+                --i-data {input_path} \
+                --o-visualization {output_path}".format(
+            input_path  = input_path,
+            output_path = output_path
+        ))
+
+def _trim_primers(check = False, data_dir = None, force = True):
+    data_dir = get_data_dir(data_dir)
+    data     = get_csv_data(sample = check)
+
+    qza_config = []
+
+    for d in data:
+        if d["layout"] == "paired":
+            sra_id   = d["sra"]
+            sra_dir  = osp.join(data_dir, sra_id)
+            qza_file = get_files(sra_dir, "*.qza")[0]
+
+            output_path = "%s_trimmed%s" % osp.splitext(qza_file)
+            
+            qza_config.append(dict(
+                input_path  = qza_file,
+                primer_f    = d["primer_f"],
+                primer_r    = d["primer_r"],
+                output_path = output_path
+            ))
+
+    with parallel.pool(processes = N_JOBS) as pool:
+        pool.map(_qiime_trim_qza, qza_config)
+    
+def preprocess_data(*args, **kwargs):
+    _convert_to_qza(*args, **kwargs)
+    _trim_primers(*args, **kwargs)

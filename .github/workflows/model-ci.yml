@@ -9,6 +9,8 @@ env:
   # package variables
   PIP_ARGS: "--use-deprecated=legacy-resolver"
   GEOMEAT_JOBS: 16
+
+  BPYUTILS_VERBOSE: "true"
   # system variables
 
 jobs:
@@ -41,7 +43,11 @@ jobs:
           python setup.py develop
       - name: Run Pipeline
         run: |
-          bpyutils -m geomeat.data.get_data -p "check=True; data_dir=./data" --verbose
+          export GEOMEAT_PARAMS="check=True; data_dir=./data"
+
+          bpyutils -m geomeat.data.get_data        -p "$GEOMEAT_PARAMS"
+          bpyutils -m geomeat.data.preprocess_data -p "$GEOMEAT_PARAMS"
+
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:

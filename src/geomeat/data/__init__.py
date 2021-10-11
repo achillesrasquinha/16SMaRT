@@ -165,7 +165,7 @@ def _qiime_trim_qza(kwargs):
                 --p-cores {jobs} \
                 --p-front-f {primer_f} \
                 --p-front-r {primer_r} \
-                --no-indels \
+                --p-no-indels \
                 --o-trimmed-sequences {output_path}".format(**merge_dict(kwargs, dict(jobs = N_JOBS))))
 
         input_path  = kwargs["output_path"]

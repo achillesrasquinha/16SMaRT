@@ -2,6 +2,8 @@ import os, os.path as osp
 import csv
 from glob import glob
 from functools import partial
+import gzip
+import shutil
 
 from geomeat.config  import PATH
 from geomeat.const   import N_JOBS
@@ -10,7 +12,7 @@ from geomeat import __name__ as NAME
 
 from bpyutils.util._dict   import dict_from_list, AutoDict
 from bpyutils.util.types   import lmap, lfilter
-from bpyutils.util.system  import ShellEnvironment, makedirs, popen
+from bpyutils.util.system  import ShellEnvironment, makedirs, popen, make_temp_dir
 from bpyutils.util.environ import getenv
 from bpyutils import parallel, log
 
@@ -39,7 +41,14 @@ def get_csv_data(sample = False):
 
     return data
 
-def _fetch_sra_to_fastq(meta, output_dir):
+def _gzip_file(meta):
+    input_path, output_path = meta["input_path"], meta["output_path"]
+
+    with open(input_path) as f_in:
+        with gzip.open(output_path, "wb") as f_out:
+            f_out.writelines(f_in)
+
+def _fetch_sra_to_fastq(meta, output_dir, gunzip = True):
     sra, layout = meta["sra"], meta["layout"]
 
     with ShellEnvironment(cwd = output_dir) as shell:
@@ -48,8 +57,18 @@ def _fetch_sra_to_fastq(meta, output_dir):
         # shell("vdb-validate {dir}".format(dir = sra_dir))
 
         args = "--split-files" if layout == "paired" else "" 
-        shell("fasterq-dump --threads {threads} {args} {sra}".format(
+        shell("fasterq-dump {args} {sra}".format(
             threads = N_JOBS, args = args, sra = sra), cwd = sra_dir)
+
+        if gunzip:
+            fastqs = lfilter(osp.isfile, map(lambda x: osp.join(sra_dir, x), os.listdir(sra_dir)))
+            meta   = lmap(lambda x: dict(
+                input_path  = x,
+                output_path = "%s.gz" % x
+            ), fastqs)
+            
+            with parallel.pool(processes = N_JOBS) as pool:
+                pool.map(_gzip_file, meta)
 
 def _fastq_quality_check(fastq_file, output_dir, fastqc_dir):
     with ShellEnvironment(cwd = output_dir) as shell:
@@ -85,9 +104,29 @@ def get_data(check = False, data_dir = None):
     
     popen("multiqc {fastqc_dir}".format(fastqc_dir = fastqc_dir), cwd = data_dir)
 
+def _fastq_to_qza(input_path, output_path, sample_data_type):
+    with ShellEnvironment() as shell:
+        shell("qiime tools import \
+                --type 'SampleData[{sample_data_type}]' \
+                --input-path  {input_path} \
+                --output-path {output_path} \
+                --input-format 'CasavaOneEightSingleLanePerSampleDirFmt'".format(
+            input_path  = input_path,
+            output_path = output_path,
+            sample_data_type = sample_data_type
+        ))
+
+def _get_qime_compat_format(basename):
+    if "_2" in basename:
+        format_ = "_S001_L001_R2_001"
+    else:
+        format_ = "_S001_L001_R1_001"
+    return format_
+
 def preprocess_data(check = False, data_dir = None):
     data_dir    =  get_data_dir(data_dir)
     study_group = AutoDict(list)
+    extension   = ".fastq.gz"
 
     data = get_csv_data(sample = check)
 
@@ -96,7 +135,24 @@ def preprocess_data(check = False, data_dir = None):
         study_group[study_id].append(d)
 
     for study_id, data in iteritems(study_group):
-        sra_ids     = lmap(lambda x: x["sra"], data)
-        fastq_files = glob("%s/**/*.fastq" % data_dir)
+        for d in data:
+            sra_id  = d["sra"]
+            sra_dir = osp.join(data_dir, sra_id)
+            sources = glob("%s/*%s" % (sra_dir, extension))
 
-        fastq_files = lfilter(lambda x: any(id_ in x for id_ in sra_ids), fastq_files)
+            output_path = osp.join(sra_dir, "%s.qza" % sra_id)
+
+            with make_temp_dir() as tmp_dir:
+                for source in sources:
+                    basename = osp.basename(source)
+                    format_  = _get_qime_compat_format(basename)
+
+                    target_name = "%s%s%s" % (sra_id, format_, extension)
+
+                    target   = osp.join(tmp_dir, target_name)
+
+                    shutil.copy2(source, target)
+
+                sample_data_type = "PairedEndSequencesWithQuality" if d["layout"] == "paired" else "SequencesWithQuality"
+                    
+                _fastq_to_qza(tmp_dir, output_path, sample_data_type)

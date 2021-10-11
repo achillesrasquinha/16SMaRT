@@ -47,7 +47,7 @@ jobs:
           export GEOMEAT_PARAMS="check=True; data_dir=./data"
 
           bpyutils -m geomeat.data.get_data        -p "$GEOMEAT_PARAMS"
-          bpyutils -m geomeat.data.preprocess_data -p "$GEOMEAT_PARAMS"
+          # bpyutils -m geomeat.data.preprocess_data -p "$GEOMEAT_PARAMS"
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2

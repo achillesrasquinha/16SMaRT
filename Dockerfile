@@ -1,4 +1,4 @@
-FROM  qiime2/core
+FROM  python:3.9
 
 LABEL maintainer=achillesrasquinha@gmail.com
 
@@ -17,7 +17,8 @@ RUN apt-get --allow-releaseinfo-change update && \
     mkdir -p /usr/share/man/man1 && \
     apt-get install -y --no-install-recommends \
         openjdk-11-jre-headless \
-        fastqc && \
+        fastqc \
+        mothur && \
     mkdir -p $GEOMEAT_PATH && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \

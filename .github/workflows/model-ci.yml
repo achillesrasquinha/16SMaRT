@@ -7,7 +7,7 @@ env:
   SRA_TOOLKIT_VERSION: "2.9.6"
   TRIM_GALORE_VERSION: "0.6.6"
   # package variables
-  PIP_ARGS: "--use-deprecated=legacy-resolver"
+  PIP_USE_DEPRECATED: "legacy-resolver"
   GEOMEAT_JOBS: 16
 
   BPYUTILS_VERBOSE: "true"

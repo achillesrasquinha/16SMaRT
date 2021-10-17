@@ -85,7 +85,7 @@ def get_data(check = False, data_dir = None):
         pool.map(
             partial(
                 _fetch_sra_to_fastq, 
-                **dict(output_dir = data_dir)
+                **dict(output_dir = data_dir, gunzip = False)
             )
         , data)
 
@@ -204,5 +204,6 @@ def _trim_primers(check = False, data_dir = None, force = True):
         pool.map(_qiime_trim_qza, qza_config)
     
 def preprocess_data(*args, **kwargs):
-    _convert_to_qza(*args, **kwargs)
-    _trim_primers(*args, **kwargs)
+    # _convert_to_qza(*args, **kwargs)
+    # _trim_primers(*args, **kwargs)
+    pass

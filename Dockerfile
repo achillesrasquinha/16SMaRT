@@ -30,7 +30,7 @@ COPY ./docker/entrypoint.sh /entrypoint.sh
 WORKDIR $GEOMEAT_PATH
 
 RUN pip install -r ./requirements.txt && \
-    python setup.py install    
+    python setup.py install
 
 ENTRYPOINT ["/entrypoint.sh"]
 

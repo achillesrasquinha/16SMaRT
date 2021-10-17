@@ -19,7 +19,7 @@ jobs:
     name: Train
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/achillesrasquinha/dl
+      image: ghcr.io/achillesrasquinha/geomeat
 
     steps:
       - uses: actions/checkout@v2
@@ -28,18 +28,6 @@ jobs:
           echo "Checking out $GITHUB_REF..."
       - name: Install dependencies
         run: |
-          wget https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz
-          tar xzvf $HOME/sra-toolkit.tar.gz -C $HOME
-          cp -R $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64/bin/* /usr/local/bin
-
-          wget https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi
-          export VDB_CONFIG=$HOME/.ncbi/default.kfg
-
-          apt-get update && apt-get install -y --no-install-recommends fastqc
-
-          # wget https://github.com/FelixKrueger/TrimGalore/archive/$TRIM_GALORE_VERSION.tar.gz -O $HOME/trim-galore.tar.gz
-          # tar xvzf $HOME/trim-galore.tar.gz
-
           pip install -r requirements-dev.txt
           python setup.py develop
       - name: Run Pipeline

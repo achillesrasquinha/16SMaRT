@@ -75,7 +75,7 @@ def _fastq_quality_check(fastq_file, output_dir, fastqc_dir):
         shell("fastqc -q --threads {threads} {fastq_file} -o {out_dir}".format(
             threads = N_JOBS, out_dir = fastqc_dir, fastq_file = fastq_file))
 
-def get_data(check = False, data_dir = None):
+def get_data(data_dir = None, check = False, *args, **kwargs):
     data_dir =  get_data_dir(data_dir)
     data     = get_csv_data(sample = check)
 
@@ -203,7 +203,8 @@ def _trim_primers(check = False, data_dir = None, force = True):
     with parallel.pool(processes = N_JOBS) as pool:
         pool.map(_qiime_trim_qza, qza_config)
     
-def preprocess_data(*args, **kwargs):
+def preprocess_data(data_dir = None, check = False, *args, **kwargs):
+    data_dir = get_data_dir(data_dir)
     # _convert_to_qza(*args, **kwargs)
     # _trim_primers(*args, **kwargs)
     pass

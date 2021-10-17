@@ -73,7 +73,8 @@ def get_dependencies(type_ = None):
     
     return requirements
 
-PKGINFO = get_package_info()
+PKGINFO    = get_package_info()
+
 
 def remove_cache():
     userdir = osp.expanduser("~")

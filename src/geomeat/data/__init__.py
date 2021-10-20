@@ -11,8 +11,8 @@ from geomeat._compat import iteritems
 from geomeat import __name__ as NAME
 
 from bpyutils.util._dict   import dict_from_list, AutoDict, merge_dict
-from bpyutils.util.types   import lmap, lfilter
-from bpyutils.util.system  import ShellEnvironment, makedirs, popen, make_temp_dir, get_files
+from bpyutils.util.types   import lmap, lfilter, auto_typecast
+from bpyutils.util.system  import ShellEnvironment, makedirs, popen, make_temp_dir, get_files, move, write
 from bpyutils.util.environ import getenv
 from bpyutils import parallel, log
 
@@ -37,7 +37,7 @@ def get_csv_data(sample = False):
         reader = csv.reader(f)
         header = next(reader, None)
 
-        data = lmap(lambda x: dict_from_list(header, x), reader)
+        data = lmap(lambda x: dict_from_list(header, lmap(auto_typecast, x)), reader)
 
     return data
 
@@ -179,32 +179,49 @@ def _qiime_trim_qza(kwargs):
             output_path = output_path
         ))
 
+_MOTHUR_SCRIPT = """
+make.file(inputdir={inputdir})
+make.contigs(file=current)
+trim.seqs(fasta=current, qaverage=35)
+"""
+
+def _generate_mothur_script(*args, **kwargs):
+    return _MOTHUR_SCRIPT.format(**kwargs)
+
+def _mothur_trim_files(files):
+    with make_temp_dir() as tmp_dir:
+        move(*files, dest = tmp_dir)
+
+        mothur_file   = osp.join(tmp_dir, "source")
+        mothur_script = _generate_mothur_script(inputdir = tmp_dir)
+        print(mothur_script)
+        write(mothur_file, mothur_script)
+        
+        # with ShellEnvironment(cwd = tmp_dir) as shell:
+        #     shell("mothur %s" % mothur_file)
+
+        os.listdir(tmp_dir)
+
 def _trim_primers(check = False, data_dir = None, force = True):
     data_dir = get_data_dir(data_dir)
     data     = get_csv_data(sample = check)
 
-    qza_config = []
+    files = []
 
     for d in data:
+        sra_id  = d["sra"]
+        sra_dir = osp.join(data_dir, sra_id)
+        fasta_files = get_files(sra_dir, "*.fastq")
+        # print(d["trimmed"], fasta_files)
+
         if d["layout"] == "paired":
-            sra_id   = d["sra"]
-            sra_dir  = osp.join(data_dir, sra_id)
-            qza_file = get_files(sra_dir, "*.qza")[0]
+            if d["trimmed"]:
+                print(fasta_files)
+                files += fasta_files
 
-            output_path = "%s_trimmed%s" % osp.splitext(qza_file)
-            
-            qza_config.append(dict(
-                input_path  = qza_file,
-                primer_f    = d["primer_f"],
-                primer_r    = d["primer_r"],
-                output_path = output_path
-            ))
-
-    with parallel.pool(processes = N_JOBS) as pool:
-        pool.map(_qiime_trim_qza, qza_config)
+    _mothur_trim_files(files)
     
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(data_dir)
     # _convert_to_qza(*args, **kwargs)
-    # _trim_primers(*args, **kwargs)
-    pass
+    _trim_primers(data_dir = data_dir, check = check, *args, **kwargs)

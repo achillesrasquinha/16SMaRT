@@ -32,11 +32,7 @@ jobs:
           python setup.py develop
       - name: Run Pipeline
         run: |
-          export GEOMEAT_PARAMS="check=True; data_dir=./data"
-
-          bpyutils -m geomeat.data.get_data        -p "$GEOMEAT_PARAMS"
-          # bpyutils -m geomeat.data.preprocess_data -p "$GEOMEAT_PARAMS"
-
+          bpyutils --run-ml geomeat -p "check=True; data_dir=./data"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:

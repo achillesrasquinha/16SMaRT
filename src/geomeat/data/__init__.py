@@ -1,9 +1,6 @@
-import os, os.path as osp
+import os.path as osp
 import csv
-from functools import partial
-import gzip
 import itertools
-from re import template
 
 from jinja2 import Template
 
@@ -12,11 +9,11 @@ from geomeat import const
 from geomeat import __name__ as NAME
 
 from bpyutils.util._dict   import dict_from_list, AutoDict
-from bpyutils.util.types   import lmap, lfilter, auto_typecast
+from bpyutils.util.types   import lmap, lfilter, auto_typecast, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     makedirs,
-    popen, make_temp_dir, get_files, copy, write, read
+    make_temp_dir, get_files, copy, write, read
 )
 from bpyutils.util.string  import get_random_str
 from bpyutils.util.environ import getenv
@@ -48,76 +45,42 @@ def get_csv_data(sample = False):
 
     return data
 
-def _gzip_file(meta):
-    input_path, output_path = meta["input_path"], meta["output_path"]
-
-    with open(input_path) as f_in:
-        with gzip.open(output_path, "wb") as f_out:
-            f_out.writelines(f_in)
-
-def _fetch_sra_to_fastq(meta, output_dir, gunzip = True):
+def _fetch_sra_to_fastq(meta, output_dir):
     sra, layout = meta["sra"], meta["layout"]
 
     with ShellEnvironment(cwd = output_dir) as shell:
         sra_dir = osp.join(output_dir, sra)
-        shell("prefetch -O {out_dir} {sra}".format(out_dir = sra_dir, sra = sra))
-        # shell("vdb-validate {dir}".format(dir = sra_dir))
 
+        logger.info("Performing prefetch for SRA %s in directory %s..." % (sra, sra_dir))
+        shell("prefetch {sra}".format(sra = sra))
+
+        logger.info("Performing vdb-validate for SRA %s in directory %s..." % (sra, sra_dir))
+        shell("vdb-validate {dir}".format(dir = sra_dir))
+
+        logger.info("Downloading FASTA file for SRA %s..." % sra)
         args = "--split-files" if layout == "paired" else "" 
         shell("fasterq-dump {args} {sra}".format(
             threads = const.N_JOBS, args = args, sra = sra), cwd = sra_dir)
 
-        if gunzip:
-            fastqs = lfilter(osp.isfile, map(lambda x: osp.join(sra_dir, x), os.listdir(sra_dir)))
-            meta   = lmap(lambda x: dict(
-                input_path  = x,
-                output_path = "%s.gz" % x
-            ), fastqs)
-            
-            with parallel.pool(processes = const.N_JOBS) as pool:
-                pool.map(_gzip_file, meta)
-
-def _fastq_quality_check(fastq_file, output_dir, fastqc_dir):
-    with ShellEnvironment(cwd = output_dir) as shell:
-        shell("fastqc -q --threads {threads} {fastq_file} -o {out_dir}".format(
-            threads = const.N_JOBS, out_dir = fastqc_dir, fastq_file = fastq_file))
+        logger.success("FASTA file for SRA %s successfully downloaded." % sra)
 
 def get_data(data_dir = None, check = False, *args, **kwargs):
-    data_dir =  get_data_dir(data_dir)
+    data_dir = get_data_dir(data_dir)
     data     = get_csv_data(sample = check)
 
     logger.info("Loading data into directory: %s" % data_dir)
 
-    with parallel.no_daemon_pool(processes = const.N_JOBS) as pool:
-        pool.map(
-            partial(
-                _fetch_sra_to_fastq, 
-                **dict(output_dir = data_dir, gunzip = False)
-            )
-        , data)
-
-    fastq_files = get_files(data_dir, "*.fastq")
-    
-    fastqc_dir  = osp.join(data_dir, "fastqc")
-    makedirs(fastqc_dir, exist_ok = True)
+    logger.info("Fetching FASTA files...")
 
     with parallel.no_daemon_pool(processes = const.N_JOBS) as pool:
-        pool.map(
-            partial(
-                _fastq_quality_check,
-                **dict(output_dir = data_dir, fastqc_dir = fastqc_dir)
-            )
-        , fastq_files)
-    
-    popen("multiqc {fastqc_dir}".format(fastqc_dir = fastqc_dir), cwd = data_dir)
+        function = build_fn(_fetch_sra_to_fastq, output_dir = data_dir)
+        pool.map(function, data)
 
 def _render_mothur_script(*args, **kwargs):
     template_path = osp.join(PATH["DATA"], "templates", "mothur-trim")
     template = Template(read(template_path))
     
     rendered = template.render(*args, **kwargs)
-
-    print(rendered)
 
     return rendered
 

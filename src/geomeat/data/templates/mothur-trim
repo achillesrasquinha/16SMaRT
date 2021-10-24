@@ -1,0 +1,6 @@
+{% if layout == "paired" %}
+make.file(inputdir={{ inputdir }}, prefix={{ prefix }})
+make.contigs(file=current, {% if oligos %}oligos={{ oligos }}, {% endif %}processors={{ processors }}) {% else %}
+fastq.info(file={{ fastq_file }}, pacbio=T) {% endif %}
+trim.seqs(fasta=current, {% if layout == "single" %}qfile=current, {% endif %}qaverage={{ qaverage }}, processors={{ processors }})
+screen.seqs(fasta=current, group={% if group is defined %}{{ group }}{% else %}current{% endif %}, maxambig={{ maxambig }}, maxhomop={{ maxhomop }}, minlength={{ min_length }}, maxlength={{ max_length }}, processors={{ processors }})

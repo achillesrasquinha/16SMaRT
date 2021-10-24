@@ -57,12 +57,12 @@ def _fetch_sra_to_fastq(meta, output_dir):
         logger.info("Performing vdb-validate for SRA %s in directory %s..." % (sra, sra_dir))
         shell("vdb-validate {dir}".format(dir = sra_dir))
 
-        logger.info("Downloading FASTA file for SRA %s..." % sra)
+        logger.info("Downloading FASTQ file for SRA %s..." % sra)
         args = "--split-files" if layout == "paired" else "" 
         shell("fasterq-dump {args} {sra}".format(
             threads = const.N_JOBS, args = args, sra = sra), cwd = sra_dir)
 
-        logger.success("FASTA file for SRA %s successfully downloaded." % sra)
+        logger.success("FASTQ file for SRA %s successfully downloaded." % sra)
 
 def get_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(data_dir)
@@ -70,14 +70,14 @@ def get_data(data_dir = None, check = False, *args, **kwargs):
 
     logger.info("Loading data into directory: %s" % data_dir)
 
-    logger.info("Fetching FASTA files...")
+    logger.info("Fetching FASTQ files...")
 
     with parallel.no_daemon_pool(processes = const.N_JOBS) as pool:
         function = build_fn(_fetch_sra_to_fastq, output_dir = data_dir)
         pool.map(function, data)
 
 def _render_mothur_script(*args, **kwargs):
-    template_path = osp.join(PATH["DATA"], "templates", "mothur-trim")
+    template_path = osp.join(PATH["DATA"], "templates", "mothur-filter")
     template = Template(read(template_path))
     
     rendered = template.render(*args, **kwargs)
@@ -86,9 +86,11 @@ def _render_mothur_script(*args, **kwargs):
 
 def _get_fastq_file_line(fname):
     prefix, _ = osp.splitext(fname)
-    return "%s %s" % (osp.basename(prefix), fname)
+    prefix    = osp.basename(prefix)
 
-def _mothur_trim_files(config):
+    return "%s %s" % (prefix, fname)
+
+def _mothur_filter_files(config):
     files      = config.pop("files")
     target_dir = config.pop("target_dir")
 
@@ -98,30 +100,31 @@ def _mothur_trim_files(config):
     layout     = config.get("layout")
     trim_type  = config.get("trim_type")
 
-    makedirs(target_dir, exist_ok = True)
-
     with make_temp_dir() as tmp_dir:
+        logger.info("Copying FASTQ files for pre-processing at %s..." % tmp_dir)
         copy(*files, dest = tmp_dir)
 
         prefix = get_random_str()
-
-        if layout == "paired" and trim_type == "false":
-            oligos_file = osp.join(tmp_dir, "meta.oligos")
-            oligos_data = "primer %s %s" % (primer_f, primer_r)
-            write(oligos_file, oligos_data)
-
-            config["oligos"] = oligos_file
+        logger.info("Using prefix %s..." % prefix)
 
         if layout == "single":
-            fastq_file  = osp.join(tmp_dir, "%s.file" % prefix)
-            fastq_data  = "\n".join(lmap(_get_fastq_file_line, files))
+            fastq_file = osp.join(tmp_dir, "%s.file" % prefix)
+            fastq_data = "\n".join(lmap(_get_fastq_file_line, files))
             write(fastq_file, fastq_data)
 
             config["fastq_file"] = fastq_file
 
             config["group"] = osp.join(tmp_dir, "%s.group" % prefix)
 
-        mothur_file   = osp.join(tmp_dir, "source")
+        if layout == "paired" and trim_type == "false":
+            oligos_file = osp.join(tmp_dir, "primers.oligos")
+            oligos_data = "primer %s %s" % (primer_f, primer_r)
+            write(oligos_file, oligos_data)
+
+            config["oligos"] = oligos_file
+
+        logger.info("Building script for mothur...")
+        mothur_file   = osp.join(tmp_dir, "mothur-filter")
         mothur_script = _render_mothur_script(inputdir = tmp_dir,
             prefix = prefix, processors = const.N_JOBS,
             qaverage = const.QUALITY_AVERAGE,
@@ -130,29 +133,35 @@ def _mothur_trim_files(config):
             **config
         )
         write(mothur_file, mothur_script)
-        
+
+        logger.info("Running mothur...")
+
         with ShellEnvironment(cwd = tmp_dir) as shell:
             shell("mothur %s" % mothur_file)
 
         choice = (".trim.contigs.trim.good.fasta", ".contigs.good.groups") \
             if layout == "paired" else (".trim.good.fasta", ".good.group") # group(s): are you f'king kiddin' me?
+
+        makedirs(target_dir, exist_ok = True)
         
         copy(
             osp.join(tmp_dir, "%s%s" % (prefix, choice[0])),
-            dest = osp.join(target_dir, "output.fasta")
+            dest = osp.join(target_dir, "filtered.fasta")
         )
 
         copy(
             osp.join(tmp_dir, "%s%s" % (prefix, choice[1])),
-            dest = osp.join(target_dir, "output.group")
+            dest = osp.join(target_dir, "filtered.group")
         )
 
-def _trim_primers(check = False, data_dir = None, force = True):
+        logger.info("Successfully completed.")
+
+def _filter_fastq(data_dir = None, check = False):
     data_dir = get_data_dir(data_dir)
     data     = get_csv_data(sample = check)
 
-    preprop_dir = osp.join(data_dir, "preprop")
-    makedirs(preprop_dir, exist_ok = True)
+    filtered_dir = makedirs(osp.join(data_dir, "filtered"), exist_ok = True)
+    logger.info("Storing filtered FASTQ files at %s." % filtered_dir)
 
     mothur_configs = [ ]
 
@@ -162,37 +171,47 @@ def _trim_primers(check = False, data_dir = None, force = True):
         study_id = d.pop("study_id")
         study_group[study_id].append(d)
 
-    for study_id, data in iteritems(study_group):
-        files  = []
+    for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):
+        for study_id, data in iteritems(study_group):
+            if len(data):
+                logger.info("Filtering FASTQ files for study %s of type (layout: %s, trimmed: %s)" % (study_id, layout, trim_type))
 
-        sample = data[0] # TODO: Check if fails.
+                sample = data[0]
 
-        for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):
-            filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)
-            
-            for d in filtered:
-                sra_id  = d["sra"]
-                sra_dir = osp.join(data_dir, sra_id)
-                fasta_files = get_files(sra_dir, "*.fastq")
+                filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)
+                files    = []
 
-                files += fasta_files
+                for d in filtered:
+                    sra_id  = d["sra"]
+                    sra_dir = osp.join(data_dir, sra_id)
+                    fasta_files = get_files(sra_dir, "*.fastq")
 
-            tar_dir = osp.join(preprop_dir, study_id)
+                    files += fasta_files
 
-            mothur_configs.append({
-                "files": files,
-                "target_dir": tar_dir,
-                # NOTE: This is under the assumption that each study has the same primer.
-                "primer_f": sample["primer_f"],
-                "primer_r": sample["primer_r"],
-                "layout": layout, "trim_type": trim_type,
-                "min_length": sample["min_length"],
-                "max_length": sample["max_length"]
-            })
+                logger.info("FASTQ files found: %s" % files)
 
+                tar_dir = osp.join(filtered_dir, study_id, layout,
+                    "trimmed" if trim_type == "true" else "untrimmed")
+
+                mothur_configs.append({
+                    "files": files,
+                    "target_dir": tar_dir,
+                    # NOTE: This is under the assumption that each study has the same primer.
+                    "primer_f": sample["primer_f"],
+                    "primer_r": sample["primer_r"],
+
+                    "layout": layout, "trim_type": trim_type,
+                    
+                    "min_length": sample["min_length"],
+                    "max_length": sample["max_length"]
+                })
+
+    logger.info("Filtering files using mothur....")
     with parallel.no_daemon_pool(processes = const.N_JOBS) as pool:
-        pool.map(_mothur_trim_files, mothur_configs)
+        pool.map(_mothur_filter_files, mothur_configs)
     
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(data_dir)
-    _trim_primers(data_dir = data_dir, check = check, *args, **kwargs)
+
+    logger.info("Filtering FASTQ files...")
+    _filter_fastq(data_dir = data_dir, check = check, *args, **kwargs)

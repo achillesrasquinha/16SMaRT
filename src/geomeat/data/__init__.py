@@ -55,7 +55,7 @@ def _fetch_sra_to_fastq(meta, output_dir):
         shell("prefetch -O {output_dir} {sra}".format(output_dir = sra_dir, sra = sra))
 
         logger.info("Performing vdb-validate for SRA %s in directory %s..." % (sra, sra_dir))
-        shell("vdb-validate {dir}".format(dir = osp.join(sra_dir, sra)))
+        shell("vdb-validate {dir}".format(dir = sra_dir))
 
         logger.info("Downloading FASTQ file for SRA %s..." % sra)
         args = "--split-files" if layout == "paired" else "" 

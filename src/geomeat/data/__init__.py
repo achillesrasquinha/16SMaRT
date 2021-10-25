@@ -24,6 +24,8 @@ logger  = log.get_logger(name = __name__)
 
 _PREFIX = NAME.upper()
 
+CACHE   = PATH["CACHE"]
+
 def get_data_dir(data_dir = None):
     data_dir = data_dir \
         or getenv("DATA_DIR", prefix = _PREFIX) \
@@ -55,7 +57,7 @@ def _fetch_sra_to_fastq(meta, output_dir):
         shell("prefetch -O {output_dir} {sra}".format(output_dir = sra_dir, sra = sra))
 
         logger.info("Performing vdb-validate for SRA %s in directory %s..." % (sra, sra_dir))
-        shell("vdb-validate {dir}".format(dir = sra_dir))
+        shell("vdb-validate {dir}".format(dir = output_dir))
 
         logger.info("Downloading FASTQ file for SRA %s..." % sra)
         args = "--split-files" if layout == "paired" else "" 
@@ -100,7 +102,7 @@ def _mothur_filter_files(config):
     layout     = config.get("layout")
     trim_type  = config.get("trim_type")
 
-    with make_temp_dir() as tmp_dir:
+    with make_temp_dir(root_dir = CACHE) as tmp_dir:
         logger.info("Copying FASTQ files for pre-processing at %s..." % tmp_dir)
         copy(*files, dest = tmp_dir)
 

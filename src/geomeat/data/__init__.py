@@ -52,7 +52,7 @@ def _fetch_sra_to_fastq(meta, output_dir):
         sra_dir = osp.join(output_dir, sra)
 
         logger.info("Performing prefetch for SRA %s in directory %s..." % (sra, sra_dir))
-        shell("prefetch {sra}".format(sra = sra))
+        shell("prefetch -O {output_dir} {sra}".format(output_dir = output_dir, sra = sra))
 
         logger.info("Performing vdb-validate for SRA %s in directory %s..." % (sra, sra_dir))
         shell("vdb-validate {dir}".format(dir = sra_dir))

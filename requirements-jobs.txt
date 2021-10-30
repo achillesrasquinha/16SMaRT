@@ -15,9 +15,11 @@ pluggy<1,>=0.12.0
 docstr-coverage
 git+https://github.com/achillesrasquinha/bpyutils.git@develop#egg=bpyutils
 # git+https://github.com/achillesrasquinha/deeply.git
-multiqc
-cutadapt
+# multiqc
+# cutadapt
 jinja2
+tqdm
+requests
 pipenv
 jedi<0.18
 ipython

@@ -3,37 +3,35 @@ import csv
 import itertools
 
 from jinja2 import Template
+import tqdm as tq
 
 from geomeat.config  import PATH
+from geomeat.const   import CONST
 from geomeat import const
 from geomeat import __name__ as NAME
 
+from bpyutils.util.ml      import get_data_dir
 from bpyutils.util._dict   import dict_from_list, AutoDict
+from bpyutils.util.array   import squash
 from bpyutils.util.types   import lmap, lfilter, auto_typecast, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     makedirs,
-    make_temp_dir, get_files, copy, write, read
+    make_temp_dir, get_files, copy, write, read,
+    extract_all
 )
 from bpyutils.util.string  import get_random_str
+from bpyutils.util.request import download_file
 from bpyutils.util.environ import getenv
+from bpyutils.util._json   import JSONLogger
 from bpyutils._compat import iteritems
 from bpyutils import parallel, log
 
-logger  = log.get_logger(name = __name__)
-
-_PREFIX = NAME.upper()
+logger  = log.get_logger(name = NAME)
 
 CACHE   = PATH["CACHE"]
 
-def get_data_dir(data_dir = None):
-    data_dir = data_dir \
-        or getenv("DATA_DIR", prefix = _PREFIX) \
-        or osp.join(PATH["CACHE"], "data")
-
-    makedirs(data_dir, exist_ok = True)
-
-    return data_dir
+_DATA_DIR_NAME_FILTERED = "filtered"
 
 def get_csv_data(sample = False):
     path_data = osp.join(PATH["DATA"], "sample.csv" if sample else "data.csv")
@@ -47,39 +45,69 @@ def get_csv_data(sample = False):
 
     return data
 
-def _fetch_sra_to_fastq(meta, output_dir):
+def get_fastq(meta, data_dir = None, *args, **kwargs):
     sra, layout = meta["sra"], meta["layout"]
 
-    with ShellEnvironment(cwd = output_dir) as shell:
-        sra_dir = osp.join(output_dir, sra)
+    jobs     = kwargs.get("jobs", CONST["jobs"])
+    data_dir = get_data_dir(NAME, data_dir)
 
-        logger.info("Performing prefetch for SRA %s in directory %s..." % (sra, sra_dir))
-        shell("prefetch -O {output_dir} {sra}".format(output_dir = sra_dir, sra = sra))
+    data_logger = JSONLogger(path = osp.join(data_dir, "datalog.json"))
 
-        logger.info("Performing vdb-validate for SRA %s in directory %s..." % (sra, sra_dir))
-        shell("vdb-validate {dir}".format(dir = output_dir))
+    with ShellEnvironment(cwd = data_dir) as shell:
+        sra_dir = osp.join(data_dir, sra)
 
-        logger.info("Downloading FASTQ file for SRA %s..." % sra)
-        args = "--split-files" if layout == "paired" else "" 
-        shell("fasterq-dump {args} {sra}".format(
-            threads = const.N_JOBS, args = args, sra = sra), cwd = sra_dir)
+        if not data_logger[sra]["prefetched"]:
+            logger.info("Performing prefetch for SRA %s in directory %s." % (sra, sra_dir))
+            shell("prefetch -O {output_dir} {sra}".format(output_dir = sra_dir, sra = sra))
 
-        logger.success("FASTQ file for SRA %s successfully downloaded." % sra)
+            data_logger[sra]["prefetched"] = True
+            data_logger.save()
+
+            logger.success("Successfully prefeteched SRA %s." % sra)
+
+        if not data_logger[sra]["validated"]:
+            logger.info("Performing vdb-validate for SRA %s in directory %s." % (sra, sra_dir))
+            shell("vdb-validate {dir}".format(dir = data_dir))
+
+            data_logger[sra]["validated"]  = True
+            data_logger.save()
+
+            logger.success("Successfully validated SRA %s." % sra)
+
+        if not data_logger[sra]["fastq_path"]:
+            logger.info("Downloading FASTQ file(s) for SRA %s..." % sra)
+            args = "--split-files" if layout == "paired" else "" 
+            shell("fasterq-dump {args} {sra}".format(
+                threads = jobs, args = args, sra = sra), cwd = sra_dir)
+
+            data_logger[sra]["fastq_path"] = squash(get_files(sra_dir, "*.fastq"))
+            data_logger.save()
+
+            logger.success("Successfully downloaded FASTQ file(s) for SRA %s." % sra)
+
+        data_logger.save()
 
 def get_data(data_dir = None, check = False, *args, **kwargs):
-    data_dir = get_data_dir(data_dir)
+    jobs     = kwargs.get("jobs", CONST["jobs"])
+
+    data_dir = get_data_dir(NAME, data_dir)
+    logger.info("Created data directory at %s." % data_dir)
+
     data     = get_csv_data(sample = check)
 
-    logger.info("Loading data into directory: %s" % data_dir)
-
     logger.info("Fetching FASTQ files...")
+    with parallel.no_daemon_pool(processes = jobs) as pool:
+        length   = len(data)
 
-    with parallel.no_daemon_pool(processes = const.N_JOBS) as pool:
-        function = build_fn(_fetch_sra_to_fastq, output_dir = data_dir)
-        pool.map(function, data)
+        function = build_fn(get_fastq, data_dir = data_dir, *args, **kwargs)
+        results  = pool.imap(function, data)
 
-def _render_mothur_script(*args, **kwargs):
-    template_path = osp.join(PATH["DATA"], "templates", "mothur-filter")
+        list(tq.tqdm(results, total = length))
+
+def _render_template(*args, **kwargs):
+    script = kwargs["template"]
+
+    template_path = osp.join(PATH["DATA"], "templates", script)
     template = Template(read(template_path))
     
     rendered = template.render(*args, **kwargs)
@@ -125,10 +153,11 @@ def _mothur_filter_files(config):
 
             config["oligos"] = oligos_file
 
-        logger.info("Building script for mothur...")
-        mothur_file   = osp.join(tmp_dir, "mothur-filter")
-        mothur_script = _render_mothur_script(inputdir = tmp_dir,
-            prefix = prefix, processors = const.N_JOBS,
+        template      = "mothur-filter"
+        mothur_file   = osp.join(tmp_dir, template)
+        logger.info("Building script %s for mothur..." % template)
+        mothur_script = _render_template(template = template, inputdir = tmp_dir,
+            prefix = prefix, processors = CONST["jobs"],
             qaverage = const.QUALITY_AVERAGE,
             maxambig = const.MAX_AMBIGUITY,
             maxhomop = const.MAX_HOMOPOLYMERS,
@@ -156,13 +185,82 @@ def _mothur_filter_files(config):
             dest = osp.join(target_dir, "filtered.group")
         )
 
+        copy(
+            osp.join(tmp_dir, "%s%s" % (prefix, ".trim.contigs.trim.good.summary")),
+            dest = osp.join(target_dir, "filtered.summary")
+        )
+
         logger.info("Successfully completed.")
+
+def install_silva(*args, **kwargs):
+    path_silva_seed = osp.join(PATH["CACHE"], "silva.seed_v132.tgz")
+    path_target = osp.join(PATH["CACHE"], "silva")
+
+    if not osp.exists(path_silva_seed):
+        logger.info("Downloading SILVA seed v132 database...")
+
+        download_file(CONST["url_silva_seed_132"], path_silva_seed)
+        extract_all(path_silva_seed, path_target)
+
+    path_silva_gold_bacteria = osp.join(PATH["CACHE"], "silva.gold.bacteria.zip")
+
+    if not osp.exists(path_silva_gold_bacteria):
+        logger.info("Downloading SILVA for chimera...")
+
+        download_file(CONST["url_silva_gold_bacteria"], path_silva_gold_bacteria)
+        extract_all(path_silva_gold_bacteria, path_target)
+
+    return path_target
+
+def _merge_and_preprocess_files(data_dir, silva_path):
+    filtered_dir = osp.join(data_dir, _DATA_DIR_NAME_FILTERED)
+
+    filtered = get_files(filtered_dir, "*.fasta")
+    groups   = get_files(filtered_dir, "*.group")
+
+    with make_temp_dir(root_dir = CACHE) as tmp_dir:
+        files = filtered + groups
+        copy(*files, dest = tmp_dir)
+
+        template    = "mothur-merge"
+        mothur_file = osp.join(tmp_dir, template)
+
+        logger.info("Building script %s for mothur..." % template)
+
+        output_fasta  = osp.join(tmp_dir, "merged.fasta")
+        output_group  = osp.join(tmp_dir, "merged.group")
+    
+        mothur_script = _render_template(
+            template = template,
+            input_fastas = filtered,
+            input_groups = groups,
+            output_fasta = output_fasta,
+            output_group = output_group,
+            silva_seed_path      = osp.join(silva_path, "silva.seed_v132.align"),
+
+            silva_seed_pcr_align = osp.join(silva_path, "silva.seed_v132.pcr.align"),
+
+            silva_gold_path = osp.join(silva_path, "silva.gold.bacteria.align")
+
+        )
+        write(mothur_file, mothur_script)
+
+        with ShellEnvironment(cwd = tmp_dir) as shell:
+            shell("mothur %s" % mothur_file)
+
+        copy(
+            output_fasta,
+            output_group,
+            dest = filtered_dir
+        )
+
+        logger.info("Successfully merged.")
 
 def _filter_fastq(data_dir = None, check = False):
     data_dir = get_data_dir(data_dir)
     data     = get_csv_data(sample = check)
 
-    filtered_dir = makedirs(osp.join(data_dir, "filtered"), exist_ok = True)
+    filtered_dir = makedirs(osp.join(data_dir, _DATA_DIR_NAME_FILTERED), exist_ok = True)
     logger.info("Storing filtered FASTQ files at %s." % filtered_dir)
 
     mothur_configs = [ ]
@@ -209,8 +307,16 @@ def _filter_fastq(data_dir = None, check = False):
                 })
 
     logger.info("Filtering files using mothur....")
-    with parallel.no_daemon_pool(processes = const.N_JOBS) as pool:
+    with parallel.no_daemon_pool(processes = CONST["jobs"]) as pool:
         pool.map(_mothur_filter_files, mothur_configs)
+
+    logger.info("Installing SILVA...")
+    path_silva = install_silva()
+
+
+    logger.info("Merging files...")
+    _merge_and_preprocess_files(data_dir = data_dir,
+        silva_path = path_silva)
     
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(data_dir)

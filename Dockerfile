@@ -2,7 +2,9 @@ FROM  python:3.9
 
 LABEL maintainer=achillesrasquinha@gmail.com
 
-ENV SRA_TOOLKIT_VERSION=2.9.6 \
+ENV TERM=xterm-256color \
+    SRA_TOOLKIT_VERSION=2.9.6 \
+    VSEARCH_VERSION=2.18.0 \
     GEOMEAT_PATH=/usr/local/src/geomeat
 
 RUN apt-get --allow-releaseinfo-change update && \
@@ -19,10 +21,18 @@ RUN apt-get --allow-releaseinfo-change update && \
         openjdk-11-jre-headless \
         fastqc \
         mothur && \
+    wget -nv https://github.com/torognes/vsearch/archive/v${VSEARCH_VERSION}.tar.gz -O $HOME/vsearch.tar.gz && \
+    tar xzf $HOME/vsearch.tar.gz -C $HOME && \
+    cd $HOME/vsearch-${VSEARCH_VERSION} && \
+    ./autogen.sh && \
+    ./configure CFLAGS="-O3" CXXFLAGS="-O3" && \
+    make && \
+    make install && \
     mkdir -p $GEOMEAT_PATH && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
-        $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64
+        $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \
+        $HOME/vsearch*
 
 COPY . $GEOMEAT_PATH
 COPY ./docker/entrypoint.sh /entrypoint.sh

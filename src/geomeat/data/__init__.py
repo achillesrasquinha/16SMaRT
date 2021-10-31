@@ -11,7 +11,7 @@ from geomeat import const, settings, __name__ as NAME
 
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util._dict   import dict_from_list, AutoDict, merge_dict
-from bpyutils.util.array   import squash
+from bpyutils.util.array   import squash, chunkify
 from bpyutils.util.types   import lmap, lfilter, auto_typecast, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
@@ -368,12 +368,13 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
 
     if mothur_configs:
         logger.info("Filtering files using mothur....")
-        with parallel.no_daemon_pool(processes = jobs) as pool:
-            length      = len(mothur_configs)
-            function_   = build_fn(_mothur_filter_files, *args, **kwargs)
-            results     = pool.imap(function_, mothur_configs)
 
-            list(tq.tqdm(results, total = length))
+        chunks = 2
+
+        for configs in tq.tqdm(chunkify(mothur_configs, chunks)):
+            with parallel.no_daemon_pool(processes = jobs) as pool:
+                function_ = build_fn(_mothur_filter_files, *args, **kwargs)
+                pool.map(function_, configs)
 
     # logger.info("Installing SILVA...")
     # path_silva = install_silva()

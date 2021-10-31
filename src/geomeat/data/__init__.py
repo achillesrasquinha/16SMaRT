@@ -171,7 +171,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
         target_types,
-        lmap(lambda x: osp.join(target_dir, "filtered.%s" % x))
+        lmap(lambda x: osp.join(target_dir, "filtered.%s" % x), target_types)
     )
 
     if not all(osp.exists(x) for x in itervalues(target_path)):

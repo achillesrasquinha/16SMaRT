@@ -8,7 +8,9 @@ env:
   TRIM_GALORE_VERSION: "0.6.6"
   # package variables
   PIP_USE_DEPRECATED: "legacy-resolver"
-  GEOMEAT_JOBS: 16
+
+  GEOMEAT_JOBS: 32
+  GEOMEAT_DATA_DIR: /data
 
   BPYUTILS_VERBOSE: "true"
   
@@ -32,9 +34,9 @@ jobs:
           python setup.py develop
       - name: Run Pipeline
         run: |
-          bpyutils --run-ml geomeat -p "check=True; data_dir=./data"
+          bpyutils --run-ml geomeat -p "check=True"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:
           name: multiqc-output
-          path: ./data/multiqc_report.html
+          path: $GEOMEAT_DATA_DIR

@@ -18,13 +18,11 @@ from bpyutils.util.string  import get_random_str
 from bpyutils._compat import itervalues
 from bpyutils import parallel, log
 
-from geomeat.data.util import install_silva, render_template
+from geomeat.data.util import render_template
 
-logger  = log.get_logger(name = NAME)
+logger = log.get_logger(name = NAME)
 
-CACHE   = PATH["CACHE"]
-
-_DATA_DIR_NAME_FILTERED = "filtered"
+CACHE  = PATH["CACHE"]
 
 def get_csv_data(sample = False):
     path_data = osp.join(PATH["DATA"], "sample.csv" if sample else "data.csv")
@@ -113,19 +111,21 @@ def _get_fastq_file_line(fname):
     return "%s %s" % (prefix, fname)
 
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
-    jobs        = kwargs.get("jobs", settings.get("jobs"))
-    data_dir    = get_data_dir(NAME, data_dir)
+    logger.info("Using config %s to filter files." % config)
 
-    files       = config.pop("files")
-    target_dir  = config.pop("target_dir")
+    jobs       = kwargs.get("jobs", settings.get("jobs"))
+    data_dir   = get_data_dir(NAME, data_dir)
 
-    primer_f    = config.pop("primer_f")
-    primer_r    = config.pop("primer_r")
+    files      = config.pop("files")
+    target_dir = config.pop("target_dir")
 
-    layout      = config.get("layout")
-    trim_type   = config.get("trim_type")
+    primer_f   = config.pop("primer_f")
+    primer_r   = config.pop("primer_r")
 
-    sra_id      = config.pop("sra_id")
+    layout     = config.get("layout")
+    trim_type  = config.get("trim_type")
+
+    sra_id     = config.pop("sra_id")
 
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
@@ -135,7 +135,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
     if not all(osp.exists(x) for x in itervalues(target_path)):
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
-            logger.info("[SRA %s] Copying FASTQ files for pre-processing at %s." % (sra_id, tmp_dir))
+            logger.info("[SRA %s] Copying FASTQ files %s for pre-processing at %s." % (files, sra_id, tmp_dir))
             copy(*files, dest = tmp_dir)
 
             prefix = get_random_str()
@@ -207,42 +207,47 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
 def merge_fastq(data_dir = None):
     data_dir = get_data_dir(NAME, data_dir = data_dir)
+
+    logger.info("Finding files in directory: %s" % data_dir)
     
     filtered = get_files(data_dir, "filtered.fasta")
     groups   = get_files(data_dir, "filtered.group")
 
-    logger.info("Merging %s filter and %s group files." % (len(filtered), len(groups)))
+    if filtered and groups:
+        logger.info("Merging %s filter and %s group files." % (len(filtered), len(groups)))
 
-    output_fasta = osp.join(data_dir, "merged.fasta")
-    output_group = osp.join(data_dir, "merged.group")
+        output_fasta = osp.join(data_dir, "merged.fasta")
+        output_group = osp.join(data_dir, "merged.group")
 
-    with make_temp_dir(root_dir = CACHE) as tmp_dir:
-        template    = "mothur-merge"
-        mothur_file = osp.join(tmp_dir, template)
+        with make_temp_dir(root_dir = CACHE) as tmp_dir:
+            template    = "mothur-merge"
+            mothur_file = osp.join(tmp_dir, template)
 
-        logger.info("Building script %s for mothur." % template)
-    
-        mothur_script = render_template(
-            template  = template,
-            input_fastas = filtered,
-            input_groups = groups,
-            output_fasta = output_fasta,
-            output_group = output_group
-        )
-        write(mothur_file, mothur_script)
+            logger.info("Building script %s for mothur." % template)
 
-        with ShellEnvironment(cwd = tmp_dir) as shell:
-            code = shell("mothur %s" % mothur_file)
+            mothur_script = render_template(
+                template  = template,
+                input_fastas = filtered,
+                input_groups = groups,
+                output_fasta = output_fasta,
+                output_group = output_group
+            )
+            write(mothur_file, mothur_script)
 
-            if not code:
-                logger.success("Successfully merged.")
-            else:
-                logger.error("Error merging files.")
+            with ShellEnvironment(cwd = tmp_dir) as shell:
+                code = shell("mothur %s" % mothur_file)
+
+                if not code:
+                    logger.success("Successfully merged.")
+                else:
+                    logger.error("Error merging files.")
+    else:
+        logger.warn("No files found to merge.")
 
 def filter_fastq(data_dir = None, check = False, *args, **kwargs):
     jobs = kwargs.get("jobs", settings.get("jobs"))    
 
-    data_dir = get_data_dir(NAME, data_dir)
+    data_dir = get_data_dir(NAME, data_dir = data_dir)
 
     data = get_csv_data(sample = check)
 
@@ -253,7 +258,7 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
     for d in data:
         sra_id  = d["sra"]
         sra_dir = osp.join(data_dir, sra_id)
-        fastq_files = get_files(sra_dir, "*.fastq")
+        fastq_files = get_files(sra_dir, type_ = "*.fastq")
 
         mothur_configs.append({
             "files": fastq_files,
@@ -279,9 +284,6 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
             results   = pool.imap(function_, mothur_configs)
 
             list(tq.tqdm(results, total = length))
-
-    logger.info("Installing SILVA...")
-    install_silva()
     
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
@@ -291,3 +293,6 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
 
     logger.info("Merging FASTQs...")
     merge_fastq(data_dir = data_dir)
+
+    # logger.info("Installing SILVA...")
+    # install_silva()

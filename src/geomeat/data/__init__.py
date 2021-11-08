@@ -271,8 +271,8 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
 
             "layout": d["layout"], "trim_type": d["trimmed"],
             
-            "min_length": int(d["min_length"]),
-            "max_length": int(d["max_length"])
+            "min_length": d["min_length"],
+            "max_length": d["max_length"]
         })
 
     if mothur_configs:

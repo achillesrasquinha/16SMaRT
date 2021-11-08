@@ -135,7 +135,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
     if not all(osp.exists(x) for x in itervalues(target_path)):
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
-            logger.info("[SRA %s] Copying FASTQ files %s for pre-processing at %s." % (files, sra_id, tmp_dir))
+            logger.info("[SRA %s] Copying FASTQ files %s for pre-processing at %s." % (sra_id, files, tmp_dir))
             copy(*files, dest = tmp_dir)
 
             prefix = get_random_str()

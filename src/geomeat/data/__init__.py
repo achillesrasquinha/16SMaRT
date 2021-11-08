@@ -159,7 +159,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
                 config["oligos"] = oligos_file
 
-            template    = "mothur-filter"
+            template    = "mothur/filter"
             mothur_file = osp.join(tmp_dir, template)
 
             config = merge_dict(config, dict(template = template, inputdir = tmp_dir,
@@ -220,7 +220,7 @@ def merge_fastq(data_dir = None):
         output_group = osp.join(data_dir, "merged.group")
 
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
-            template    = "mothur-merge"
+            template    = "mothur/merge"
             mothur_file = osp.join(tmp_dir, template)
 
             logger.info("Building script %s for mothur." % template)

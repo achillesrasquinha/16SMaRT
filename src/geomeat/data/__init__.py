@@ -271,12 +271,12 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
 
             "layout": d["layout"], "trim_type": d["trimmed"],
             
-            "min_length": d["min_length"],
-            "max_length": d["max_length"]
+            "min_length": int(d["min_length"]),
+            "max_length": int(d["max_length"])
         })
 
     if mothur_configs:
-        logger.info("Filtering files using mothur....")
+        logger.info("Filtering files using mothur using %s jobs...." % jobs)
 
         with parallel.no_daemon_pool(processes = jobs) as pool:
             length    = len(mothur_configs)

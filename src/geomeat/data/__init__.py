@@ -37,13 +37,13 @@ def get_csv_data(sample = False):
 
     return data
 
-def get_fastq(meta, data_dir = None, raise_err = True, *args, **kwargs):
+def get_fastq(meta, data_dir = None, *args, **kwargs):
     sra, layout = meta["sra"], meta["layout"]
 
     jobs     = kwargs.get("jobs", settings.get("jobs"))
     data_dir = get_data_dir(NAME, data_dir)
 
-    with ShellEnvironment(cwd = data_dir, raise_err = raise_err) as shell:
+    with ShellEnvironment(cwd = data_dir) as shell:
         sra_dir = osp.join(data_dir, sra)
 
         logger.info("Checking if SRA %s is prefetched..." % sra)
@@ -128,8 +128,6 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
     sra_id     = config.pop("sra_id")
 
-    raise_err  = config.pop("raise_err", True)
-
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
         target_types,
@@ -177,7 +175,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
             logger.info("[SRA %s] Running mothur..." % sra_id)
 
-            with ShellEnvironment(cwd = tmp_dir, raise_err = raise_err) as shell:
+            with ShellEnvironment(cwd = tmp_dir) as shell:
                 code = shell("mothur %s" % mothur_file)
 
                 if not code:
@@ -217,7 +215,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
     else:
         logger.warn("[SRA %s] Filtered files already exists." % sra_id)
 
-def merge_fastq(data_dir = None, raise_err = True):
+def merge_fastq(data_dir = None):
     data_dir = get_data_dir(NAME, data_dir = data_dir)
 
     logger.info("Finding files in directory: %s" % data_dir)
@@ -246,7 +244,7 @@ def merge_fastq(data_dir = None, raise_err = True):
             )
             write(mothur_file, mothur_script)
 
-            with ShellEnvironment(cwd = tmp_dir, raise_err = raise_err) as shell:
+            with ShellEnvironment(cwd = tmp_dir) as shell:
                 code = shell("mothur %s" % mothur_file)
 
                 if not code:
@@ -304,8 +302,7 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
 
     logger.info("Attempting to filter FASTQ files...")
-    filter_fastq(data_dir = data_dir, check = check,
-        raise_err = False, *args, **kwargs)
+    filter_fastq(data_dir = data_dir, check = check, *args, **kwargs)
 
     logger.info("Merging FASTQs...")
     merge_fastq(data_dir = data_dir)

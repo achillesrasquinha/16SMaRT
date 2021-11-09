@@ -34,12 +34,16 @@ RUN apt-get --allow-releaseinfo-change update && \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \
         $HOME/vsearch*
 
-COPY . $GEOMEAT_PATH
 COPY ./docker/entrypoint.sh /entrypoint.sh
+
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+COPY . $GEOMEAT_PATH
 
 WORKDIR $GEOMEAT_PATH
 
-RUN pip install -r ./requirements.txt && \
+RUN pip install -r /requirements.txt && \
     python setup.py install
 
 ENTRYPOINT ["/entrypoint.sh"]

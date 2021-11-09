@@ -30,6 +30,7 @@ cache.create()
 
 settings = Settings(location = PATH["CACHE"], defaults = {
     "jobs":                 DEFAULT["jobs"],
+    "filter_chunks":        DEFAULT["filter_chunks"],
     "quality_average":      DEFAULT["quality_average"],
     "maximum_ambiguity":    DEFAULT["maximum_ambiguity"],
     "maximum_homopolymers": DEFAULT["maximum_homopolymers"]

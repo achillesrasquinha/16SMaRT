@@ -7,6 +7,7 @@ from geomeat.config  import PATH
 from geomeat import settings, __name__ as NAME
 
 from bpyutils.util.ml      import get_data_dir
+from bpyutils.util.array   import chunkify
 from bpyutils.util._dict   import dict_from_list, merge_dict
 from bpyutils.util.types   import lmap, auto_typecast, build_fn
 from bpyutils.util.system  import (
@@ -280,12 +281,15 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
     if mothur_configs:
         logger.info("Filtering files using mothur using %s jobs...." % jobs)
 
-        with parallel.no_daemon_pool(processes = jobs) as pool:
-            length    = len(mothur_configs)
-            function_ = build_fn(_mothur_filter_files, *args, **kwargs)
-            results   = pool.imap(function_, mothur_configs)
+        filter_chunks = settings.get("filter_chunks")
 
-            list(tq.tqdm(results, total = length))
+        for chunk in chunkify(mothur_configs, filter_chunks):
+            with parallel.no_daemon_pool(processes = jobs) as pool:
+                length    = len(mothur_configs)
+                function_ = build_fn(_mothur_filter_files, *args, **kwargs)
+                results   = pool.imap(function_, chunk)
+
+                list(tq.tqdm(results, total = length))
     
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)

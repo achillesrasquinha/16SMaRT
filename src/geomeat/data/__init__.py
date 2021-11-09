@@ -177,7 +177,6 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
             logger.info("[SRA %s] Running mothur..." % sra_id)
 
             try:
-
                 with ShellEnvironment(cwd = tmp_dir) as shell:
                     code = shell("mothur %s" % mothur_file)
 

@@ -1,0 +1,2 @@
+unique.seqs(fasta={{ merged_fasta }})
+count.seqs(name=current, group={{ merged_group }})

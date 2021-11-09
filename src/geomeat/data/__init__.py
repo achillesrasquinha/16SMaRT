@@ -5,6 +5,7 @@ import tqdm as tq
 
 from geomeat.config  import PATH
 from geomeat import settings, __name__ as NAME
+from geomeat.data.util import install_silva
 
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.array   import chunkify
@@ -13,7 +14,7 @@ from bpyutils.util.types   import lmap, auto_typecast, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     makedirs,
-    make_temp_dir, get_files, copy, write
+    make_temp_dir, get_files, copy, write, move
 )
 from bpyutils.util.string    import get_random_str
 from bpyutils.exception      import PopenError
@@ -112,6 +113,12 @@ def _get_fastq_file_line(fname):
 
     return "%s %s" % (prefix, fname)
 
+def _build_mothur_script(template, output, config):
+    logger.info("Building script %s for mothur." % template)
+
+    mothur_script = render_template(template = template, **config)
+    write(output, mothur_script)
+
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
     logger.info("Using config %s to filter files." % config)
 
@@ -161,18 +168,16 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
                 config["oligos"] = oligos_file
 
-            template    = "mothur/filter"
             mothur_file = osp.join(tmp_dir, "script")
-
-            config = merge_dict(config, dict(template = template, inputdir = tmp_dir,
-                prefix = prefix, processors = jobs,
-                qaverage = settings.get("quality_average"),
-                maxambig = settings.get("maximum_ambiguity"),
-                maxhomop = settings.get("maximum_homopolymers")
-            ))
-            logger.info("[SRA %s] Building script %s for mothur using config: %s" % (sra_id, template, config))
-            mothur_script = render_template(**config)
-            write(mothur_file, mothur_script)
+            _build_mothur_script("mothur/filter", 
+                output = mothur_file,
+                config = dict(
+                    inputdir = tmp_dir, prefix = prefix, processors = jobs,
+                    qaverage = settings.get("quality_average"),
+                    maxambig = settings.get("maximum_ambiguity"),
+                    maxhomop = settings.get("maximum_homopolymers")
+                )
+            )
 
             logger.info("[SRA %s] Running mothur..." % sra_id)
 
@@ -234,19 +239,16 @@ def merge_fastq(data_dir = None):
         output_group = osp.join(data_dir, "merged.group")
 
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
-            template    = "mothur/merge"
             mothur_file = osp.join(tmp_dir, "script")
-
-            logger.info("Building script %s for mothur." % template)
-
-            mothur_script = render_template(
-                template  = template,
-                input_fastas = filtered,
-                input_groups = groups,
-                output_fasta = output_fasta,
-                output_group = output_group
+            _build_mothur_script("mothur/preprocess", 
+                output = mothur_file,
+                config = dict(
+                    input_fastas = filtered,
+                    input_groups = groups,
+                    output_fasta = output_fasta,
+                    output_group = output_group
+                )
             )
-            write(mothur_file, mothur_script)
 
             with ShellEnvironment(cwd = tmp_dir) as shell:
                 code = shell("mothur %s" % mothur_file)
@@ -256,8 +258,8 @@ def merge_fastq(data_dir = None):
                     merged_fasta = get_files(data_dir, "merged.fasta")
                     merged_group = get_files(data_dir, "merged.group")
 
-                    copy(*merged_fasta, dest = output_fasta)
-                    copy(*merged_group, dest = output_group)
+                    move(*merged_fasta, dest = output_fasta)
+                    move(*merged_group, dest = output_group)
 
                     logger.success("Successfully merged.")
                 else:
@@ -308,7 +310,23 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
                 results   = pool.imap(function_, chunk)
 
                 list(tq.tqdm(results, total = length))
-    
+
+def preprocess_fasta(data_dir = None):
+    data_dir = get_data_dir(NAME, data_dir)
+
+    merged_fasta = osp.join(data_dir, "merged.fasta")
+    merged_group = osp.join(data_dir, "merged.group")
+
+    with make_temp_dir(root_dir = CACHE) as tmp_dir:
+        mothur_file = osp.join(tmp_dir, "script")
+        _build_mothur_script("mothur/preprocess", 
+            output = mothur_file,
+            config = dict(
+                merged_fasta = merged_fasta,
+                merged_group = merged_group
+            )
+        )
+
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
 
@@ -318,8 +336,11 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     logger.info("Merging FASTQs...")
     merge_fastq(data_dir = data_dir)
 
-    # logger.info("Installing SILVA...")
-    # install_silva()
+    logger.info("Installing SILVA...")
+    install_silva()
+
+    logger.info("Pre-processing FASTA + Group files...")
+    preprocess_fasta(data_dir = data_dir)
 
 def check_data(data_dir = None):
     pass

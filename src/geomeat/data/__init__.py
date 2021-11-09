@@ -15,7 +15,8 @@ from bpyutils.util.system  import (
     makedirs,
     make_temp_dir, get_files, copy, write
 )
-from bpyutils.util.string  import get_random_str
+from bpyutils.util.exception import PopenError
+from bpyutils.util.string    import get_random_str
 from bpyutils._compat import itervalues
 from bpyutils import parallel, log
 
@@ -175,43 +176,47 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
             logger.info("[SRA %s] Running mothur..." % sra_id)
 
-            with ShellEnvironment(cwd = tmp_dir) as shell:
-                code = shell("mothur %s" % mothur_file)
+            try:
 
-                if not code:
-                    logger.success("[SRA %s] mothur ran successfully." % sra_id)
+                with ShellEnvironment(cwd = tmp_dir) as shell:
+                    code = shell("mothur %s" % mothur_file)
 
-                    logger.info("[SRA %s] Attempting to copy filtered files." % sra_id)
+                    if not code:
+                        logger.success("[SRA %s] mothur ran successfully." % sra_id)
 
-                    choice = (
-                        ".trim.contigs.trim.good.fasta",
-                        ".contigs.good.groups",
-                        ".trim.contigs.trim.good.summary"
-                    ) if layout == "paired" else (
-                        ".trim.good.fasta",
-                        ".good.group",
-                        ".trim.good.summary"
-                    )
-                        # group(s): are you f'king kiddin' me?
+                        logger.info("[SRA %s] Attempting to copy filtered files." % sra_id)
 
-                    makedirs(target_dir, exist_ok = True)
-            
-                    copy(
-                        osp.join(tmp_dir, "%s%s" % (prefix, choice[0])),
-                        dest = target_path["fasta"]
-                    )
+                        choice = (
+                            ".trim.contigs.trim.good.fasta",
+                            ".contigs.good.groups",
+                            ".trim.contigs.trim.good.summary"
+                        ) if layout == "paired" else (
+                            ".trim.good.fasta",
+                            ".good.group",
+                            ".trim.good.summary"
+                        )
+                            # group(s): are you f'king kiddin' me?
 
-                    copy(
-                        osp.join(tmp_dir, "%s%s" % (prefix, choice[1])),
-                        dest = target_path["group"]
-                    )
+                        makedirs(target_dir, exist_ok = True)
+                
+                        copy(
+                            osp.join(tmp_dir, "%s%s" % (prefix, choice[0])),
+                            dest = target_path["fasta"]
+                        )
 
-                    copy(
-                        osp.join(tmp_dir, "%s%s" % (prefix, choice[2])),
-                        dest = target_path["summary"]
-                    )
+                        copy(
+                            osp.join(tmp_dir, "%s%s" % (prefix, choice[1])),
+                            dest = target_path["group"]
+                        )
 
-                    logger.info("[SRA %s] Successfully copied filtered files at %s." % (sra_id, target_dir))
+                        copy(
+                            osp.join(tmp_dir, "%s%s" % (prefix, choice[2])),
+                            dest = target_path["summary"]
+                        )
+
+                        logger.info("[SRA %s] Successfully copied filtered files at %s." % (sra_id, target_dir))
+            except PopenError as e:
+                logger.error("[SRA %s] Unable to filter files. Error: %s" % e)
     else:
         logger.warn("[SRA %s] Filtered files already exists." % sra_id)
 

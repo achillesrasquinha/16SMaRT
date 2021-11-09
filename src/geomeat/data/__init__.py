@@ -128,6 +128,8 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
     sra_id     = config.pop("sra_id")
 
+    raise_err  = config.pop("raise_err", True)
+
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
         target_types,
@@ -175,7 +177,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
             logger.info("[SRA %s] Running mothur..." % sra_id)
 
-            with ShellEnvironment(cwd = tmp_dir) as shell:
+            with ShellEnvironment(cwd = tmp_dir, raise_err = raise_err) as shell:
                 code = shell("mothur %s" % mothur_file)
 
                 if not code:
@@ -183,8 +185,15 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
                     logger.info("[SRA %s] Attempting to copy filtered files." % sra_id)
 
-                    choice = (".trim.contigs.trim.good.fasta", ".contigs.good.groups") \
-                        if layout == "paired" else (".trim.good.fasta", ".good.group")
+                    choice = (
+                        ".trim.contigs.trim.good.fasta",
+                        ".contigs.good.groups",
+                        ".trim.contigs.trim.good.summary"
+                    ) if layout == "paired" else (
+                        ".trim.good.fasta",
+                        ".good.group",
+                        ".trim.good.summary"
+                    )
                         # group(s): are you f'king kiddin' me?
 
                     makedirs(target_dir, exist_ok = True)
@@ -200,7 +209,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                     )
 
                     copy(
-                        osp.join(tmp_dir, "%s%s" % (prefix, ".trim.contigs.trim.good.summary")),
+                        osp.join(tmp_dir, "%s%s" % (prefix, choice[2])),
                         dest = target_path["summary"]
                     )
 
@@ -208,7 +217,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
     else:
         logger.warn("[SRA %s] Filtered files already exists." % sra_id)
 
-def merge_fastq(data_dir = None):
+def merge_fastq(data_dir = None, raise_err = True):
     data_dir = get_data_dir(NAME, data_dir = data_dir)
 
     logger.info("Finding files in directory: %s" % data_dir)
@@ -237,7 +246,7 @@ def merge_fastq(data_dir = None):
             )
             write(mothur_file, mothur_script)
 
-            with ShellEnvironment(cwd = tmp_dir) as shell:
+            with ShellEnvironment(cwd = tmp_dir, raise_err = raise_err) as shell:
                 code = shell("mothur %s" % mothur_file)
 
                 if not code:
@@ -295,7 +304,8 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
 
     logger.info("Attempting to filter FASTQ files...")
-    filter_fastq(data_dir = data_dir, check = check, *args, **kwargs)
+    filter_fastq(data_dir = data_dir, check = check,
+        raise_err = False, *args, **kwargs)
 
     logger.info("Merging FASTQs...")
     merge_fastq(data_dir = data_dir)

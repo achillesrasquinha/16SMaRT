@@ -252,6 +252,13 @@ def merge_fastq(data_dir = None):
                 code = shell("mothur %s" % mothur_file)
 
                 if not code:
+                    # HACK: weird hack around failure of mothur detecting output for merge.files
+                    merged_fasta = get_files(data_dir, "merged.fasta")
+                    merged_group = get_files(data_dir, "merged.group")
+
+                    copy(*merged_fasta, dest = output_fasta)
+                    copy(*merged_group, dest = output_group)
+
                     logger.success("Successfully merged.")
                 else:
                     logger.error("Error merging files.")

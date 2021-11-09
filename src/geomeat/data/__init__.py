@@ -216,7 +216,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
                         logger.info("[SRA %s] Successfully copied filtered files at %s." % (sra_id, target_dir))
             except PopenError as e:
-                logger.error("[SRA %s] Unable to filter files. Error: %s" % e)
+                logger.error("[SRA %s] Unable to filter files. Error: %s" % (sra_id, e))
     else:
         logger.warn("[SRA %s] Filtered files already exists." % sra_id)
 

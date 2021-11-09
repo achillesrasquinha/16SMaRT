@@ -15,8 +15,8 @@ from bpyutils.util.system  import (
     makedirs,
     make_temp_dir, get_files, copy, write
 )
-from bpyutils.util.exception import PopenError
 from bpyutils.util.string    import get_random_str
+from bpyutils.exception      import PopenError
 from bpyutils._compat import itervalues
 from bpyutils import parallel, log
 

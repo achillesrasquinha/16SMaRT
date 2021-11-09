@@ -204,6 +204,8 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                     )
 
                     logger.info("[SRA %s] Successfully copied filtered files at %s." % (sra_id, target_dir))
+    else:
+        logger.warn("[SRA %s] Filtered files already exists." % sra_id)
 
 def merge_fastq(data_dir = None):
     data_dir = get_data_dir(NAME, data_dir = data_dir)

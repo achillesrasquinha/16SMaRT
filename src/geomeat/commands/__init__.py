@@ -2,24 +2,15 @@
 from __future__ import absolute_import
 
 # imports - standard imports
-import sys, os
-import re
-import json
-import multiprocessing as mp
-from   functools import partial
 import traceback
 
 from geomeat.commands.util 	import cli_format
-from bpyutils.util.array    	import flatten, sequencify
 from bpyutils.util._dict        import merge_dict
-from bpyutils.util.system   	import (read, write, touch, popen, which)
-from bpyutils.util.environ  	import getenvvar
-from bpyutils.util.datetime 	import get_timestamp_str
-from bpyutils.util.imports      import import_or_raise
+from bpyutils.util.system   	import touch
 from bpyutils.config			import environment
-from bpyutils import request as req, log, parallel
+from bpyutils import log
 from geomeat 	import cli
-from bpyutils._compat		    import builtins, iteritems
+from bpyutils._compat		    import iteritems
 from geomeat.__attr__      	import __name__
 from geomeat.exception      import DependencyNotFoundError
 

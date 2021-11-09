@@ -313,3 +313,6 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
 
     # logger.info("Installing SILVA...")
     # install_silva()
+
+def check_data(data_dir = None):
+    pass

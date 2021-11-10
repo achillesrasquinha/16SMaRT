@@ -113,10 +113,13 @@ def _get_fastq_file_line(fname):
 
     return "%s %s" % (prefix, fname)
 
-def _build_mothur_script(template, output, config):
-    logger.info("Building script %s for mothur." % template)
+def _build_mothur_script(*args, **kwargs):
+    template = kwargs.pop("template")
+    output   = kwargs.pop("output")
 
-    mothur_script = render_template(**merge_dict(dict(template = template), config))
+    logger.info("Building script %s for mothur..." % template)
+
+    mothur_script = render_template(**kwargs)
     write(output, mothur_script)
 
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
@@ -171,12 +174,10 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
             mothur_file = osp.join(tmp_dir, "script")
             _build_mothur_script("mothur/filter", 
                 output = mothur_file,
-                config = dict(
-                    inputdir = tmp_dir, prefix = prefix, processors = jobs,
-                    qaverage = settings.get("quality_average"),
-                    maxambig = settings.get("maximum_ambiguity"),
-                    maxhomop = settings.get("maximum_homopolymers")
-                )
+                inputdir = tmp_dir, prefix = prefix, processors = jobs,
+                qaverage = settings.get("quality_average"),
+                maxambig = settings.get("maximum_ambiguity"),
+                maxhomop = settings.get("maximum_homopolymers")
             )
 
             logger.info("[SRA %s] Running mothur..." % sra_id)
@@ -240,14 +241,13 @@ def merge_fastq(data_dir = None):
 
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
             mothur_file = osp.join(tmp_dir, "script")
-            _build_mothur_script("mothur/preprocess", 
-                output = mothur_file,
-                config = dict(
-                    input_fastas = filtered,
-                    input_groups = groups,
-                    output_fasta = output_fasta,
-                    output_group = output_group
-                )
+            _build_mothur_script(
+                template     = "mothur/preprocess", 
+                output       = mothur_file,
+                input_fastas = filtered,
+                input_groups = groups,
+                output_fasta = output_fasta,
+                output_group = output_group
             )
 
             with ShellEnvironment(cwd = tmp_dir) as shell:
@@ -321,10 +321,8 @@ def preprocess_fasta(data_dir = None):
         mothur_file = osp.join(tmp_dir, "script")
         _build_mothur_script("mothur/preprocess", 
             output = mothur_file,
-            config = dict(
-                merged_fasta = merged_fasta,
-                merged_group = merged_group
-            )
+            merged_fasta = merged_fasta,
+            merged_group = merged_group
         )
 
         with ShellEnvironment(cwd = tmp_dir) as shell:

@@ -116,7 +116,7 @@ def _get_fastq_file_line(fname):
 def _build_mothur_script(template, output, config):
     logger.info("Building script %s for mothur." % template)
 
-    mothur_script = render_template(template = template, **config)
+    mothur_script = render_template(**merge_dict(dict(template = template), config))
     write(output, mothur_script)
 
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):

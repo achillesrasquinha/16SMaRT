@@ -258,8 +258,8 @@ def merge_fastq(data_dir = None):
                     merged_fasta = get_files(data_dir, "merged.fasta")
                     merged_group = get_files(data_dir, "merged.group")
 
-                    copy(*merged_fasta, dest = output_fasta)
-                    copy(*merged_group, dest = output_group)
+                    move(*merged_fasta, dest = output_fasta)
+                    move(*merged_group, dest = output_group)
 
                     logger.success("Successfully merged.")
                 else:

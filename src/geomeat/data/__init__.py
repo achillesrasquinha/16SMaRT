@@ -258,8 +258,8 @@ def merge_fastq(data_dir = None):
                     merged_fasta = get_files(data_dir, "merged.fasta")
                     merged_group = get_files(data_dir, "merged.group")
 
-                    move(*merged_fasta, dest = output_fasta)
-                    move(*merged_group, dest = output_group)
+                    copy(*merged_fasta, dest = output_fasta)
+                    copy(*merged_group, dest = output_group)
 
                     logger.success("Successfully merged.")
                 else:
@@ -326,6 +326,14 @@ def preprocess_fasta(data_dir = None):
                 merged_group = merged_group
             )
         )
+
+        with ShellEnvironment(cwd = tmp_dir) as shell:
+            code = shell("mothur %s" % mothur_file)
+
+            if not code:
+                pass
+            else:
+                logger.error("Error merging files.")
 
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)

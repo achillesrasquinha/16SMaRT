@@ -172,8 +172,9 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                 config["oligos"] = oligos_file
 
             mothur_file = osp.join(tmp_dir, "script")
-            _build_mothur_script("mothur/filter", 
-                output = mothur_file,
+            _build_mothur_script(
+                template = "mothur/filter", 
+                output   = mothur_file,
                 inputdir = tmp_dir, prefix = prefix, processors = jobs,
                 qaverage = settings.get("quality_average"),
                 maxambig = settings.get("maximum_ambiguity"),
@@ -319,8 +320,9 @@ def preprocess_fasta(data_dir = None):
 
     with make_temp_dir(root_dir = CACHE) as tmp_dir:
         mothur_file = osp.join(tmp_dir, "script")
-        _build_mothur_script("mothur/preprocess", 
-            output = mothur_file,
+        _build_mothur_script(
+            template = "mothur/preprocess", 
+            output   = mothur_file,
             merged_fasta = merged_fasta,
             merged_group = merged_group
         )

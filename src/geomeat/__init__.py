@@ -32,7 +32,10 @@ settings = Settings(location = PATH["CACHE"], defaults = {
     "filter_chunks":        DEFAULT["filter_chunks"],
     "quality_average":      DEFAULT["quality_average"],
     "maximum_ambiguity":    DEFAULT["maximum_ambiguity"],
-    "maximum_homopolymers": DEFAULT["maximum_homopolymers"]
+    "maximum_homopolymers": DEFAULT["maximum_homopolymers"],
+    "silva_version":        DEFAULT["silva_version"],
+    "silva_seed_pcr_start": DEFAULT["silva_seed_pcr_start"],
+    "silva_seed_pcr_end":   DEFAULT["silva_seed_pcr_end"]
 })
 
 def get_version_str():

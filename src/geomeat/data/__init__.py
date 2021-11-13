@@ -313,19 +313,30 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
 
                 list(tq.tqdm(results, total = length))
 
-def preprocess_fasta(data_dir = None):
+def preprocess_fasta(data_dir = None, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
 
     merged_fasta = osp.join(data_dir, "merged.fasta")
     merged_group = osp.join(data_dir, "merged.group")
 
+    silva_seed = kwargs["silva_seed"]
+    silva_gold = kwargs["silva_gold"]
+
+    files = (merged_fasta, merged_group, silva_seed, silva_gold)
+
     with make_temp_dir(root_dir = CACHE) as tmp_dir:
+        copy(*files, dest = tmp_dir)
+
         mothur_file = osp.join(tmp_dir, "script")
         _build_mothur_script(
             template = "mothur/preprocess",
             output   = mothur_file,
             merged_fasta = merged_fasta,
-            merged_group = merged_group
+            merged_group = merged_group,
+
+            silva_seed   = osp.join(tmp_dir, osp.basename(silva_seed)),
+            silva_seed_start = settings.get("silva_seed_pcr_start"),
+            silva_seed_end   = settings.get("silva_seed_pcr_end")
         )
 
         with ShellEnvironment(cwd = tmp_dir) as shell:
@@ -346,10 +357,14 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     merge_fastq(data_dir = data_dir)
 
     logger.info("Installing SILVA...")
-    install_silva()
+    silva_paths = install_silva()
 
+    logger.success("SILVA successfully downloaded at %s." % silva_paths)
+    
     logger.info("Pre-processing FASTA + Group files...")
-    preprocess_fasta(data_dir = data_dir)
+    preprocess_fasta(data_dir = data_dir,
+        silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"]
+    )
 
 def check_data(data_dir = None):
     pass

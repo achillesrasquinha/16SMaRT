@@ -8,7 +8,7 @@ from bpyutils.util.request import download_file
 
 from geomeat.config import PATH
 from geomeat.const  import CONST
-from geomeat import __name__ as NAME
+from geomeat import __name__ as NAME, settings
 
 logger = log.get_logger(name = NAME)
 
@@ -23,13 +23,18 @@ def render_template(*args, **kwargs):
     return rendered
 
 def install_silva():
-    path_silva_seed = osp.join(PATH["CACHE"], "silva.seed_v132.tgz")
+    silva_version = str(settings.get("silva_version"))
+    silva_version_str = "v%s" % silva_version.replace(".", "_")
+
+    logger.info("Installing SILVA version v%s" % silva_version)
+
+    path_silva_seed = osp.join(PATH["CACHE"], "silva.seed_%s.tgz" % silva_version_str)
     path_target     = osp.join(PATH["CACHE"], "silva")
 
     if not osp.exists(path_silva_seed):
-        logger.info("Downloading SILVA seed v132 database...")
+        logger.info("Downloading SILVA seed v%s database..." % silva_version)
 
-        download_file(CONST["url_silva_seed_132"], path_silva_seed)
+        download_file(CONST["url_silva_seed"].format(version = silva_version_str), path_silva_seed)
         extract_all(path_silva_seed, path_target)
 
     path_silva_gold_bacteria = osp.join(PATH["CACHE"], "silva.gold.bacteria.zip")
@@ -40,4 +45,11 @@ def install_silva():
         download_file(CONST["url_silva_gold_bacteria"], path_silva_gold_bacteria)
         extract_all(path_silva_gold_bacteria, path_target)
 
-    return path_target
+    silva_paths = {
+        "seed": osp.join(path_target, "silva.seed_%s.align" % silva_version_str),
+        "gold": osp.join(path_target, "silva.gold.align")
+    }
+
+    logger.success("SILVA successfully downloaded at %s." % silva_paths)
+
+    return silva_paths

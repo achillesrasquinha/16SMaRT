@@ -244,7 +244,7 @@ def merge_fastq(data_dir = None):
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
             mothur_file = osp.join(tmp_dir, "script")
             _build_mothur_script(
-                template     = "mothur/preprocess", 
+                template     = "mothur/merge", 
                 output       = mothur_file,
                 input_fastas = filtered,
                 input_groups = groups,
@@ -322,7 +322,7 @@ def preprocess_fasta(data_dir = None):
     with make_temp_dir(root_dir = CACHE) as tmp_dir:
         mothur_file = osp.join(tmp_dir, "script")
         _build_mothur_script(
-            template = "mothur/preprocess", 
+            template = "mothur/preprocess",
             output   = mothur_file,
             merged_fasta = merged_fasta,
             merged_group = merged_group

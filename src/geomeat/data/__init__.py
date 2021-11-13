@@ -114,12 +114,12 @@ def _get_fastq_file_line(fname):
     return "%s %s" % (prefix, fname)
 
 def _build_mothur_script(*args, **kwargs):
-    template = kwargs.get("template")
+    template = kwargs.pop("template")
     output   = kwargs.pop("output")
 
     logger.info("Building script %s for mothur..." % template)
 
-    mothur_script = render_template(*args, **kwargs)
+    mothur_script = render_template(template = template, *args, **kwargs)
     write(output, mothur_script)
 
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):

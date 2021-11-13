@@ -114,12 +114,12 @@ def _get_fastq_file_line(fname):
     return "%s %s" % (prefix, fname)
 
 def _build_mothur_script(*args, **kwargs):
-    template = kwargs.pop("template")
+    template = kwargs.get("template")
     output   = kwargs.pop("output")
 
-    logger.info("Building script %s for mothur..." % template)
+    logger.info("Building script %s for mothur with args: %s" % (template, kwargs))
 
-    mothur_script = render_template(template = template, *args, **kwargs)
+    mothur_script = render_template(*args, **kwargs)
     write(output, mothur_script)
 
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
@@ -173,7 +173,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
             mothur_file = osp.join(tmp_dir, "script")
             _build_mothur_script(
-                template = "mothur/filter", 
+                template = "mothur/filter",
                 output   = mothur_file,
                 inputdir = tmp_dir, prefix = prefix, processors = jobs,
                 qaverage = settings.get("quality_average"),

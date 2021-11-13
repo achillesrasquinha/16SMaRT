@@ -114,7 +114,7 @@ def _get_fastq_file_line(fname):
     return "%s %s" % (prefix, fname)
 
 def _build_mothur_script(*args, **kwargs):
-    template = kwargs.pop("template")
+    template = kwargs.get("template")
     output   = kwargs.pop("output")
 
     logger.info("Building script %s for mothur..." % template)

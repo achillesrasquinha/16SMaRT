@@ -47,7 +47,8 @@ def install_silva():
 
     silva_paths = {
         "seed": osp.join(path_target, "silva.seed_%s.align" % silva_version_str),
-        "gold": osp.join(path_target, "silva.gold.align")
+        "gold": osp.join(path_target, "silva.gold.align"),
+        "taxonomy": osp.join(path_target, "silva.seed_%s.tax" % silva_version_str)
     }
 
     logger.success("SILVA successfully downloaded at %s." % silva_paths)

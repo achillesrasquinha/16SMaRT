@@ -321,11 +321,14 @@ def preprocess_fasta(data_dir = None, *args, **kwargs):
 
     silva_seed = kwargs["silva_seed"]
     silva_gold = kwargs["silva_gold"]
+    silva_seed_tax = kwargs["silva_seed_tax"]
 
     files = (merged_fasta, merged_group, silva_seed, silva_gold)
 
     with make_temp_dir(root_dir = CACHE) as tmp_dir:
         copy(*files, dest = tmp_dir)
+
+        silva_seed_splitext = osp.splitext(osp.basename(silva_seed))
 
         mothur_file = osp.join(tmp_dir, "script")
         _build_mothur_script(
@@ -334,9 +337,16 @@ def preprocess_fasta(data_dir = None, *args, **kwargs):
             merged_fasta = merged_fasta,
             merged_group = merged_group,
 
-            silva_seed   = osp.join(tmp_dir, osp.basename(silva_seed)),
+            silva_seed       = osp.join(tmp_dir, osp.basename(silva_seed)),
             silva_seed_start = settings.get("silva_seed_pcr_start"),
-            silva_seed_end   = settings.get("silva_seed_pcr_end")
+            silva_seed_end   = settings.get("silva_seed_pcr_end"),
+
+            silva_seed_pcr   = osp.join(tmp_dir, "%s.pcr%s" % (silva_seed_splitext[0], silva_seed_splitext[1])),
+            
+            silva_seed_tax   = osp.join(tmp_dir, osp.basename(silva_seed_tax)),
+            silva_gold       = osp.join(tmp_dir, osp.basename(silva_gold)),
+
+            maxhomop         = settings.get("maximum_homopolymers")
         )
 
         with ShellEnvironment(cwd = tmp_dir) as shell:
@@ -363,7 +373,8 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     
     logger.info("Pre-processing FASTA + Group files...")
     preprocess_fasta(data_dir = data_dir,
-        silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"]
+        silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
+        silva_seed_tax = silva_paths["taxonomy"]
     )
 
 def check_data(data_dir = None):

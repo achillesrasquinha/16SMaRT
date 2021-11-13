@@ -315,6 +315,8 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
 
 def preprocess_fasta(data_dir = None, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
+    
+    jobs     = kwargs.get("jobs", settings.get("jobs"))
 
     merged_fasta = osp.join(data_dir, "merged.fasta")
     merged_group = osp.join(data_dir, "merged.group")
@@ -346,7 +348,9 @@ def preprocess_fasta(data_dir = None, *args, **kwargs):
             silva_seed_tax   = osp.join(tmp_dir, osp.basename(silva_seed_tax)),
             silva_gold       = osp.join(tmp_dir, osp.basename(silva_gold)),
 
-            maxhomop         = settings.get("maximum_homopolymers")
+            maxhomop         = settings.get("maximum_homopolymers"),
+
+            processors       = jobs
         )
 
         with ShellEnvironment(cwd = tmp_dir) as shell:

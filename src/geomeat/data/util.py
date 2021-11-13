@@ -17,6 +17,8 @@ def render_template(*args, **kwargs):
 
     template_path = osp.join(PATH["DATA"], "templates", script)
     template = Template(read(template_path))
+
+    logger.info("Rendering template: %s" % kwargs)
     
     rendered = template.render(*args, **kwargs)
 

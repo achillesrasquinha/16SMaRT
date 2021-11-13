@@ -178,7 +178,8 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                 inputdir = tmp_dir, prefix = prefix, processors = jobs,
                 qaverage = settings.get("quality_average"),
                 maxambig = settings.get("maximum_ambiguity"),
-                maxhomop = settings.get("maximum_homopolymers")
+                maxhomop = settings.get("maximum_homopolymers"),
+                **config
             )
 
             logger.info("[SRA %s] Running mothur..." % sra_id)

@@ -18,7 +18,7 @@ DEFAULT = {
     "quality_average":      35,
     "maximum_ambiguity":    0,
     "maximum_homopolymers": 8,
-    "silva_version":        "138",
+    "silva_version":        "132",
     "silva_seed_pcr_start": 6388,
     "silva_seed_pcr_end":   13861
 }

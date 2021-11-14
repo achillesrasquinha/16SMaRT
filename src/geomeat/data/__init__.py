@@ -336,8 +336,8 @@ def preprocess_fasta(data_dir = None, *args, **kwargs):
         _build_mothur_script(
             template = "mothur/preprocess",
             output   = mothur_file,
-            merged_fasta = merged_fasta,
-            merged_group = merged_group,
+            merged_fasta = osp.join(tmp_dir, osp.basename(merged_fasta)),
+            merged_group = osp.join(tmp_dir, osp.basename(merged_group)),
 
             silva_seed       = osp.join(tmp_dir, osp.basename(silva_seed)),
             silva_seed_start = settings.get("silva_seed_pcr_start"),

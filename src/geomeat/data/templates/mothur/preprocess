@@ -1,4 +1,4 @@
-pcr.seqs(fasta={{ silva_seed }}, start={{ silva_seed_start }}, end={{ silva_seed_end }}, keepdots=FALSE, flip=T, processors={{ processors }})
+pcr.seqs(fasta={{ silva_seed }}, start={{ silva_seed_start }}, end={{ silva_seed_end }}, keepdots=FALSE, processors={{ processors }})
 
 unique.seqs(fasta={{ merged_fasta }})
 count.seqs(name=current, group={{ merged_group }})

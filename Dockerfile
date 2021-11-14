@@ -4,6 +4,7 @@ LABEL maintainer=achillesrasquinha@gmail.com
 
 ENV TERM=xterm-256color \
     SRA_TOOLKIT_VERSION=2.9.6 \
+    MOTHUR_VERSION=1.46.1 \
     VSEARCH_VERSION=2.18.0 \
     GEOMEAT_PATH=/usr/local/src/geomeat
 
@@ -17,10 +18,10 @@ RUN apt-get --allow-releaseinfo-change update && \
     export VDB_CONFIG=$HOME/.ncbi/default.kfg && \
     # FastQC
     mkdir -p /usr/share/man/man1 && \
-    apt-get install -y --no-install-recommends \
-        openjdk-11-jre-headless \
-        fastqc \
-        mothur && \
+    wget -nv https://github.com/mothur/mothur/releases/download/v${MOTHUR_VERSION}/Mothur.Ubuntu_20.zip -O $HOME/mothur.zip && \
+    unzip $HOME/mothur.zip -d /mothur && \
+    cp /mothur/mothur/mothur /usr/local/bin && \
+    rm -rf $HOME/mothur* && \
     wget -nv https://github.com/torognes/vsearch/archive/v${VSEARCH_VERSION}.tar.gz -O $HOME/vsearch.tar.gz && \
     tar xzf $HOME/vsearch.tar.gz -C $HOME && \
     cd $HOME/vsearch-${VSEARCH_VERSION} && \

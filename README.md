@@ -1,27 +1,18 @@
 <div align="center">
   <img src=".github/assets/logo.png" height="128">
   <h1>
-      geomeat
+      16SMaRT
   </h1>
-  <h4>A meta-analysis for meat across geographies.</h4>
+  <h4>16s rRNA Sequencing Meta-analysis Reconstruction Tool.</h4>
 </div>
 
 <p align="center">
-    <a href='https://github.com/achillesrasquinha/geomeat//actions?query=workflow:"Continuous Integration"'>
-      <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/geomeat/Continuous Integration?style=flat-square">
+    <a href='https://github.com/achillesrasquinha/16SMaRT/actions?query=workflow:"Continuous Integration"'>
+      <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/16SMaRT/Continuous Integration?style=flat-square">
     </a>
-    <a href="https://coveralls.io/github/achillesrasquinha/geomeat">
-      <img src="https://img.shields.io/coveralls/github/achillesrasquinha/geomeat.svg?style=flat-square">
+    <a href="https://coveralls.io/github/achillesrasquinha/16SMaRT">
+      <img src="https://img.shields.io/coveralls/github/achillesrasquinha/16SMaRT.svg?style=flat-square">
     </a>
-    <a href="https://pypi.org/project/geomeat/">
-      <img src="https://img.shields.io/pypi/v/geomeat.svg?style=flat-square">
-    </a>
-    <a href="https://pypi.org/project/geomeat/">
-      <img src="https://img.shields.io/pypi/l/geomeat.svg?style=flat-square">
-    </a>
-    <a href="https://pypi.org/project/geomeat/">
-		  <img src="https://img.shields.io/pypi/pyversions/geomeat.svg?style=flat-square">
-	  </a>
     <a href="https://git.io/boilpy">
       <img src="https://img.shields.io/badge/made%20with-boilpy-red.svg?style=flat-square">
     </a>
@@ -34,13 +25,11 @@
 * [License](#license)
 
 ### Features
-* Python 2.7+ and Python 3.4+ compatible.
+
+* Supports single-end and paired-end Illumina data.
+* Docker/Singularity support.
 
 ### Quick Start
-
-```shell
-$ pip install geomeat
-```
 
 Check out [installation](docs/source/installation.md) for more details.
 
@@ -48,28 +37,7 @@ Check out [installation](docs/source/installation.md) for more details.
 
 #### Application Interface
 
-```python
->>> import geomeat
-```
-
-
 #### Command-Line Interface
-
-```console
-$ geomeat
-Usage: geomeat [OPTIONS] COMMAND [ARGS]...
-
-  A meta-analysis for meat across geographies.
-
-Options:
-  --version   Show the version and exit.
-  -h, --help  Show this message and exit.
-
-Commands:
-  help     Show this message and exit.
-  version  Show version and exit.
-```
-
 
 ### License
 

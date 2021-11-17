@@ -26,7 +26,7 @@
 
 ### Features
 
-* Supports single-end and paired-end Illumina data.
+* Supports single-ended and paired-ended Illumina data.
 * Docker/Singularity support.
 
 ### Quick Start

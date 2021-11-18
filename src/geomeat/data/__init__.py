@@ -166,7 +166,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
             if trim_type == "false":
                 oligos_file = osp.join(tmp_dir, "primers.oligos")
-                oligos_data = "primer %s %s" % (primer_f, primer_r, study_id)
+                oligos_data = "primer %s %s %s" % (primer_f, primer_r, study_id)
                 write(oligos_file, oligos_data)
 
                 config["oligos"] = oligos_file

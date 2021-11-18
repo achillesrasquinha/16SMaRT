@@ -138,6 +138,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
     trim_type  = config.get("trim_type")
 
     sra_id     = config.pop("sra_id")
+    study_id   = config.pop("study_id")
 
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
@@ -165,7 +166,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
             if trim_type == "false":
                 oligos_file = osp.join(tmp_dir, "primers.oligos")
-                oligos_data = "primer %s %s" % (primer_f, primer_r)
+                oligos_data = "primer %s %s" % (primer_f, primer_r, study_id)
                 write(oligos_file, oligos_data)
 
                 config["oligos"] = oligos_file
@@ -288,6 +289,8 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
         mothur_configs.append({
             "files": fastq_files,
             "target_dir": sra_dir,
+
+            "study_id": d["study_id"],
 
             "sra_id": sra_id,
 

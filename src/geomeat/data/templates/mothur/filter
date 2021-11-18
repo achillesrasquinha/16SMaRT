@@ -2,6 +2,6 @@
 make.file(inputdir={{ inputdir }}, prefix={{ prefix }})
 make.contigs(file=current, {% if oligos %}oligos={{ oligos }}, {% endif %}processors={{ processors }}) {% else %}
 fastq.info(file={{ fastq_file }}{% if trim_type == "true" %}, pacbio=T{% endif %}) {% endif %}
-trim.seqs(fasta=current, {% if layout == "single" %}qfile=current, {% if group is defined %}group={{ group }}, {% endif %}{% if oligos %}oligos={{ oligos }}, {% endif %}{% if pdiffs is defined %}pdiffs={{ pdiffs }}, {% endif %}{% endif %}qaverage={{ qaverage }}, processors={{ processors }})
+trim.seqs(fasta=current, {% if layout == "single" %}qfile=current, {% if oligos %}oligos={{ oligos }}, {% endif %}{% if pdiffs is defined %}pdiffs={{ pdiffs }}, {% endif %}{% endif %}qaverage={{ qaverage }}, processors={{ processors }})
 screen.seqs(fasta=current, group={% if group is defined %}{{ group }}{% else %}current{% endif %}, maxambig={{ maxambig }}, maxhomop={{ maxhomop }}, minlength={{ min_length }}, maxlength={{ max_length }}, processors={{ processors }})
 summary.seqs(fasta=current)

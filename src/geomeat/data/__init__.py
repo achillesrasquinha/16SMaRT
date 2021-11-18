@@ -164,7 +164,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
                 config["group"] = osp.join(tmp_dir, "%s.group" % prefix)
 
-            if layout == "paired" and trim_type == "false":
+            if trim_type == "false":
                 oligos_file = osp.join(tmp_dir, "primers.oligos")
                 oligos_data = "primer %s %s" % (primer_f, primer_r)
                 write(oligos_file, oligos_data)
@@ -179,6 +179,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                 qaverage = settings.get("quality_average"),
                 maxambig = settings.get("maximum_ambiguity"),
                 maxhomop = settings.get("maximum_homopolymers"),
+                pdiffs   = settings.get("primer_difference")
                 **config
             )
 

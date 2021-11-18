@@ -161,8 +161,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                 write(fastq_file, fastq_data)
 
                 config["fastq_file"] = fastq_file
-
-                config["group"] = osp.join(tmp_dir, "%s.group" % prefix)
+                config["group"]      = osp.join(tmp_dir, "%s.group" % prefix)
 
             if trim_type == "false":
                 oligos_file = osp.join(tmp_dir, "primers.oligos")

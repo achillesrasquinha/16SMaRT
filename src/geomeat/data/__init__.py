@@ -178,7 +178,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                 qaverage = settings.get("quality_average"),
                 maxambig = settings.get("maximum_ambiguity"),
                 maxhomop = settings.get("maximum_homopolymers"),
-                pdiffs   = settings.get("primer_difference")
+                pdiffs   = settings.get("primer_difference"),
                 **config
             )
 

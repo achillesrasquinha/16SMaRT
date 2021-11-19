@@ -20,25 +20,22 @@
 
 *16SMaRT* is a bioinformatics analysis pipeline for 16s rRNA gene sequencing data. It currently supports single-end or paired-end [Illumina](https://www.illumina.com/) data.
 
-### Table of Contents
----------------------
+## Table of Contents
 
 * [Features](#features)
 * [Quick Start](#quick-start)
 * [Usage](#usage)
 * [License](#license)
 
-### Features
-------------
+## Features
 
 * Supports single-end and paired-end [Illumina](https://www.illumina.com/) data.
 * Quality Control using [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 * [Docker](https://www.docker.com/) + [Singularity](https://singularity.hpcng.org/) support.
 
-### Quick Start
----------------
+## Quick Start
 
-#### Using [Docker](https://www.docker.com/)
+### Using [Docker](https://www.docker.com/)
 
 You can run *16SMaRT* by simply running the following command:
 
@@ -53,7 +50,7 @@ docker run \
 
 where `<HOST_MACHINE_PATH_DATA>` is the path to your host machine to store pipeline data and `<HOST_MACHINE_PATH_CONFIG>` is the path to store 16SMaRT configuration and intermediate data.
 
-#### Running on HPC systems using [Singularity](https://singularity.hpcng.org/)
+### Running on HPC systems using [Singularity](https://singularity.hpcng.org/)
 
 Singularity is the most widely used container system for HPC (High-Performance Computing) systems. In order to run your analysis on an HPC system, simply run the following command.
 
@@ -67,11 +64,9 @@ singularity run \
     bpyutils --run-ml s3mart -p "data_dir=/data" --verbose
 ```
 
-### Usage
----------
+## Usage
 
-### License
------------
+## License
 
 This repository has been released under the [MIT License](LICENSE).
 

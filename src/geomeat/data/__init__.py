@@ -9,7 +9,7 @@ from geomeat.data.util import install_silva
 
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.array   import chunkify
-from bpyutils.util._dict   import dict_from_list, merge_dict
+from bpyutils.util._dict   import dict_from_list, merge_dict, AutoDict
 from bpyutils.util.types   import lmap, auto_typecast, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
@@ -120,6 +120,7 @@ def _build_mothur_script(*args, **kwargs):
     logger.info("Building script %s for mothur with args: %s" % (template, kwargs))
 
     mothur_script = render_template(*args, **kwargs)
+    print(mothur_script)
     write(output, mothur_script)
 
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):

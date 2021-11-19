@@ -2,8 +2,8 @@ from bpyutils.util.array   import sequencify
 from bpyutils.util.imports import import_handler
 
 # imports - module imports
-from geomeat.cli.parser import get_args
-from geomeat import cli
+from s3mart.cli.parser import get_args
+from s3mart import cli
 
 def group_commands(group, commands):
     """

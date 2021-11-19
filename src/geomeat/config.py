@@ -1,7 +1,7 @@
 import os.path as osp
 
-from geomeat.__attr__ import __name__ as NAME
-from geomeat.const import CONST
+from s3mart.__attr__ import __name__ as NAME
+from s3mart.const import CONST
 
 from bpyutils.config      import get_config_path
 from bpyutils.util.system  import pardir

@@ -14,14 +14,14 @@ NOW     = dt.datetime.now()
 
 sys.path.insert(0, BASEDIR)
 
-import geomeat
+import s3mart
 
-project   = geomeat.__name__
-author    = geomeat.__author__
-copyright = "%s %s" % (NOW.year, geomeat.__author__)
+project   = s3mart.__name__
+author    = s3mart.__author__
+copyright = "%s %s" % (NOW.year, s3mart.__author__)
 
-version   = geomeat.__version__
-release   = geomeat.__version__
+version   = s3mart.__version__
+release   = s3mart.__version__
 
 source_suffix       = [".rst"]
 

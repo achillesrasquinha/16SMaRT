@@ -19,7 +19,7 @@ from setuptools.command.install import install
 #     from pip.req           import parse_requirements # pip 9
 
 # globals
-PACKAGE     = "geomeat"
+PACKAGE     = "s3mart"
 SRCDIR      = "src"
 
 # A very awful patch for parse_requirements from pip

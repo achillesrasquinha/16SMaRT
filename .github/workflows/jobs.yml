@@ -38,4 +38,4 @@ jobs:
           python setup.py develop
       - name: Run Jobs
         run: |
-          python -c "import geomeat; geomeat.run_all_jobs()"
+          python -c "import s3mart; s3mart.run_all_jobs()"

@@ -1,1 +1,1 @@
-docker run --rm -it achillesrasquinha/geomeat "$@"
+docker run --rm -it achillesrasquinha/s3mart "$@"

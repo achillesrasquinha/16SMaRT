@@ -1,4 +1,4 @@
-from geomeat.data.get_data import get_data_dir
+from s3mart.data.get_data import get_data_dir
 
 def build_model():
     pass

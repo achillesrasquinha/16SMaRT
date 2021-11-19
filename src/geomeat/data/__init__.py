@@ -4,9 +4,9 @@ import itertools
 
 import tqdm as tq
 
-from geomeat.config  import PATH
-from geomeat import settings, __name__ as NAME
-from geomeat.data.util import install_silva
+from s3mart.config  import PATH
+from s3mart import settings, __name__ as NAME
+from s3mart.data.util import install_silva
 
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.array   import chunkify
@@ -22,7 +22,7 @@ from bpyutils.exception      import PopenError
 from bpyutils._compat import itervalues, iteritems
 from bpyutils import parallel, log
 
-from geomeat.data.util import render_template
+from s3mart.data.util import render_template
 
 logger = log.get_logger(name = NAME)
 

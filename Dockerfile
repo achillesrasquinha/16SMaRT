@@ -6,7 +6,7 @@ ENV TERM=xterm-256color \
     SRA_TOOLKIT_VERSION=2.9.6 \
     MOTHUR_VERSION=1.46.1 \
     VSEARCH_VERSION=2.18.0 \
-    GEOMEAT_PATH=/usr/local/src/geomeat
+    GEOMEAT_PATH=/usr/local/src/s3mart
 
 RUN apt-get --allow-releaseinfo-change update && \
     # SRA Toolkit
@@ -51,4 +51,4 @@ RUN pip install -r /requirements.txt && \
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["geomeat"]
+CMD ["s3mart"]

@@ -21,7 +21,7 @@ jobs:
     name: Train
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/achillesrasquinha/geomeat
+      image: ghcr.io/achillesrasquinha/s3mart
 
     steps:
       - uses: actions/checkout@v2
@@ -34,7 +34,7 @@ jobs:
           python setup.py develop
       - name: Run Pipeline
         run: |
-          bpyutils --run-ml geomeat -p "check=True"
+          bpyutils --run-ml s3mart -p "check=True"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:

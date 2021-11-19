@@ -4,10 +4,10 @@
 
 #### Installation via pip
 
-The recommended way to install **geomeat** is via `pip`.
+The recommended way to install **s3mart** is via `pip`.
 
 ```shell
-$ pip install geomeat
+$ pip install s3mart
 ```
 
 For instructions on installing python and pip see “The Hitchhiker’s Guide to Python” 
@@ -15,13 +15,13 @@ For instructions on installing python and pip see “The Hitchhiker’s Guide to
 
 #### Building from source
 
-`geomeat` is actively developed on [https://github.com](https://github.com/achillesrasquinha/geomeat)
+`s3mart` is actively developed on [https://github.com](https://github.com/achillesrasquinha/s3mart)
 and is always avaliable.
 
 You can clone the base repository with git as follows:
 
 ```shell
-$ git clone https://github.com/achillesrasquinha/geomeat
+$ git clone https://github.com/achillesrasquinha/s3mart
 ```
 
 Optionally, you could download the tarball or zipball as follows:
@@ -29,30 +29,30 @@ Optionally, you could download the tarball or zipball as follows:
 ##### For Linux Users
 
 ```shell
-$ curl -OL https://github.com/achillesrasquinha/tarball/geomeat
+$ curl -OL https://github.com/achillesrasquinha/tarball/s3mart
 ```
 
 ##### For Windows Users
 
 ```shell
-$ curl -OL https://github.com/achillesrasquinha/zipball/geomeat
+$ curl -OL https://github.com/achillesrasquinha/zipball/s3mart
 ```
 
 Install necessary dependencies
 
 ```shell
-$ cd geomeat
+$ cd s3mart
 $ pip install -r requirements.txt
 ```
 
-Then, go ahead and install geomeat in your site-packages as follows:
+Then, go ahead and install s3mart in your site-packages as follows:
 
 ```shell
 $ python setup.py install
 ```
 
-Check to see if you’ve installed geomeat correctly.
+Check to see if you’ve installed s3mart correctly.
 
 ```shell
-$ geomeat --help
+$ s3mart --help
 ```

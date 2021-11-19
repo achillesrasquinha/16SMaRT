@@ -1,6 +1,6 @@
 # imports - module imports
 from bpyutils.cli.util      import *
-from geomeat.cli.parser     import get_args
+from s3mart.cli.parser     import get_args
 from bpyutils.util._dict    import merge_dict
 from bpyutils.util.types    import get_function_arguments
 

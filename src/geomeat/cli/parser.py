@@ -5,7 +5,7 @@ import argparse
 import multiprocessing as mp
 
 # imports - module imports
-from geomeat.__attr__     import (
+from s3mart.__attr__     import (
     __name__,
     __version__,
     __description__,

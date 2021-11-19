@@ -6,7 +6,7 @@ import subprocess
 import pytest
 
 # imports - module imports
-from geomeat.__attr__ import (
+from s3mart.__attr__ import (
     read,
     pardir,
     strip,

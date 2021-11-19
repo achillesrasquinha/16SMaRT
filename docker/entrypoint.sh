@@ -3,7 +3,7 @@
 set -euo pipefail
 
 if [ "${1:0:1}" = "-" ]; then
-    set -- geomeat "$@"
+    set -- s3mart "$@"
 fi
 
 exec "$@"

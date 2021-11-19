@@ -4,15 +4,15 @@ from __future__ import absolute_import
 # imports - standard imports
 import traceback
 
-from geomeat.commands.util 	import cli_format
+from s3mart.commands.util 	import cli_format
 from bpyutils.util._dict        import merge_dict
 from bpyutils.util.system   	import touch
 from bpyutils.config			import environment
 from bpyutils import log
-from geomeat 	import cli
+from s3mart 	import cli
 from bpyutils._compat		    import iteritems
-from geomeat.__attr__      	import __name__
-from geomeat.exception      import DependencyNotFoundError
+from s3mart.__attr__      	import __name__
+from s3mart.exception      import DependencyNotFoundError
 
 logger   = log.get_logger(level = log.DEBUG)
 
@@ -42,7 +42,7 @@ def command(**ARGUMENTS):
 
             cli.echo(cli_format("""\
 An error occured while performing the above command. This could be an issue with
-"geomeat". Kindly post an issue at https://github.com/achillesrasquinha/geomeat/issues""", cli.RED))
+"s3mart". Kindly post an issue at https://github.com/achillesrasquinha/s3mart/issues""", cli.RED))
         else:
             raise e
 

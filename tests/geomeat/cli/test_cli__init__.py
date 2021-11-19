@@ -2,8 +2,8 @@
 from bpyutils._compat import iteritems, iterkeys
 
 # imports - module imports
-from geomeat import cli
-from geomeat.cli import get_args
+from s3mart import cli
+from s3mart.cli import get_args
 from bpyutils.util._dict import merge_dict
 
 def test_command():

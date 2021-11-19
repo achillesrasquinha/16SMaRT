@@ -1,5 +1,5 @@
 # imports - standard imports
-from geomeat.cli.parser import get_args
+from s3mart.cli.parser import get_args
 
 def test_args():
     def _get_arg(args, arg):

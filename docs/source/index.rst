@@ -1,4 +1,4 @@
-geomeat
+s3mart
 =======
 
 Release v\ |version|. (:ref:`Installation <install:>`)

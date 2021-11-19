@@ -1,5 +1,5 @@
 def test_imports():
-    from geomeat import (
+    from s3mart import (
         __name__    as _,
         __version__ as _,
         __author__  as _,

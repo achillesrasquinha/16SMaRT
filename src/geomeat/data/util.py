@@ -6,9 +6,9 @@ from bpyutils import log
 from bpyutils.util.system  import read, extract_all
 from bpyutils.util.request import download_file
 
-from geomeat.config import PATH
-from geomeat.const  import CONST
-from geomeat import __name__ as NAME, settings
+from s3mart.config import PATH
+from s3mart.const  import CONST
+from s3mart import __name__ as NAME, settings
 
 logger = log.get_logger(name = NAME)
 

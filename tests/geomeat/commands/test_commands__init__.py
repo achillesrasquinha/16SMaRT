@@ -1,7 +1,7 @@
 import os.path as osp
 
 # imports - compatibility imports
-from geomeat.commands    import _command as command
+from s3mart.commands    import _command as command
 from bpyutils.util._dict  import merge_dict
 from bpyutils.util.string import strip_ansi
 

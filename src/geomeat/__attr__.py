@@ -66,8 +66,8 @@ path                        = dict()
 path["base"]                = pardir(__file__)
 path["version"]             = osp.join(path["base"], "VERSION")
 
-__name__                    = "geomeat"
-__command__                 = "geomeat"
+__name__                    = "s3mart"
+__command__                 = "s3mart"
 __version__                 = read(osp.join(pardir(__file__), "VERSION"))
 __build__                   = get_revision(pardir(__file__, 2), short = True, raise_err = False)
 __author__                  = "Rebecca Furbeck, Achilles Rasquinha"

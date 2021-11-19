@@ -5,9 +5,9 @@ BASEDIR					= $(shell pwd)
 
 ENVIRONMENT			   ?= development
 
-PROJECT					= geomeat
+PROJECT					= s3mart
 
-PROJDIR					= ${BASEDIR}/src/geomeat
+PROJDIR					= ${BASEDIR}/src/s3mart
 TESTDIR					= ${BASEDIR}/tests
 DOCSDIR					= ${BASEDIR}/docs
 

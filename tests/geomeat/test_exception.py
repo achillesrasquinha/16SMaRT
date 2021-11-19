@@ -1,13 +1,13 @@
 
 
 # imports - module imports
-from geomeat.exception import (
+from s3mart.exception import (
     GeomeatError
 )
 
 # imports - test imports
 import pytest
 
-def test_geomeat_error():
+def test_s3mart_error():
     with pytest.raises(GeomeatError):
         raise GeomeatError

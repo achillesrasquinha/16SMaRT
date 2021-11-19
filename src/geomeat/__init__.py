@@ -10,16 +10,16 @@ except ImportError:
     pass
 
 # imports - module imports
-from geomeat.__attr__ import (
+from s3mart.__attr__ import (
     __name__,
     __version__,
     __build__,
     __description__,
     __author__
 )
-from geomeat.__main__    import main
-from geomeat.config      import PATH
-from geomeat.const       import DEFAULT
+from s3mart.__main__    import main
+from s3mart.config      import PATH
+from s3mart.const       import DEFAULT
 
 from bpyutils.cache       import Cache
 from bpyutils.config      import Settings

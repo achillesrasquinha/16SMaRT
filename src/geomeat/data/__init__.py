@@ -120,7 +120,6 @@ def _build_mothur_script(*args, **kwargs):
     logger.info("Building script %s for mothur with args: %s" % (template, kwargs))
 
     mothur_script = render_template(*args, **kwargs)
-    print(mothur_script)
     write(output, mothur_script)
 
 def _mothur_filter_files(config, data_dir = None, *args, **kwargs):

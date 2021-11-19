@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements-dev.txt
-          python setup.py develop
+          python setup.py develop --force
       - name: Run Pipeline
         run: |
           bpyutils --run-ml geomeat -p "check=True"

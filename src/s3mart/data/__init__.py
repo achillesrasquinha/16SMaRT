@@ -53,7 +53,7 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
 
     if data:
         logger.info("Fetching FASTQ files...")
-        with parallel.no_daemon_pool(progress = True, processes = jobs) as pool:
+        with parallel.no_daemon_pool(processes = jobs) as pool:
             length   = len(data)
 
             function = build_fn(get_fastq, data_dir = data_dir, *args, **kwargs)

@@ -29,6 +29,7 @@
 ### Features
 
 * Supports single-end and paired-end [Illumina](https://www.illumina.com/) data.
+* Quality Control using [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 * [Docker](https://www.docker.com/) + [Singularity](https://singularity.hpcng.org/) support.
 
 ### Quick Start

@@ -8,10 +8,11 @@ from s3mart.config  import PATH
 from s3mart import settings, __name__ as NAME
 from s3mart.data.util import install_silva
 
+from bpyutils.util._csv    import read as read_csv
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.array   import chunkify
 from bpyutils.util._dict   import dict_from_list, AutoDict
-from bpyutils.util.types   import lmap, lfilter, auto_typecast, build_fn
+from bpyutils.util.types   import lmap, lfilter, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     makedirs,
@@ -22,6 +23,7 @@ from bpyutils.exception      import PopenError
 from bpyutils._compat import itervalues, iteritems
 from bpyutils import parallel, log
 
+from s3mart.data.functions.get_fastq import get_fastq
 from s3mart.data.util import render_template
 
 logger = log.get_logger(name = NAME)
@@ -30,85 +32,34 @@ CACHE  = PATH["CACHE"]
 
 _DATA_DIR_NAME_FILTERED = "filtered"
 
-def get_csv_data(sample = False):
-    path_data = osp.join(PATH["DATA"], "sample.csv" if sample else "data.csv")
-    data      = []
-    
-    with open(path_data) as f:
-        reader = csv.reader(f)
-        header = next(reader, None)
+def get_data(input = None, data_dir = None, *args, **kwargs):
+    if input:
+        input = osp.abspath(input)
 
-        data = lmap(lambda x: dict_from_list(header, lmap(auto_typecast, x)), reader)
+        if osp.isdir(input):
+            data_dir = input
+    else:
+        input = osp.join(PATH["DATA"], "sample.csv")
 
-    return data
+    data = []
 
-def get_fastq(meta, data_dir = None, *args, **kwargs):
-    sra, layout = meta["sra"], meta["layout"]
+    if osp.isfile(input):
+        data = read_csv(input)
 
+    data_dir = get_data_dir(NAME, data_dir)
     jobs     = kwargs.get("jobs", settings.get("jobs"))
-    data_dir = get_data_dir(NAME, data_dir)
 
-    with ShellEnvironment(cwd = data_dir) as shell:
-        sra_dir = osp.join(data_dir, sra)
+    logger.info("Data directory at %s." % data_dir)
 
-        logger.info("Checking if SRA %s is prefetched..." % sra)
-        path_sra = osp.join(sra_dir, "%s.sra" % sra)
+    if data:
+        logger.info("Fetching FASTQ files...")
+        with parallel.no_daemon_pool(progress = True, processes = jobs) as pool:
+            length   = len(data)
 
-        if not osp.exists(path_sra):
-            logger.info("Performing prefetch for SRA %s in directory %s." % (sra, sra_dir))
-            code = shell("prefetch -O {output_dir} {sra}".format(output_dir = sra_dir, sra = sra))
+            function = build_fn(get_fastq, data_dir = data_dir, *args, **kwargs)
+            results  = pool.imap(function, data)
 
-            if not code:
-                logger.success("Successfully prefeteched SRA %s." % sra)
-
-                logger.info("Validating SRA %s..." % sra)
-                logger.info("Performing vdb-validate for SRA %s in directory %s." % (sra, sra_dir))
-                code = shell("vdb-validate {dir}".format(dir = sra_dir))
-
-                if not code:
-                    logger.success("Successfully validated SRA %s." % sra)
-                else:
-                    logger.error("Unable to validate SRA %s." % sra)
-                    return
-            else:
-                logger.error("Unable to prefetech SRA %s." % sra)
-                return
-        else:
-            logger.warn("SRA %s already prefeteched." % sra)
-
-        logger.info("Checking if FASTQ files for SRA %s has been downloaded..." % sra)
-        fastq_files = get_files(sra_dir, "*.fastq")
-        
-        if not fastq_files:
-            logger.info("Downloading FASTQ file(s) for SRA %s..." % sra)
-            args = "--split-files" if layout == "paired" else "" 
-            code = shell("fasterq-dump --threads {threads} {args} {sra}".format(
-                threads = jobs, args = args, sra = sra), cwd = sra_dir)
-
-            if not code:
-                logger.success("Successfully downloaded FASTQ file(s) for SRA %s." % sra)
-            else:
-                logger.error("Unable to download FASTQ file(s) for SRA %s." % sra)
-        else:
-            logger.warn("FASTQ file(s) for SRA %s already exist." % sra)
-
-def get_data(data_dir = None, check = False, *args, **kwargs):
-    jobs    = kwargs.get("jobs", settings.get("jobs"))
-
-    data_dir = get_data_dir(NAME, data_dir)
-    logger.info("Created data directory at %s." % data_dir)
-
-    data = get_csv_data(sample = check)
-
-    logger.info("Fetching FASTQ files...")
-    with parallel.no_daemon_pool(processes = jobs) as pool:
-        length   = len(data)
-
-        function = build_fn(get_fastq, data_dir = data_dir,
-            raise_err = False, *args, **kwargs)
-        results  = pool.imap(function, data)
-
-        list(tq.tqdm(results, total = length))
+            list(tq.tqdm(results, total = length))
 
 def _get_fastq_file_line(fname):
     prefix, _ = osp.splitext(fname)

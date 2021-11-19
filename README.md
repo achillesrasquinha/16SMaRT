@@ -66,6 +66,8 @@ singularity run \
 
 ## Usage
 
+Checkout [usage](docs/usage.md) for details.
+
 ## License
 
 This repository has been released under the [MIT License](LICENSE).

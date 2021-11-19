@@ -19,7 +19,7 @@ RUN apt-get --allow-releaseinfo-change update && \
     mkdir -p /usr/share/man/man1 && \
     apt-get install -y --no-install-recommends \
         openjdk-11-jre-headless \
-        fastqc \
+        fastqc && \
     wget -nv https://github.com/mothur/mothur/releases/download/v${MOTHUR_VERSION}/Mothur.Ubuntu_20.zip -O $HOME/mothur.zip && \
     unzip $HOME/mothur.zip -d /mothur && \
     cp /mothur/mothur/mothur /usr/local/bin && \

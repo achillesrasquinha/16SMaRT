@@ -46,6 +46,8 @@ docker run \
     --verbose
 ```
 
+where `<HOST_MACHINE_PATH_DATA>` is the path to your host machine to store pipeline data and `<HOST_MACHINE_PATH_CONFIG>` is the path to store 16SMaRT configuration and intermediate data.
+
 ### Usage
 
 #### Application Interface

@@ -1,5 +1,6 @@
 import os.path as osp
 import csv
+import itertools
 
 import tqdm as tq
 
@@ -8,7 +9,7 @@ from geomeat import settings, __name__ as NAME
 from geomeat.data.util import install_silva
 
 from bpyutils.util.ml      import get_data_dir
-from bpyutils.util.array   import chunkify
+from bpyutils.util.array   import chunkify, lfilter
 from bpyutils.util._dict   import dict_from_list, merge_dict, AutoDict
 from bpyutils.util.types   import lmap, auto_typecast, build_fn
 from bpyutils.util.system  import (
@@ -18,7 +19,7 @@ from bpyutils.util.system  import (
 )
 from bpyutils.util.string    import get_random_str
 from bpyutils.exception      import PopenError
-from bpyutils._compat import itervalues
+from bpyutils._compat import itervalues, iteritems
 from bpyutils import parallel, log
 
 from geomeat.data.util import render_template
@@ -26,6 +27,8 @@ from geomeat.data.util import render_template
 logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
+
+_DATA_DIR_NAME_FILTERED = "filtered"
 
 def get_csv_data(sample = False):
     path_data = osp.join(PATH["DATA"], "sample.csv" if sample else "data.csv")
@@ -277,31 +280,55 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
 
     data = get_csv_data(sample = check)
 
+    filtered_dir = makedirs(osp.join(data_dir, _DATA_DIR_NAME_FILTERED), exist_ok = True)
+    logger.info("Storing filtered FASTQ files at %s." % filtered_dir)
+
     mothur_configs = [ ]
+
+    study_group    = AutoDict(list)
+
+    for d in data:
+        study_id = d.pop("study_id")
+        study_group[study_id].append(d)
 
     logger.info("Building configs for mothur...")
 
-    for d in data:
-        sra_id  = d["sra"]
-        sra_dir = osp.join(data_dir, sra_id)
-        fastq_files = get_files(sra_dir, type_ = "*.fastq")
+    for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):
+        for study_id, data in iteritems(study_group):
+            if len(data):
+                filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)
+                files    = []
 
-        mothur_configs.append({
-            "files": fastq_files,
-            "target_dir": sra_dir,
+                for d in filtered:
+                    sra_id  = d["sra"]
+                    sra_dir = osp.join(data_dir, sra_id)
+                    fasta_files = get_files(sra_dir, "*.fastq")
 
-            "study_id": d["study_id"],
+                    files += fasta_files
 
-            "sra_id": sra_id,
+                if files:
+                    logger.info("Filtering FASTQ files for study %s of type (layout: %s, trimmed: %s)" % (study_id, layout, trim_type))
 
-            "primer_f": d["primer_f"],
-            "primer_r": d["primer_r"],
+                    sample  = data[0]
 
-            "layout": d["layout"], "trim_type": d["trimmed"],
-            
-            "min_length": d["min_length"],
-            "max_length": d["max_length"]
-        })
+                    tar_dir = osp.join(filtered_dir, study_id, layout,
+                        "trimmed" if trim_type == "true" else "untrimmed")
+
+                    mothur_configs.append({
+                        "files": files,
+                        "target_dir": tar_dir,
+
+                        "study_id": study_id,
+
+                        # NOTE: This is under the assumption that each study has the same primer.
+                        "primer_f": sample["primer_f"],
+                        "primer_r": sample["primer_r"],
+
+                        "layout": layout, "trim_type": trim_type,
+                        
+                        "min_length": sample["min_length"],
+                        "max_length": sample["max_length"]
+                    })
 
     if mothur_configs:
         logger.info("Filtering files using mothur using %s jobs...." % jobs)

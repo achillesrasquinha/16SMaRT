@@ -41,7 +41,7 @@ docker run \
     --rm -it \
     -v "<HOST_MACHINE_PATH_DATA>:/data" \
     -v "<HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
-    ghcr.io/achillesrasquinha/s3mart \
+    ghcr.io/achillesrasquinha/16SMaRT \
     bpyutils --run-ml s3mart -p "data_dir=/data" \
     --verbose
 ```

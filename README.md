@@ -66,7 +66,7 @@ singularity run \
 
 ## Usage
 
-Checkout [usage](docs/usage.md) for details.
+Checkout [usage](docs/source/usage.md) for details.
 
 ## License
 

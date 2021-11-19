@@ -9,9 +9,9 @@ from geomeat import settings, __name__ as NAME
 from geomeat.data.util import install_silva
 
 from bpyutils.util.ml      import get_data_dir
-from bpyutils.util.array   import chunkify, lfilter
-from bpyutils.util._dict   import dict_from_list, merge_dict, AutoDict
-from bpyutils.util.types   import lmap, auto_typecast, build_fn
+from bpyutils.util.array   import chunkify
+from bpyutils.util._dict   import dict_from_list, AutoDict
+from bpyutils.util.types   import lmap, lfilter, auto_typecast, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     makedirs,

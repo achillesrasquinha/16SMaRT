@@ -1,4 +1,4 @@
-study_id,sra,layout,primer_f,primer_r,trimmed,min_length,max_length
+group,sra,layout,primer_f,primer_r,trimmed,min_length,max_length
 BZ1,ERR4144822,paired,CCTACGGGNGGCWGCAG,GACTACHVGGGTATCTAATCC,false,400,444
 BZ1,ERR4144823,paired,CCTACGGGNGGCWGCAG,GACTACHVGGGTATCTAATCC,false,400,444
 BZ1,ERR4144824,paired,CCTACGGGNGGCWGCAG,GACTACHVGGGTATCTAATCC,false,400,444

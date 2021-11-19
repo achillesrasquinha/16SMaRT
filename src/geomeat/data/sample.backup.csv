@@ -1,4 +1,4 @@
-study_id,sra,layout,primer_f,primer_r,trimmed,min_length,max_length
+group,sra,layout,primer_f,primer_r,trimmed,min_length,max_length
 SK13,ERR3792283,paired,,,true,240,275
 SK13,ERR3792284,paired,,,true,240,275
 CB24,SRR14255540,paired,,,true,240,275

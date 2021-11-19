@@ -5,7 +5,6 @@ count.seqs(name=current, group={{ merged_group }})
 align.seqs(fasta=current, reference={{ silva_seed_pcr }}, processors={{ processors }})
 summary.seqs(fasta=current, processors={{ processors }})
 screen.seqs(fasta=current, count=current, maxhomop={{ maxhomop }}, processors={{ processors }})
-filter.seqs(fasta=current, trump=., processors={{ processors }})
 unique.seqs(fasta=current, count=current)
 
 pre.cluster(fasta=current, count=current, processors={{ processors }})

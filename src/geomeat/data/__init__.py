@@ -1,4 +1,4 @@
-import os.path as osp
+import os, os.path as osp
 import csv
 import itertools
 
@@ -93,7 +93,7 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
             logger.warn("FASTQ file(s) for SRA %s already exist." % sra)
 
 def get_data(data_dir = None, check = False, *args, **kwargs):
-    jobs = kwargs.get("jobs", settings.get("jobs"))
+    jobs    = kwargs.get("jobs", settings.get("jobs"))
 
     data_dir = get_data_dir(NAME, data_dir)
     logger.info("Created data directory at %s." % data_dir)
@@ -141,7 +141,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
     layout     = config.get("layout")
     trim_type  = config.get("trim_type")
 
-    study_id   = config.pop("study_id")
+    group      = config.pop("group")
 
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
@@ -151,13 +151,13 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
     if not all(osp.exists(x) for x in itervalues(target_path)):
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
-            logger.info("[study %s] Copying FASTQ files %s for pre-processing at %s." % (study_id, files, tmp_dir))
+            logger.info("[group %s] Copying FASTQ files %s for pre-processing at %s." % (group, files, tmp_dir))
             copy(*files, dest = tmp_dir)
 
             prefix = get_random_str()
-            logger.info("[study %s] Using prefix for mothur: %s" % (study_id, prefix))
+            logger.info("[group %s] Using prefix for mothur: %s" % (group, prefix))
 
-            logger.info("[study %s] Setting up directory %s for preprocessing" % (study_id, tmp_dir))
+            logger.info("[group %s] Setting up directory %s for preprocessing" % (group, tmp_dir))
 
             if layout == "single":
                 fastq_file = osp.join(tmp_dir, "%s.file" % prefix)
@@ -169,7 +169,7 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
             if trim_type == "false":
                 oligos_file = osp.join(tmp_dir, "primers.oligos")
-                oligos_data = "primer %s %s %s" % (primer_f, primer_r, study_id)
+                oligos_data = "primer %s %s %s" % (primer_f, primer_r, group)
                 write(oligos_file, oligos_data)
 
                 config["oligos"] = oligos_file
@@ -186,16 +186,16 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                 **config
             )
 
-            logger.info("[study %s] Running mothur..." % study_id)
+            logger.info("[group %s] Running mothur..." % group)
 
             try:
                 with ShellEnvironment(cwd = tmp_dir) as shell:
                     code = shell("mothur %s" % mothur_file)
 
                     if not code:
-                        logger.success("[study %s] mothur ran successfully." % study_id)
+                        logger.success("[group %s] mothur ran successfully." % group)
 
-                        logger.info("[study %s] Attempting to copy filtered files." % study_id)
+                        logger.info("[group %s] Attempting to copy filtered files." % group)
 
                         choice = (
                             ".trim.contigs.trim.good.fasta",
@@ -225,11 +225,11 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                             dest = target_path["summary"]
                         )
 
-                        logger.info("[study %s] Successfully copied filtered files at %s." % (study_id, target_dir))
+                        logger.info("[group %s] Successfully copied filtered files at %s." % (group, target_dir))
             except PopenError as e:
-                logger.error("[study %s] Unable to filter files. Error: %s" % (study_id, e))
+                logger.error("[group %s] Unable to filter files. Error: %s" % (group, e))
     else:
-        logger.warn("[study %s] Filtered files already exists." % study_id)
+        logger.warn("[group %s] Filtered files already exists." % group)
 
 def merge_fastq(data_dir = None):
     data_dir = get_data_dir(NAME, data_dir = data_dir)
@@ -288,13 +288,13 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
     study_group    = AutoDict(list)
 
     for d in data:
-        study_id = d.pop("study_id")
-        study_group[study_id].append(d)
+        group = d.pop("group")
+        study_group[group].append(d)
 
     logger.info("Building configs for mothur...")
 
     for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):
-        for study_id, data in iteritems(study_group):
+        for group, data in iteritems(study_group):
             if len(data):
                 filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)
                 files    = []
@@ -307,20 +307,20 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
                     files += fasta_files
 
                 if files:
-                    logger.info("Filtering FASTQ files for study %s of type (layout: %s, trimmed: %s)" % (study_id, layout, trim_type))
+                    logger.info("Filtering FASTQ files for group %s of type (layout: %s, trimmed: %s)" % (group, layout, trim_type))
 
                     sample  = data[0]
 
-                    tar_dir = osp.join(filtered_dir, study_id, layout,
+                    tar_dir = osp.join(filtered_dir, group, layout,
                         "trimmed" if trim_type == "true" else "untrimmed")
 
                     mothur_configs.append({
                         "files": files,
                         "target_dir": tar_dir,
 
-                        "study_id": study_id,
+                        "group": group,
 
-                        # NOTE: This is under the assumption that each study has the same primer.
+                        # NOTE: This is under the assumption that each group has the same primer.
                         "primer_f": sample["primer_f"],
                         "primer_r": sample["primer_r"],
 
@@ -390,8 +390,44 @@ def preprocess_fasta(data_dir = None, *args, **kwargs):
             else:
                 logger.error("Error merging files.")
 
+def fastqc_check(file_, output_dir = None, threads = None):
+    output_dir = output_dir or os.cwd()
+    threads    = threads or settings.get("jobs")
+
+    with ShellEnvironment(cwd = output_dir) as shell:
+        shell("fastqc -q --threads {threads} {fastq_file} -o {out_dir}".format(
+            threads = threads, out_dir = output_dir, fastq_file = file_))
+
+def check_quality(data_dir = None, multiqc = False, *args, **kwargs):    
+    data_dir = get_data_dir(NAME, data_dir)
+
+    jobs  = kwargs.get("jobs", settings.get("jobs"))     
+    
+    logger.info("Checking quality of FASTQ files...")
+
+    files = get_files(data_dir, "*.fastq")
+
+    fastqc_dir = osp.join(data_dir, "fastqc")
+    makedirs(fastqc_dir, exist_ok = True)
+
+    with parallel.no_daemon_pool(processes = jobs) as pool:
+        length   = len(files)
+
+        function = build_fn(fastqc_check, output_dir = fastqc_dir, threads = jobs)
+        results  = pool.imap(function, files)
+
+        list(tq.tqdm(results, total = length))
+
+    
+
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
+
+    fastqc   = kwargs.get("fastqc",  False)
+    multiqc  = kwargs.get("multiqc", False)
+
+    if fastqc:
+        check_quality(data_dir = data_dir, multiqc = multiqc)
 
     logger.info("Attempting to filter FASTQ files...")
     filter_fastq(data_dir = data_dir, check = check, *args, **kwargs)

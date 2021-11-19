@@ -29,7 +29,7 @@
 ### Features
 
 * Supports single-end and paired-end [Illumina](https://www.illumina.com/) data.
-* Docker/Singularity support.
+* [Docker](https://www.docker.com/) + [Singularity](https://singularity.hpcng.org/) support.
 
 ### Quick Start
 

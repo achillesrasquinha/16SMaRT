@@ -21,18 +21,22 @@
 *16SMaRT* is a bioinformatics analysis pipeline for 16s rRNA gene sequencing data. It currently supports single-end or paired-end [Illumina](https://www.illumina.com/) data.
 
 ### Table of Contents
+---------------------
+
 * [Features](#features)
 * [Quick Start](#quick-start)
 * [Usage](#usage)
 * [License](#license)
 
 ### Features
+------------
 
 * Supports single-end and paired-end [Illumina](https://www.illumina.com/) data.
 * Quality Control using [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 * [Docker](https://www.docker.com/) + [Singularity](https://singularity.hpcng.org/) support.
 
 ### Quick Start
+---------------
 
 #### Using [Docker](https://www.docker.com/)
 
@@ -64,12 +68,10 @@ singularity run \
 ```
 
 ### Usage
-
-#### Application Interface
-
-#### Command-Line Interface
+---------
 
 ### License
+-----------
 
 This repository has been released under the [MIT License](LICENSE).
 

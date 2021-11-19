@@ -34,7 +34,17 @@
 
 ### Quick Start
 
-Check out [installation](docs/source/installation.md) for more details.
+Using [Docker](https://www.docker.com/)
+
+```
+docker run \
+    --rm -it \
+    -v "<HOST_MACHINE_PATH_DATA>:/data" \
+    -v "<HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
+    ghcr.io/achillesrasquinha/s3mart \
+    bpyutils --run-ml s3mart -p "data_dir=/data" \
+    --verbose
+```
 
 ### Usage
 

@@ -44,7 +44,7 @@ docker run \
     --rm -it \
     -v "<HOST_MACHINE_PATH_DATA>:/data" \
     -v "<HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
-    ghcr.io/achillesrasquinha/16SMaRT \
+    ghcr.io/achillesrasquinha/s3mart \
     bpyutils --run-ml s3mart -p "data_dir=/data" --verbose
 ```
 
@@ -60,7 +60,7 @@ singularity run \
     --cleanenv \
     -B <HOST_MACHINE_PATH_DATA>:/data \
     -B <HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
-    docker://ghcr.io/achillesrasquinha/16SMaRT \
+    docker://ghcr.io/achillesrasquinha/s3mart \
     bpyutils --run-ml s3mart -p "data_dir=/data" --verbose
 ```
 

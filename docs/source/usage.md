@@ -11,8 +11,6 @@ The input data can be passed to **16SMaRT** in two different ways using the `inp
 
 The CSV DataSheet must be of the following format.
 
-`group,sra,layout,primer_f,primer_r,trimmed,min_length,max_length`
-
 | Column       | Description |
 |--------------|-------------|
 | `group`      | A group of FASTQ files (or a study).

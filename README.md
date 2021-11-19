@@ -18,6 +18,8 @@
     </a>
 </p>
 
+*16SMaRT* is a bioinformatics analysis pipeline for 16s rRNA gene sequencing data. It currently supports single-end or paired-end [Illumina](https://www.illumina.com/) data.
+
 ### Table of Contents
 * [Features](#features)
 * [Quick Start](#quick-start)
@@ -26,7 +28,7 @@
 
 ### Features
 
-* Supports single-ended and paired-ended Illumina data.
+* Supports single-end and paired-end [Illumina](https://www.illumina.com/) data.
 * Docker/Singularity support.
 
 ### Quick Start

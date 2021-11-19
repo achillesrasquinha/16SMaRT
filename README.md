@@ -34,7 +34,9 @@
 
 ### Quick Start
 
-Using [Docker](https://www.docker.com/)
+#### Using [Docker](https://www.docker.com/)
+
+You can run *16SMaRT* by simply running the following command:
 
 ```
 docker run \
@@ -42,11 +44,24 @@ docker run \
     -v "<HOST_MACHINE_PATH_DATA>:/data" \
     -v "<HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
     ghcr.io/achillesrasquinha/16SMaRT \
-    bpyutils --run-ml s3mart -p "data_dir=/data" \
-    --verbose
+    bpyutils --run-ml s3mart -p "data_dir=/data" --verbose
 ```
 
 where `<HOST_MACHINE_PATH_DATA>` is the path to your host machine to store pipeline data and `<HOST_MACHINE_PATH_CONFIG>` is the path to store 16SMaRT configuration and intermediate data.
+
+#### Running on HPC systems using [Singularity](https://singularity.hpcng.org/)
+
+Singularity is the most widely used container system for HPC (High-Performance Computing) systems. In order to run your analysis on an HPC system, simply run the following command.
+
+```
+singularity run \
+    --home $HOME \
+    --cleanenv \
+    -B <HOST_MACHINE_PATH_DATA>:/data \
+    -B <HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
+    docker://ghcr.io/achillesrasquinha/16SMaRT \
+    bpyutils --run-ml s3mart -p "data_dir=/data" --verbose
+```
 
 ### Usage
 

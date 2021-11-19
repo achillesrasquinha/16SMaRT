@@ -140,7 +140,6 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
     layout     = config.get("layout")
     trim_type  = config.get("trim_type")
 
-    sra_id     = config.pop("sra_id")
     study_id   = config.pop("study_id")
 
     target_types = ("fasta", "group", "summary")
@@ -151,13 +150,13 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
 
     if not all(osp.exists(x) for x in itervalues(target_path)):
         with make_temp_dir(root_dir = CACHE) as tmp_dir:
-            logger.info("[SRA %s] Copying FASTQ files %s for pre-processing at %s." % (sra_id, files, tmp_dir))
+            logger.info("[study %s] Copying FASTQ files %s for pre-processing at %s." % (study_id, files, tmp_dir))
             copy(*files, dest = tmp_dir)
 
             prefix = get_random_str()
-            logger.info("[SRA %s] Using prefix for mothur: %s" % (sra_id, prefix))
+            logger.info("[study %s] Using prefix for mothur: %s" % (study_id, prefix))
 
-            logger.info("[SRA %s] Setting up directory %s for preprocessing" % (sra_id, tmp_dir))
+            logger.info("[study %s] Setting up directory %s for preprocessing" % (study_id, tmp_dir))
 
             if layout == "single":
                 fastq_file = osp.join(tmp_dir, "%s.file" % prefix)
@@ -186,16 +185,16 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                 **config
             )
 
-            logger.info("[SRA %s] Running mothur..." % sra_id)
+            logger.info("[study %s] Running mothur..." % study_id)
 
             try:
                 with ShellEnvironment(cwd = tmp_dir) as shell:
                     code = shell("mothur %s" % mothur_file)
 
                     if not code:
-                        logger.success("[SRA %s] mothur ran successfully." % sra_id)
+                        logger.success("[study %s] mothur ran successfully." % study_id)
 
-                        logger.info("[SRA %s] Attempting to copy filtered files." % sra_id)
+                        logger.info("[study %s] Attempting to copy filtered files." % study_id)
 
                         choice = (
                             ".trim.contigs.trim.good.fasta",
@@ -225,11 +224,11 @@ def _mothur_filter_files(config, data_dir = None, *args, **kwargs):
                             dest = target_path["summary"]
                         )
 
-                        logger.info("[SRA %s] Successfully copied filtered files at %s." % (sra_id, target_dir))
+                        logger.info("[study %s] Successfully copied filtered files at %s." % (study_id, target_dir))
             except PopenError as e:
-                logger.error("[SRA %s] Unable to filter files. Error: %s" % (sra_id, e))
+                logger.error("[study %s] Unable to filter files. Error: %s" % (study_id, e))
     else:
-        logger.warn("[SRA %s] Filtered files already exists." % sra_id)
+        logger.warn("[study %s] Filtered files already exists." % study_id)
 
 def merge_fastq(data_dir = None):
     data_dir = get_data_dir(NAME, data_dir = data_dir)

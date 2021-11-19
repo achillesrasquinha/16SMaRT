@@ -21,3 +21,5 @@ The CSV DataSheet must be of the following format.
 | `trimmed`    | whether this sequence has already been trimmed or not. (values: `true`, `false`)
 | `min_length` | start length used to screen a sequence.
 | `max_length` | end length used to screen a sequence.
+
+Take a look at a [sample.csv](https://github.com/achillesrasquinha/16SMaRT/blob/develop/src/s3mart/data/sample.csv) used in the pipeline.

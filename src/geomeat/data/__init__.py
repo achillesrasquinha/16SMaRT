@@ -273,7 +273,7 @@ def merge_fastq(data_dir = None):
         logger.warn("No files found to merge.")
 
 def filter_fastq(data_dir = None, check = False, *args, **kwargs):
-    jobs = kwargs.get("jobs", settings.get("jobs"))    
+    jobs = kwargs.get("jobs", settings.get("jobs"))
 
     data_dir = get_data_dir(NAME, data_dir = data_dir)
 
@@ -344,7 +344,6 @@ def filter_fastq(data_dir = None, check = False, *args, **kwargs):
 
 def preprocess_fasta(data_dir = None, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
-    
     jobs     = kwargs.get("jobs", settings.get("jobs"))
 
     merged_fasta = osp.join(data_dir, "merged.fasta")
@@ -407,7 +406,7 @@ def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     logger.info("Pre-processing FASTA + Group files...")
     preprocess_fasta(data_dir = data_dir,
         silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
-        silva_seed_tax = silva_paths["taxonomy"]
+        silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
     )
 
 def check_data(data_dir = None):

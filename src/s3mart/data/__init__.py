@@ -1,5 +1,4 @@
-import os, os.path as osp
-import csv
+import os.path as osp
 import itertools
 
 import tqdm as tq
@@ -23,7 +22,10 @@ from bpyutils.exception      import PopenError
 from bpyutils._compat import itervalues, iteritems
 from bpyutils import parallel, log
 
-from s3mart.data.functions.get_fastq import get_fastq
+from s3mart.data.functions import (
+    get_fastq,
+    check_quality
+)
 from s3mart.data.util import render_template
 
 logger = log.get_logger(name = NAME)
@@ -60,6 +62,32 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
             results  = pool.imap(function, data)
 
             list(tq.tqdm(results, total = length))
+
+def preprocess_data(data_dir = None, check = False, *args, **kwargs):
+    data_dir = get_data_dir(NAME, data_dir)
+
+    fastqc   = kwargs.get("fastqc",  True)
+    multiqc  = kwargs.get("multiqc", True)
+
+    if fastqc:
+        check_quality(data_dir = data_dir, multiqc = multiqc)
+
+    logger.info("Attempting to filter FASTQ files...")
+    filter_fastq(data_dir = data_dir, check = check, *args, **kwargs)
+
+    logger.info("Merging FASTQs...")
+    merge_fastq(data_dir = data_dir)
+
+    logger.info("Installing SILVA...")
+    silva_paths = install_silva()
+
+    logger.success("SILVA successfully downloaded at %s." % silva_paths)
+    
+    logger.info("Pre-processing FASTA + Group files...")
+    preprocess_fasta(data_dir = data_dir,
+        silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
+        silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
+    )
 
 def _get_fastq_file_line(fname):
     prefix, _ = osp.splitext(fname)
@@ -340,62 +368,6 @@ def preprocess_fasta(data_dir = None, *args, **kwargs):
                 pass
             else:
                 logger.error("Error merging files.")
-
-def fastqc_check(file_, output_dir = None, threads = None):
-    output_dir = output_dir or os.cwd()
-    threads    = threads or settings.get("jobs")
-
-    with ShellEnvironment(cwd = output_dir) as shell:
-        shell("fastqc -q --threads {threads} {fastq_file} -o {out_dir}".format(
-            threads = threads, out_dir = output_dir, fastq_file = file_))
-
-def check_quality(data_dir = None, multiqc = False, *args, **kwargs):    
-    data_dir = get_data_dir(NAME, data_dir)
-
-    jobs  = kwargs.get("jobs", settings.get("jobs"))     
-    
-    logger.info("Checking quality of FASTQ files...")
-
-    files = get_files(data_dir, "*.fastq")
-
-    fastqc_dir = osp.join(data_dir, "fastqc")
-    makedirs(fastqc_dir, exist_ok = True)
-
-    with parallel.no_daemon_pool(processes = jobs) as pool:
-        length   = len(files)
-
-        function = build_fn(fastqc_check, output_dir = fastqc_dir, threads = jobs)
-        results  = pool.imap(function, files)
-
-        list(tq.tqdm(results, total = length))
-
-    
-
-def preprocess_data(data_dir = None, check = False, *args, **kwargs):
-    data_dir = get_data_dir(NAME, data_dir)
-
-    fastqc   = kwargs.get("fastqc",  False)
-    multiqc  = kwargs.get("multiqc", False)
-
-    if fastqc:
-        check_quality(data_dir = data_dir, multiqc = multiqc)
-
-    logger.info("Attempting to filter FASTQ files...")
-    filter_fastq(data_dir = data_dir, check = check, *args, **kwargs)
-
-    logger.info("Merging FASTQs...")
-    merge_fastq(data_dir = data_dir)
-
-    logger.info("Installing SILVA...")
-    silva_paths = install_silva()
-
-    logger.success("SILVA successfully downloaded at %s." % silva_paths)
-    
-    logger.info("Pre-processing FASTA + Group files...")
-    preprocess_fasta(data_dir = data_dir,
-        silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
-        silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
-    )
 
 def check_data(data_dir = None):
     pass

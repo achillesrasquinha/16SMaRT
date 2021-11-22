@@ -7,7 +7,7 @@ from s3mart import settings, __name__ as NAME
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.types   import build_fn
 from bpyutils.util.system  import (
-    ShellEnvironment,
+    ShellEnvironment, popen,
     makedirs,
     get_files
 )
@@ -45,4 +45,4 @@ def check_quality(data_dir = None, multiqc = False, *args, **kwargs):
     if multiqc:
         logger.info("Running MultiQC...")
 
-        
+        popen("multiqc {fastqc_dir}".format(fastqc_dir = fastqc_dir), cwd = data_dir)

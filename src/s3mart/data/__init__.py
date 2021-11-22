@@ -5,7 +5,6 @@ import tqdm as tq
 
 from s3mart.config  import PATH
 from s3mart import settings, __name__ as NAME
-from s3mart.data.util import install_silva
 
 from bpyutils.util._csv    import read as read_csv
 from bpyutils.util.ml      import get_data_dir
@@ -24,7 +23,8 @@ from bpyutils import parallel, log
 
 from s3mart.data.functions import (
     get_fastq,
-    check_quality
+    check_quality,
+    trim_seqs
 )
 from s3mart.data.util import render_template
 
@@ -34,7 +34,7 @@ CACHE  = PATH["CACHE"]
 
 _DATA_DIR_NAME_FILTERED = "filtered"
 
-def get_data(input = None, data_dir = None, *args, **kwargs):
+def get_input_data(input = None, data_dir = None, *args, **kwargs):
     if input:
         input = osp.abspath(input)
 
@@ -47,6 +47,11 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
 
     if osp.isfile(input):
         data = read_csv(input)
+
+    return data_dir, data
+
+def get_data(input = None, data_dir = None, *args, **kwargs):
+    data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
 
     data_dir = get_data_dir(NAME, data_dir)
     jobs     = kwargs.get("jobs", settings.get("jobs"))
@@ -63,31 +68,32 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
 
             list(tq.tqdm(results, total = length))
 
-def preprocess_data(data_dir = None, check = False, *args, **kwargs):
+def preprocess_data(data_dir = None, *args, **kwargs):
+    data_dir, data = get_input_data(input = None, data_dir = None, *args, **kwargs)
     data_dir = get_data_dir(NAME, data_dir)
 
     fastqc   = kwargs.get("fastqc",  True)
     multiqc  = kwargs.get("multiqc", True)
 
     if fastqc:
-        check_quality(data_dir = data_dir, multiqc = multiqc)
+        check_quality(data_dir = data_dir, multiqc = multiqc, *args, **kwargs)
 
-    logger.info("Attempting to filter FASTQ files...")
-    filter_fastq(data_dir = data_dir, check = check, *args, **kwargs)
+    logger.info("Attempting to trim FASTQ files...")
+    trim_seqs(data_dir = data_dir, data = data, *args, **kwargs)
 
-    logger.info("Merging FASTQs...")
-    merge_fastq(data_dir = data_dir)
+    # logger.info("Merging FASTQs...")
+    # merge_fastq(data_dir = data_dir)
 
-    logger.info("Installing SILVA...")
-    silva_paths = install_silva()
+    # logger.info("Installing SILVA...")
+    # silva_paths = install_silva()
 
-    logger.success("SILVA successfully downloaded at %s." % silva_paths)
+    # logger.success("SILVA successfully downloaded at %s." % silva_paths)
     
-    logger.info("Pre-processing FASTA + Group files...")
-    preprocess_fasta(data_dir = data_dir,
-        silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
-        silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
-    )
+    # logger.info("Pre-processing FASTA + Group files...")
+    # preprocess_fasta(data_dir = data_dir,
+    #     silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
+    #     silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
+    # )
 
 def _get_fastq_file_line(fname):
     prefix, _ = osp.splitext(fname)
@@ -368,6 +374,3 @@ def preprocess_fasta(data_dir = None, *args, **kwargs):
                 pass
             else:
                 logger.error("Error merging files.")
-
-def check_data(data_dir = None):
-    pass

@@ -3,7 +3,7 @@ import os.path as osp
 from jinja2 import Template
 
 from bpyutils import log
-from bpyutils.util.system  import read, extract_all
+from bpyutils.util.system  import read, extract_all, write
 from bpyutils.util.request import download_file
 
 from s3mart.config import PATH
@@ -54,3 +54,12 @@ def install_silva():
     logger.success("SILVA successfully downloaded at %s." % silva_paths)
 
     return silva_paths
+
+def build_mothur_script(*args, **kwargs):
+    template = kwargs.get("template")
+    output   = kwargs.pop("output")
+
+    logger.info("Building script %s for mothur with args: %s" % (template, kwargs))
+
+    mothur_script = render_template(*args, **kwargs)
+    write(output, mothur_script)

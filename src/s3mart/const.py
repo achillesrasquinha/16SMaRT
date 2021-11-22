@@ -14,7 +14,7 @@ CONST = {
 
 DEFAULT = {
     "jobs":                 getenv("JOBS", CPU_COUNT, prefix = _PREFIX),
-    "filter_chunks":        8,
+    "trim_chunks":          8,
     "primer_difference":    5,
     "quality_average":      35,
     "maximum_ambiguity":    0,

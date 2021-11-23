@@ -83,9 +83,3 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
         silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
         silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
     )
-
-def _get_fastq_file_line(fname):
-    prefix, _ = osp.splitext(fname)
-    prefix    = osp.basename(prefix)
-
-    return "%s %s" % (prefix, fname)

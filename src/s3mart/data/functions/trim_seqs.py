@@ -29,6 +29,12 @@ CACHE  = PATH["CACHE"]
 _DATA_DIR_NAME_TRIMMED = "trimmed"
 _FILENAME_TRIMMED      = "trimmed"
 
+def _get_fastq_file_line(fname):
+    prefix, _ = osp.splitext(fname)
+    prefix    = osp.basename(prefix)
+
+    return "%s %s" % (prefix, fname)
+
 def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
     logger.info("Using config %s to filter files." % config)
 
@@ -62,13 +68,13 @@ def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
 
             logger.info("[group %s] Setting up directory %s for preprocessing" % (group, tmp_dir))
 
-            # if layout == "single":
-            #     fastq_file = osp.join(tmp_dir, "%s.file" % prefix)
-            #     fastq_data = "\n".join(lmap(_get_fastq_file_line, files))
-            #     write(fastq_file, fastq_data)
+            if layout == "single":
+                fastq_file = osp.join(tmp_dir, "%s.file" % prefix)
+                fastq_data = "\n".join(lmap(_get_fastq_file_line, files))
+                write(fastq_file, fastq_data)
 
-            #     config["fastq_file"] = fastq_file
-            #     config["group"]      = osp.join(tmp_dir, "%s.group" % prefix)
+                config["fastq_file"] = fastq_file
+                config["group"]      = osp.join(tmp_dir, "%s.group" % prefix)
 
             if trim_type == "false":
                 oligos_file = osp.join(tmp_dir, "primers.oligos")

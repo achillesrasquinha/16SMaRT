@@ -31,6 +31,7 @@
 
 * Supports single-end and paired-end [Illumina](https://www.illumina.com/) data.
 * Quality Control using [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/).
+* Trimming using [mothur](https://mothur.org)
 * [Docker](https://www.docker.com/) + [Singularity](https://singularity.hpcng.org/) support.
 
 ## Quick Start

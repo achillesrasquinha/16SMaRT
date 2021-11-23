@@ -14,5 +14,5 @@ remove.lineage(fasta=current,count=current,taxonomy=current, taxon=Chloroplast-M
 cluster.split(fasta=current, count=current, taxonomy=current, splitmethod=classify, taxlevel=6, cutoff=0.03)
 make.shared(list=current, count=current, label=0.03)
 classify.otu(list=current, taxonomy=current, label=0.03)
-dist.seqs(fasta=current, output=lt, processors=16)
+dist.seqs(fasta=current, output=lt, processors={{ processors }})
 clearcut(phylip=current)

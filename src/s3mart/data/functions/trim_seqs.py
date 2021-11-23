@@ -27,6 +27,7 @@ logger = log.get_logger(name = NAME)
 CACHE  = PATH["CACHE"]
 
 _DATA_DIR_NAME_TRIMMED = "trimmed"
+_FILENAME_TRIMMED      = "trimmed"
 
 def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
     logger.info("Using config %s to filter files." % config)
@@ -48,7 +49,7 @@ def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
         target_types,
-        lmap(lambda x: osp.join(target_dir, "trimmed.%s" % x), target_types)
+        lmap(lambda x: osp.join(target_dir, "%s.%s" % (_FILENAME_TRIMMED, x)), target_types)
     )
 
     if not all(osp.exists(x) for x in itervalues(target_path)):
@@ -151,7 +152,7 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
             if len(data):
                 filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)
                 files    = []
-
+                
                 for d in filtered:
                     sra_id  = d["sra"]
                     sra_dir = osp.join(data_dir, sra_id)

@@ -22,6 +22,15 @@ def render_template(*args, **kwargs):
 
     return rendered
 
+def build_mothur_script(*args, **kwargs):
+    template = kwargs.get("template")
+    output   = kwargs.pop("output")
+
+    logger.info("Building script %s for mothur with args: %s" % (template, kwargs))
+
+    mothur_script = render_template(*args, **kwargs)
+    write(output, mothur_script)
+
 def install_silva():
     silva_version = str(settings.get("silva_version"))
     silva_version_str = "v%s" % silva_version.replace(".", "_")
@@ -54,12 +63,3 @@ def install_silva():
     logger.success("SILVA successfully downloaded at %s." % silva_paths)
 
     return silva_paths
-
-def build_mothur_script(*args, **kwargs):
-    template = kwargs.get("template")
-    output   = kwargs.pop("output")
-
-    logger.info("Building script %s for mothur with args: %s" % (template, kwargs))
-
-    mothur_script = render_template(*args, **kwargs)
-    write(output, mothur_script)

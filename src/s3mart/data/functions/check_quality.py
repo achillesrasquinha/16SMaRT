@@ -15,13 +15,19 @@ from bpyutils import parallel, log
 
 logger = log.get_logger(name = NAME)
 
-def fastqc_check(file_, output_dir = None, threads = None):
+def fastqc_check(file_, output_dir = None, threads = None, force = False):
     output_dir = output_dir or os.cwd()
     threads    = threads or settings.get("jobs")
 
-    with ShellEnvironment(cwd = output_dir) as shell:
-        shell("fastqc -q --threads {threads} {fastq_file} -o {out_dir}".format(
-            threads = threads, out_dir = output_dir, fastq_file = file_))
+    basename   = osp.basename(file_)
+    prefix, _  = osp.splitext(basename)
+
+    if not get_files(output_dir, "%s_fastqc.*" % prefix):
+        with ShellEnvironment(cwd = output_dir) as shell:
+            shell("fastqc -q --threads {threads} {fastq_file} -o {out_dir}".format(
+                threads = threads, out_dir = output_dir, fastq_file = file_))
+    else:
+        logger.warn("FASTQC for file %s already exists." % file_)
 
 def check_quality(data_dir = None, multiqc = False, *args, **kwargs):    
     data_dir = get_data_dir(NAME, data_dir)

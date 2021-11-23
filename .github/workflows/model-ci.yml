@@ -34,7 +34,7 @@ jobs:
           python setup.py develop
       - name: Run Pipeline
         run: |
-          bpyutils --run-ml s3mart -p "check=True; data_dir=/data"
+          bpyutils --run-ml s3mart -p "check=True; data_dir=/data; jobs=8"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:

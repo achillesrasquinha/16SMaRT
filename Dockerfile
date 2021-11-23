@@ -45,10 +45,11 @@ RUN pip install -r /requirements.txt
 
 COPY . $S3MART_PATH
 
-WORKDIR $WORKSPACEDIR
-
-RUN pip install -r /requirements.txt && \
+RUN cd $S3MART_PATH && \
+    pip install -r /requirements.txt && \
     python setup.py install
+
+WORKDIR $WORKSPACEDIR
 
 ENTRYPOINT ["/entrypoint.sh"]
 

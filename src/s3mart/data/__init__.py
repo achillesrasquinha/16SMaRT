@@ -10,7 +10,7 @@ from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.types   import build_fn
 from bpyutils.util.string  import check_url, safe_decode
 from bpyutils.util.system  import write
-from bpyutils import parallel, log, req
+from bpyutils import parallel, log, request as req
 
 from s3mart.data.functions import (
     get_fastq,

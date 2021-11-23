@@ -18,7 +18,7 @@
     </a>
 </p>
 
-**16SMaRT** is a bioinformatics analysis pipeline for 16s rRNA gene sequencing data. It currently supports single-end or paired-end [Illumina](https://www.illumina.com/) data.
+**16SMaRT** is a bioinformatics analysis pipeline for 16s rRNA gene sequencing data. **16SMaRT** is a "one-click" solution towards performing microbial community analysis of amplicon sequencing data. It currently supports single-end or paired-end [Illumina](https://www.illumina.com/) MiSeq data.
 
 ## Table of Contents
 
@@ -31,7 +31,7 @@
 
 * Supports single-end and paired-end [Illumina](https://www.illumina.com/) data.
 * Quality Control using [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/).
-* Trimming using [mothur](https://mothur.org)
+* Trimming using [mothur](https://mothur.org).
 * [Docker](https://www.docker.com/) + [Singularity](https://singularity.hpcng.org/) support.
 
 ## Quick Start

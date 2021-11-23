@@ -9,8 +9,8 @@ env:
   # package variables
   PIP_USE_DEPRECATED: "legacy-resolver"
 
-  GEOMEAT_JOBS: 32
-  GEOMEAT_DATA_DIR: /data
+  S3MART_JOBS: 32
+  S3MART_DATA_DIR: /data
 
   BPYUTILS_VERBOSE: "true"
   

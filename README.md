@@ -45,11 +45,12 @@ docker run \
     --rm -it \
     -v "<HOST_MACHINE_PATH_DATA>:/data" \
     -v "<HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
+    -v "<HOST_MACHINE_PATH_WORKSPACE>:/work \
     ghcr.io/achillesrasquinha/s3mart \
     bpyutils --run-ml s3mart -p "data_dir=/data" --verbose
 ```
 
-where `<HOST_MACHINE_PATH_DATA>` is the path to your host machine to store pipeline data and `<HOST_MACHINE_PATH_CONFIG>` is the path to store 16SMaRT configuration and intermediate data.
+where `<HOST_MACHINE_PATH_DATA>` is the path to your host machine to store pipeline data and `<HOST_MACHINE_PATH_CONFIG>` is the path to store 16SMaRT configuration and intermediate data. `<HOST_MACHINE_PATH_WORKSPACE>` is a workspace directory for you to store your files that can be used by 16SMaRT (e.g. input files).
 
 ### Running on HPC systems using [Singularity](https://singularity.hpcng.org/)
 
@@ -61,6 +62,7 @@ singularity run \
     --cleanenv \
     -B <HOST_MACHINE_PATH_DATA>:/data \
     -B <HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
+    -B <HOST_MACHINE_PATH_WORKSPACE>:/work \
     docker://ghcr.io/achillesrasquinha/s3mart \
     bpyutils --run-ml s3mart -p "data_dir=/data" --verbose
 ```

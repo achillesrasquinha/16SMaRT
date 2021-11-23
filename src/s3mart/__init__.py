@@ -3,7 +3,7 @@ from __future__ import absolute_import
 try:
     import os
 
-    if os.environ.get("GEOMEAT_GEVENT_PATCH"):
+    if os.environ.get("S3MART_GEVENT_PATCH"):
         from gevent import monkey
         monkey.patch_all(threaded = False, select = False)
 except ImportError:

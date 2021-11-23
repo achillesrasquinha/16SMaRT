@@ -6,7 +6,8 @@ ENV TERM=xterm-256color \
     SRA_TOOLKIT_VERSION=2.9.6 \
     MOTHUR_VERSION=1.46.1 \
     VSEARCH_VERSION=2.18.0 \
-    GEOMEAT_PATH=/usr/local/src/s3mart
+    S3MART_PATH=/usr/local/src/s3mart \
+    WORKSPACEDIR=/work
 
 RUN apt-get --allow-releaseinfo-change update && \
     # SRA Toolkit
@@ -31,7 +32,7 @@ RUN apt-get --allow-releaseinfo-change update && \
     ./configure CFLAGS="-O3" CXXFLAGS="-O3" && \
     make && \
     make install && \
-    mkdir -p $GEOMEAT_PATH && \
+    mkdir -p $S3MART_PATH && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \
@@ -42,9 +43,9 @@ COPY ./docker/entrypoint.sh /entrypoint.sh
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
-COPY . $GEOMEAT_PATH
+COPY . $S3MART_PATH
 
-WORKDIR $GEOMEAT_PATH
+WORKDIR $WORKSPACEDIR
 
 RUN pip install -r /requirements.txt && \
     python setup.py install

@@ -30,8 +30,8 @@ _DATA_DIR_NAME_TRIMMED = "trimmed"
 _FILENAME_TRIMMED      = "trimmed"
 
 def _get_fastq_file_line(fname):
-    prefix, _ = osp.splitext(fname)
-    prefix    = osp.basename(prefix)
+    prefix    = osp.basename(fname)
+    prefix, _ = osp.splitext(prefix)
 
     return "%s %s" % (prefix, fname)
 

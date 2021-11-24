@@ -46,4 +46,3 @@ Quality Control can be disabled by simply providing the parameter as follows:
 ```
 fastqc=False; multiqc=False
 ```
-

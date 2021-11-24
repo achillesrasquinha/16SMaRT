@@ -115,7 +115,7 @@ ifneq (${ENVIRONMENT},test)
 	@clear
 
 	$(call log,INFO,Cleaning Python Cache)
-	@find $(BASEDIR) | grep -E "__pycache__|\.pyc" | xargs rm -rf
+	@find $(BASEDIR) | grep -E "__pycache__|\.pyc|\.egg-info" | xargs rm -rf
 
 	@rm -rf \
 		$(BASEDIR)/*.egg-info \
@@ -127,6 +127,7 @@ ifneq (${ENVIRONMENT},test)
 		$(BASEDIR)/htmlcov \
 		$(BASEDIR)/dist \
 		$(BASEDIR)/build \
+		$(BASEDIR)/*.log \
 		~/.config/$(PROJECT)
 
 	$(call log,SUCCESS,Cleaning Successful)

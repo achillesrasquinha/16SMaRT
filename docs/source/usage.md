@@ -1,18 +1,18 @@
-## Usage
+# Usage
 
-### Table of Contents
+## Table of Contents
 * [Input Data](#input-data)
     * [CSV DataSheet](#csv-datasheet)
 * [Quality Control](#quality-control)
 
-### Input Data
+## Input Data
 
 The input data can be passed to **16SMaRT** in two different ways using the `input` argument, either:
 
 * a comma-seperated datasheet containing [NCBI SRA](https://www.ncbi.nlm.nih.gov/sra) IDs (or a URL to a CSV file).
 * a directory containing a list of FASTQ files.
 
-#### CSV DataSheet
+### CSV DataSheet
 
 The CSV DataSheet must be of the following format.
 
@@ -37,7 +37,7 @@ You can then provide the parameter as follows:
 input=/work/input.csv
 ```
 
-### Quality Control
+## Quality Control
 
 **16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files.
 

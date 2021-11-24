@@ -207,7 +207,7 @@ docker-build: clean ## Build the Docker Image.
 	@docker build $(BASEDIR) --tag $(DOCKER_IMAGE) $(DOCKER_BUILD_ARGS)
 
 docker-push: ## Push Docker Image to Registry.
-	@docker push $(DOCKER_IMAGE)$(DOCKER_IMAGE_TAG)
+	@docker push $(DOCKER_IMAGE) --all-tags
 
 docker-tox: clean ## Test using Docker Tox Image.
 	$(call log,INFO,Running Tests using Docker Tox)
@@ -238,7 +238,6 @@ endif
 
 start: ## Start app.
 	$(PYTHON) -m flask run
-
 
 notebooks: ## Launch Notebooks
 	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)

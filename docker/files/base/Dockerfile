@@ -30,7 +30,6 @@ RUN apt-get --allow-releaseinfo-change update && \
     ./configure CFLAGS="-O3" CXXFLAGS="-O3" && \
     make && \
     make install && \
-    mkdir -p $S3MART_PATH && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \

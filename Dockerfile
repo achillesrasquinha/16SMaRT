@@ -3,6 +3,8 @@ FROM ghcr.io/achillesrasquinha/s3mart:base
 ENV S3MART_PATH=/usr/local/src/s3mart \
     WORKSPACEDIR=/work
 
+WORKDIR $S3MART_PATH
+
 COPY ./docker/entrypoint.sh /entrypoint.sh
 
 COPY ./requirements.txt /requirements.txt

@@ -197,7 +197,16 @@ ifeq (${launch},true)
 	$(call browse,file:///${DOCSDIR}/build/index.html)
 endif
 
-docker-build: clean ## Build the Docker Image.
+docker-pull:
+	$(call log,INFO,Pulling latest Docker Image)
+
+	for folder in `ls ${BASEDIR}/docker/files`; do \
+		docker pull $(DOCKER_IMAGE):$$folder; \
+	done
+
+	docker pull $(DOCKER_IMAGE):latest
+
+docker-build: clean docker-pull ## Build the Docker Image.
 	$(call log,INFO,Building Docker Image)
 
 	for folder in `ls ${BASEDIR}/docker/files`; do \

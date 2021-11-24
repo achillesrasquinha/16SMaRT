@@ -31,7 +31,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements-dev.txt
-          python setup.py develop
+          pip install -e .
       - name: Run Pipeline
         run: |
           bpyutils --run-ml s3mart -p "check=True; data_dir=/data; jobs=8"

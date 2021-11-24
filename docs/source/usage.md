@@ -1,5 +1,10 @@
 ## Usage
 
+### Table of Contents
+* [Input Data](#input-data)
+    * [CSV DataSheet](#csv-datasheet)
+* [Quality Control](#quality-control)
+
 ### Input Data
 
 The input data can be passed to **16SMaRT** in two different ways using the `input` argument, either:

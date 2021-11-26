@@ -5,8 +5,8 @@ from s3mart import settings, __name__ as NAME
 
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.system  import (
-    ShellEnvironment,
-    make_temp_dir, copy
+    ShellEnvironment, makedirs,
+    make_temp_dir, copy, move
 )
 from bpyutils import log
 
@@ -28,6 +28,16 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
     silva_seed_tax = kwargs["silva_seed_tax"]
 
     files = (merged_fasta, merged_group, silva_seed, silva_gold, silva_seed_tax)
+    target_files = [{
+        "source": "merged.unique.good.unique.precluster.pick.pick.phylip.tre",
+        "target": osp.join(data_dir, "output.tre")
+    }, {
+        "source": "merged.unique.good.unique.precluster.pick.pick.opti_mcc.0.03.cons.taxonomy",
+        "target": osp.join(data_dir, "output.taxonomy"),
+    }, {
+        "source": "merged.unique.good.unique.precluster.pick.count_table",
+        "target": osp.join(data_dir, "output.count_table")
+    }]
 
     with make_temp_dir(root_dir = CACHE) as tmp_dir:
         copy(*files, dest = tmp_dir)
@@ -59,6 +69,14 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
             code = shell("mothur %s" % mothur_file)
 
             if not code:
-                pass
+                makedirs(data_dir, exists_ok = True)
+
+                for tar_file in target_files:
+                    source = osp.join(tmp_dir, tar_file["source"])
+                    target = tar_file["target"]
+
+                    move(source, dest = target)
+
+                logger.success("Successfully preprocessed files.")
             else:
                 logger.error("Error merging files.")

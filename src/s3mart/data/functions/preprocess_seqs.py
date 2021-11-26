@@ -69,7 +69,7 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
             code = shell("mothur %s" % mothur_file)
 
             if not code:
-                makedirs(data_dir, exists_ok = True)
+                makedirs(data_dir, exist_ok = True)
 
                 for tar_file in target_files:
                     source = osp.join(tmp_dir, tar_file["source"])

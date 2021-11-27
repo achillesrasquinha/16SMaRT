@@ -29,7 +29,7 @@ def get_input_data(input = None, data_dir = None, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
 
     if input:
-        if check_url(input):
+        if check_url(input, raise_err = False):
             response = req.get(input)
             response.raise_for_status()
 

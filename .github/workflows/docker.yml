@@ -43,10 +43,9 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: quay.io/singularity/singularity
-      options: --privileged
+      image: quay.io/singularity/docker2singularity
     
     steps:
       - name: Build SIF File
         run: |
-          sudo singularity build ${PROJECT}.sif ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}
+          docker2singularity ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}

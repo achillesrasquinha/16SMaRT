@@ -17,9 +17,11 @@ from s3mart.data.functions import (
     check_quality,
     trim_seqs,
     merge_seqs,
-    preprocess_seqs
+    preprocess_seqs,
+    build_plots
 )
-from s3mart.data.util import install_silva
+from s3mart.data.util  import install_silva
+from s3mart.data.plots import PLOTS
 
 logger = log.get_logger(name = NAME)
 
@@ -76,6 +78,8 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
 
     fastqc   = kwargs.get("fastqc",  True)
     multiqc  = kwargs.get("multiqc", True)
+
+    build_plots(data = data)
 
     if fastqc:
         check_quality(data_dir = data_dir, multiqc = multiqc, *args, **kwargs)

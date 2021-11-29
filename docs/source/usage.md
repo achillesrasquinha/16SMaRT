@@ -37,6 +37,18 @@ You can then provide the parameter as follows:
 input=/work/input.csv
 ```
 
+### Command: Fetching Data
+
+```
+docker run \
+    --rm -it \
+    -v "<HOST_MACHINE_PATH_DATA>:/data" \
+    -v "<HOST_MACHINE_PATH_CONFIG>:/root/.config/s3mart \
+    -v "<HOST_MACHINE_PATH_WORKSPACE>:/work \
+    ghcr.io/achillesrasquinha/s3mart \
+    bpyutils --method s3mart.data.get_data -p "data_dir=/data; input=/work/input.csv" --verbose
+```
+
 ## Quality Control
 
 **16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files.

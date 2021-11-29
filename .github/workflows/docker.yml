@@ -13,8 +13,8 @@ env:
   PROJECT: ${{ github.event.repository.name }}
 
 jobs:
-  build:
-    name: Docker Build
+  build-docker:
+    name: Build Docker
     runs-on: ubuntu-latest
       
     steps:
@@ -36,8 +36,12 @@ jobs:
           make docker-push
 
   build-singularity:
-    name: Singularity Build
+    needs:
+      - build-docker
+
+    name: Build Singularity
     runs-on: ubuntu-latest
+
     container:
       image: quay.io/singularity/singularity
       options: --privileged

@@ -79,7 +79,7 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
     fastqc   = kwargs.get("fastqc",  True)
     multiqc  = kwargs.get("multiqc", True)
 
-    build_plots(data = data)
+    # build_plots(data = data)
 
     if fastqc:
         check_quality(data_dir = data_dir, multiqc = multiqc, *args, **kwargs)

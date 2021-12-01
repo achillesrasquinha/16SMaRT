@@ -11,3 +11,5 @@ PLOTS = [
 
 def build_plots(data, *args, **kwargs):
     logger.info("Building Plots...")
+
+    

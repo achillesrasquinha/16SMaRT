@@ -79,8 +79,6 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
     fastqc   = kwargs.get("fastqc",  True)
     multiqc  = kwargs.get("multiqc", True)
 
-    # build_plots(data = data)
-
     if fastqc:
         check_quality(data_dir = data_dir, multiqc = multiqc, *args, **kwargs)
 
@@ -100,3 +98,6 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
         silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
         silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
     )
+
+    # logger.info("Build Plots")
+    # build_plots(data = data)

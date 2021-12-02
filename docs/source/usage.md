@@ -37,6 +37,12 @@ You can then provide the parameter as follows:
 input=/work/input.csv
 ```
 
+or 
+
+```
+input="<YOUR_URL_TO_CSV_FILE>"
+```
+
 #### Command: Fetching Data
 
 ```

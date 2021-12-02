@@ -10,7 +10,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_REGISTRY: ghcr.io
   DOCKER_USERNAME: ${{ github.actor }}
-  PROJECT: ${{ github.event.repository.name }}
+  PROJECT: s3mart
 
 jobs:
   build-docker:
@@ -47,6 +47,9 @@ jobs:
       options: --privileged
     
     steps:
+      - name: Login to Registry
+        run: |
+          echo $GITHUB_TOKEN | singularity remote login -u ${DOCKER_USERNAME} --password-stdin oras://${DOCKER_REGISTRY}
       - name: Build SIF File
         run: |
           DOCKER_IMAGE="${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}"
@@ -56,5 +59,4 @@ jobs:
             --name ${SINGULARITY_IMAGE} \
              ${DOCKER_IMAGE}
 
-          echo ${GITHUB_TOKEN} | singularity remote login -u ${DOCKER_USERNAME} --password-stdin oras://${DOCKER_REGISTRY}
           singularity push /output/${SINGULARITY_IMAGE} oras://${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}:singularity

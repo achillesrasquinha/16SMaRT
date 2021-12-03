@@ -24,7 +24,7 @@ RUN apt-get update && \
     mkdir -p /usr/share/man/man1 && \
     apt-get install -y --no-install-recommends \
         openjdk-11-jre-headless \
-        fastqc && \
+        fastqc \
         r-base && \
     wget -nv https://github.com/mothur/mothur/releases/download/v${MOTHUR_VERSION}/Mothur.Ubuntu_20.zip -O $HOME/mothur.zip && \
     unzip $HOME/mothur.zip -d /mothur && \
@@ -40,4 +40,5 @@ RUN apt-get update && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \
-        $HOME/vsearch*
+        $HOME/vsearch* \
+        /var/lib/apt/lists/*

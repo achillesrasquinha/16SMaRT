@@ -77,7 +77,7 @@ Checkout [usage](docs/source/usage.md) for details.
 
 ## Support
 
-Have any queries? Post an issue on the [GitHub Issue Tracker](https://github.com/achillesrasquinha/autopsy/issues).
+Have any queries? Post an issue on the [GitHub Issue Tracker](https://github.com/achillesrasquinha/16SMaRT/issues).
 
 ## References
 

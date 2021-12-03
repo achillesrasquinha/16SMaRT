@@ -73,7 +73,7 @@ singularity run \
 
 ## Usage
 
-Check out [usage](usage.md) to understand how to use this pipeline.
+Check out [usage](docs/source/usage.md) to understand how to use this pipeline.
 
 ## Support
 

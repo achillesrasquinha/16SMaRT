@@ -7,7 +7,7 @@ align.seqs(fasta=current, reference={{ silva_seed_pcr }}, processors={{ processo
 screen.seqs(fasta=current, count=current, maxhomop={{ maxhomop }}, processors={{ processors }})
 filter.seqs(fasta=current, vertical=T, trump=.)
 
-pre.cluster(fasta=current, count=current, processors={{ processors }}, diffs=2)
+pre.cluster(fasta=current, count=current, processors={{ processors }})
 
 chimera.vsearch(fasta=current, reference={{ silva_gold }})
 

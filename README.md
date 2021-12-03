@@ -25,6 +25,9 @@
 * [Features](#features)
 * [Quick Start](#quick-start)
 * [Usage](#usage)
+* [Support](#support)
+* [References](#references)
+* [Citation](#citation)
 * [License](#license)
 
 ## Features
@@ -71,6 +74,10 @@ singularity run \
 ## Usage
 
 Checkout [usage](docs/source/usage.md) for details.
+
+## Support
+
+Have any queries? Post an issue on the [GitHub Issue Tracker](https://github.com/achillesrasquinha/autopsy/issues).
 
 ## References
 

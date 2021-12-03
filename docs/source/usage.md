@@ -1,8 +1,6 @@
 # Usage
 
-## Background
-
-| Molecule of a thermus thermophilus    | 16S ribosomal RNA |
+| Molecule of a 30S Subunit from thermus thermophilus | 16S ribosomal RNA |
 |---------------------------------------|-------------------|
 | ![](_static/thermus-thermophilus.gif) | <img src="_static/16S-rRNA.png" height="320"/> |
 

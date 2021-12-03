@@ -72,6 +72,14 @@ singularity run \
 
 Checkout [usage](docs/source/usage.md) for details.
 
+## Citation
+
+If you use this software in your work, please cite it using the following:
+
+```
+Furbeck, R., & Rasquinha, A. (2021). 16SMaRT - 16s rRNA Sequencing Meta-analysis Reconstruction Tool. (Version 0.1.0) [Computer software]. https://github.com/achillesrasquinha/16SMaRT
+```
+
 ## License
 
 This repository has been released under the [MIT License](LICENSE).

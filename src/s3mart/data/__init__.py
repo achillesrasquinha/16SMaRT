@@ -21,7 +21,6 @@ from s3mart.data.functions import (
     build_plots
 )
 from s3mart.data.util  import install_silva
-from s3mart.data.plots import PLOTS
 
 logger = log.get_logger(name = NAME)
 
@@ -99,5 +98,5 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
         silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
     )
 
-    # logger.info("Build Plots")
-    # build_plots(data = data)
+    logger.info("Build Plots")
+    build_plots(data = data)

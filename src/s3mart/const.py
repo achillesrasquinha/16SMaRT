@@ -21,5 +21,7 @@ DEFAULT = {
     "maximum_homopolymers": 8,
     "silva_version":        "132",
     "silva_seed_pcr_start": 6388,
-    "silva_seed_pcr_end":   13861
+    "silva_seed_pcr_end":   13861,
+
+    "keep_temp_files":      False
 }

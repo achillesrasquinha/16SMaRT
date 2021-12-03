@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use 16SMaRT software, please cite it as below."
+authors:
+- family-names: "Furbeck"
+  given-names: "Rebecca"
+- family-names: "Rasquinha"
+  given-names: "Achilles"
+  orcid: "https://orcid.org/0000-0001-9321-032X"
+title: "16SMaRT - 16s rRNA Sequencing Meta-analysis Reconstruction Tool."
+version: 0.1.0
+date-released: 2021-01-03
+url: "https://github.com/achillesrasquinha/16SMaRT"

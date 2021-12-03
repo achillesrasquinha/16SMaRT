@@ -36,7 +36,8 @@ settings = Settings(location = PATH["CACHE"], defaults = {
     "maximum_homopolymers": DEFAULT["maximum_homopolymers"],
     "silva_version":        DEFAULT["silva_version"],
     "silva_seed_pcr_start": DEFAULT["silva_seed_pcr_start"],
-    "silva_seed_pcr_end":   DEFAULT["silva_seed_pcr_end"]
+    "silva_seed_pcr_end":   DEFAULT["silva_seed_pcr_end"],
+    "keep_temp_files":      DEFAULT["keep_temp_files"] 
 })
 
 def get_version_str():

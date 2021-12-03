@@ -50,6 +50,8 @@ or
 input="<YOUR_URL_TO_CSV_FILE>"
 ```
 
+Each SRA ID is then fetched and saved onto disk within your data directory.
+
 ## Quality Control
 
 **16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files. Quality Control can be disabled by simply providing the parameter as follows:

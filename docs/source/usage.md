@@ -24,7 +24,7 @@ The CSV DataSheet must be of the following format.
 
 Take a look at a [sample.csv](https://github.com/achillesrasquinha/16SMaRT/blob/develop/src/s3mart/data/sample.csv) used in our sample pipeline.
 
-![](docs/source/_static/sample-datasheet.png)
+![](source/_static/sample-datasheet.png)
 
 You can then provide the parameter as follows:
 

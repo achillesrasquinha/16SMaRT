@@ -1,5 +1,13 @@
 # Usage
 
+## Background
+
+| Molecule of a thermus thermophilus    | 16S ribosomal RNA |
+|---------------------------------------|-------------------|
+| ![](_static/thermus-thermophilus.gif) | <img src="_static/16S-rRNA.png" height="320"/> |
+
+***Source:*** [Wikipedia](https://en.wikipedia.org/wiki/Thermus_thermophilus)
+
 ## Table of Contents
 
 * [Input Data](#input-data)

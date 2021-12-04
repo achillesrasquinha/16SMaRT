@@ -5,15 +5,9 @@ LABEL maintainer=achillesrasquinha@gmail.com
 ENV TERM=xterm-256color \
     SRA_TOOLKIT_VERSION=2.9.6 \
     MOTHUR_VERSION=1.46.1 \
-    R_BASE_VERSION=4.1.2 \
     VSEARCH_VERSION=2.18.0
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        software-properties-common && \
-    apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && \
-    add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu bullseye-cran40/" && \
-    apt-get update && \
     # SRA Toolkit
     wget -nv https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz && \
     tar xzvf $HOME/sra-toolkit.tar.gz -C $HOME && \

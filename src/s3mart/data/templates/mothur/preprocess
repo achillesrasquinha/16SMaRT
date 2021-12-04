@@ -13,6 +13,7 @@ remove.seqs(fasta=current, accnos=current, count=count)
 
 classify.seqs(fasta=current, count=current, reference={{ silva_seed_pcr }}, taxonomy={{ silva_seed_tax }}, cutoff=80, processors={{ processors }})
 remove.lineage(fasta=current,count=current,taxonomy=current, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota)
+
 cluster.split(fasta=current, count=current, taxonomy=current, splitmethod=classify, taxlevel=6, cutoff=0.03)
 make.shared(list=current, count=current, label=0.03)
 classify.otu(list=current, taxonomy=current, label=0.03)

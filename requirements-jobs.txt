@@ -20,6 +20,7 @@ cutadapt
 jinja2
 tqdm
 requests
+rpy2
 pipenv
 jedi<0.18
 ipython

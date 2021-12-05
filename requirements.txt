@@ -5,3 +5,4 @@ cutadapt
 jinja2
 tqdm
 requests
+rpy2

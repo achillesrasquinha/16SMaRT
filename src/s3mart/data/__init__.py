@@ -98,5 +98,7 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
         silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
     )
 
-    logger.info("Build Plots")
+def render_plots(input = None, data_dir = None, *args, **kwargs):
+    data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
+    
     build_plots(data = data)

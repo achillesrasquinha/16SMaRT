@@ -1,4 +1,2 @@
-
-
 def plot(data):
-    pass
+    print(data)

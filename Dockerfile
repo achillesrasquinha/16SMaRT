@@ -14,7 +14,7 @@ COPY . $S3MART_PATH
 
 RUN cd $S3MART_PATH && \
     pip install -r /requirements.txt && \
-    python setup.py install
+    python setup.py install 
 
 WORKDIR $WORKSPACEDIR
 

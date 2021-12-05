@@ -13,4 +13,6 @@ def build_plots(data, *args, **kwargs):
     logger.info("Building Plots...")
 
     for plot in PLOTS:
-        pass
+        logger.info("Plotting %s..." % plot)
+        plot_fn = import_handler("s3mart.data.plots.%s.plot" % plot)
+        plot_fn(data)

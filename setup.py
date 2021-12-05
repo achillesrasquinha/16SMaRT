@@ -89,15 +89,23 @@ def remove_cache():
         if osp.exists(path):
             shutil.rmtree(path)
 
+def install_r_packages():
+    from rpy2.robjects.packages import importr
+
+    utils = importr("utils")
+    utils.install_packages("ggplot2", repos = "https://cloud.r-project.org")
+    
 class DevelopCommand(develop):
     def run(self):
         develop.run(self)
         remove_cache()
+        install_r_packages()
 
 class InstallCommand(install):
     def run(self):
         install.run(self)
         remove_cache()
+        install_r_packages()
         
 setup(
     name                 = PKGINFO["__name__"],

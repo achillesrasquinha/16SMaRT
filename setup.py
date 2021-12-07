@@ -118,8 +118,10 @@ def install_r_packages():
             utils = importr("utils")
             utils.install_packages("BiocManager", repos = R_REPO)
 
+            biocManager = importr("BiocManager")
+
             for name, version in packages["biocDependencies"].items():
-                R('BiocManager::install("%s")' % name)
+                biocManager.install(name, ask = False)
 
 class DevelopCommand(develop):
     def run(self):

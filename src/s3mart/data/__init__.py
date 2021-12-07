@@ -98,7 +98,15 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
         silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
     )
 
+    logger.info("Render Plots...")
+    render_plots(input = input, data_dir = data_dir, *args, **kwargs)
+
 def render_plots(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
-    
+
+    mothur_data    = {
+        # "list_file": "",
+
+    }
+
     build_plots(data = data)

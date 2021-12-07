@@ -37,6 +37,7 @@
 * Trimming using [mothur](https://mothur.org).
 * Multi-Processing.
 * [Docker](https://www.docker.com/) + [Singularity](https://singularity.hpcng.org/) support.
+* Analysis using [phyloseq](https://joey711.github.io/phyloseq/).
 
 ## Quick Start
 

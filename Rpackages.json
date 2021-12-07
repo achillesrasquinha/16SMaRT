@@ -1,0 +1,9 @@
+{
+    "dependencies": {
+        "ggplot2": "",
+        "plotly": ""
+    },
+    "biocDependencies": {
+        "phyloseq": ""
+    }
+}

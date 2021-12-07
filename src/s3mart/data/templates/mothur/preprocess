@@ -9,7 +9,7 @@ screen.seqs(fasta=current, count=current, maxhomop={{ maxhomop }}, processors={{
 pre.cluster(fasta=current, count=current, processors={{ processors }})
 
 chimera.vsearch(fasta=current, reference={{ silva_gold }})
-remove.seqs(fasta=current, accnos=current, count=current)
+remove.seqs(fasta=current, accnos=current)
 
 classify.seqs(fasta=current, count=current, reference={{ silva_seed_pcr }}, taxonomy={{ silva_seed_tax }}, cutoff=80, processors={{ processors }})
 remove.lineage(fasta=current,count=current,taxonomy=current, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota)

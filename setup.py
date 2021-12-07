@@ -5,6 +5,7 @@ import os.path as osp
 import glob
 import io
 import shutil
+import json
 
 from setuptools import setup, find_packages
 
@@ -90,11 +91,36 @@ def remove_cache():
             shutil.rmtree(path)
 
 def install_r_packages():
-    from rpy2.robjects.packages import importr
+    path_packages = osp.abspath("Rpackages.json")
 
-    utils = importr("utils")
-    utils.install_packages("ggplot2", repos = "https://cloud.r-project.org")
-    
+    if osp.exists(path_packages):
+        packages = {}
+
+        with open(path_packages) as f:
+            packages = json.load(f)
+            
+        if "dependencies" in packages:
+            from rpy2.robjects.packages import importr
+
+            utils = importr("utils")
+
+            for name, version in packages["dependencies"].items():
+                utils.install_packages(name, repos = "https://cloud.r-project.org")
+
+        if "biocDependencies" in packages:
+            from rpy2.robjects.packages import importr
+
+            utils = importr("utils")
+            utils.install_packages("BiocManager", repos = "https://cloud.r-project.org")
+
+            base  = importr("base")
+            base.source("http://www.bioconductor.org/biocLite.R")
+
+            biocInstaller = importr("BiocInstaller")
+
+            for name, version in packages["biocDependencies"].items():
+                biocInstaller.biocLite(name)
+
 class DevelopCommand(develop):
     def run(self):
         develop.run(self)

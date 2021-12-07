@@ -116,10 +116,10 @@ def install_r_packages():
             base  = importr("base")
             base.source("http://www.bioconductor.org/biocLite.R")
 
-            biocInstaller = importr("BiocInstaller")
+            biocManager = importr("BiocManager")
 
             for name, version in packages["biocDependencies"].items():
-                biocInstaller.biocLite(name)
+                biocManager.install(name)
 
 class DevelopCommand(develop):
     def run(self):

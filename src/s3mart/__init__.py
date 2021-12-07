@@ -28,16 +28,20 @@ cache = Cache(dirname = __name__)
 cache.create()
 
 settings = Settings(location = PATH["CACHE"], defaults = {
-    "jobs":                 DEFAULT["jobs"],
-    "trim_chunks":          DEFAULT["trim_chunks"],
-    "primer_difference":    DEFAULT["primer_difference"],
-    "quality_average":      DEFAULT["quality_average"],
-    "maximum_ambiguity":    DEFAULT["maximum_ambiguity"],
-    "maximum_homopolymers": DEFAULT["maximum_homopolymers"],
-    "silva_version":        DEFAULT["silva_version"],
-    "silva_seed_pcr_start": DEFAULT["silva_seed_pcr_start"],
-    "silva_seed_pcr_end":   DEFAULT["silva_seed_pcr_end"],
-    "keep_temp_files":      DEFAULT["keep_temp_files"] 
+    "jobs":                     DEFAULT["jobs"],
+    "trim_chunks":              DEFAULT["trim_chunks"],
+    "primer_difference":        DEFAULT["primer_difference"],
+    "quality_average":          DEFAULT["quality_average"],
+    "maximum_ambiguity":        DEFAULT["maximum_ambiguity"],
+    "maximum_homopolymers":     DEFAULT["maximum_homopolymers"],
+    "classification_cutoff":    DEFAULT["classification_cutoff"],
+    "filter_taxonomy":          DEFAULT["filter_taxonomy"],
+
+    "silva_version":            DEFAULT["silva_version"],
+    "silva_seed_pcr_start":     DEFAULT["silva_seed_pcr_start"],
+    "silva_seed_pcr_end":       DEFAULT["silva_seed_pcr_end"],
+    
+    "keep_temp_files":          DEFAULT["keep_temp_files"] ,
 })
 
 def get_version_str():

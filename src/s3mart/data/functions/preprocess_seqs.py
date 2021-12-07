@@ -3,6 +3,7 @@ import os.path as osp
 from s3mart.config  import PATH
 from s3mart import settings, __name__ as NAME
 
+from bpyutils.util.array   import sequencify
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.system  import (
     ShellEnvironment, makedirs,
@@ -44,6 +45,11 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
 
         silva_seed_splitext = osp.splitext(osp.basename(silva_seed))
 
+        filter_taxonomy = settings.get("filter_taxonomy")
+        if not isinstance(filter_taxonomy, (list, tuple)):
+            filter_taxonomy = eval(filter_taxonomy)
+            filter_taxonomy = sequencify(filter_taxonomy)
+            
         mothur_file = osp.join(tmp_dir, "script")
         build_mothur_script(
             template = "mothur/preprocess",
@@ -60,7 +66,9 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
             silva_seed_tax   = osp.join(tmp_dir, osp.basename(silva_seed_tax)),
             silva_gold       = osp.join(tmp_dir, osp.basename(silva_gold)),
 
-            maxhomop         = settings.get("maximum_homopolymers"),
+            maxhomop              = settings.get("maximum_homopolymers"),
+            classification_cutoff = settings.get("classification_cutoff"),
+            filter_taxonomy       = filter_taxonomy,
 
             processors       = jobs
         )

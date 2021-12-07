@@ -13,15 +13,19 @@ CONST = {
 }
 
 DEFAULT = {
-    "jobs":                 getenv("JOBS", CPU_COUNT, prefix = _PREFIX),
-    "trim_chunks":          8,
-    "primer_difference":    5,
-    "quality_average":      35,
-    "maximum_ambiguity":    0,
-    "maximum_homopolymers": 8,
-    "silva_version":        "132",
-    "silva_seed_pcr_start": 6388,
-    "silva_seed_pcr_end":   13861,
+    "jobs":                     getenv("JOBS", CPU_COUNT, prefix = _PREFIX),
+    "trim_chunks":              8,
+    "primer_difference":        5,
+    "quality_average":          35,
+    "maximum_ambiguity":        0,
+    "maximum_homopolymers":     8,
+    "classification_cutoff":    80,
+    "filter_taxonomy":          ["chloroplast", "mitochondria", "archaea", "eukaryota", "unknown"],
 
-    "keep_temp_files":      False
+    "silva_version":            "132",
+    
+    "silva_seed_pcr_start":     6388,
+    "silva_seed_pcr_end":       13861,
+
+    "keep_temp_files":          False
 }

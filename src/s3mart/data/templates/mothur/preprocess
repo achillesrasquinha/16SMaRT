@@ -9,10 +9,10 @@ unique.seqs(fasta=current, count=current)
 pre.cluster(fasta=current, count=current, processors={{ processors }}, diffs=2)
 
 chimera.vsearch(fasta=current, reference={{ silva_gold }})
-remove.seqs(fasta=current, accnos=current)
+remove.seqs(fasta=current, accnos=current, count=current)
 
-classify.seqs(fasta=current, count=current, reference={{ silva_seed }}, taxonomy={{ silva_seed_tax }}, cutoff=80, processors={{ processors }})
-remove.lineage(fasta=current,count=current,taxonomy=current, taxon=Chloroplast-Mitochondria-unknown-Archaea-Eukaryota)
+classify.seqs(fasta=current, count=current, reference={{ silva_seed }}, taxonomy={{ silva_seed_tax }}, cutoff={{ classification_cutoff }}, processors={{ processors }})
+remove.lineage(fasta=current, count=current, taxonomy=current, taxon={{ filter_taxonomy.join("-") }})
 
 cluster.split(fasta=current, count=current, taxonomy=current, splitmethod=classify, taxlevel=6, cutoff=0.03)
 make.shared(list=current, count=current, label=0.03)

@@ -1,11 +1,8 @@
 # pylint: disable=E0602
 
-import sys
 import os.path as osp
-import glob
 import io
 import shutil
-import json
 
 from setuptools import setup, find_packages
 
@@ -22,8 +19,6 @@ from setuptools.command.install import install
 # globals
 PACKAGE     = "s3mart"
 SRCDIR      = "src"
-
-R_REPO      = "https://cloud.r-project.org"
 
 # A very awful patch for parse_requirements from pip
 def parse_requirements(filename, session = None):
@@ -92,48 +87,15 @@ def remove_cache():
         if osp.exists(path):
             shutil.rmtree(path)
 
-def install_r_packages():
-    path_packages = osp.abspath("Rpackages.json")
-
-    if osp.exists(path_packages):
-        packages = {}
-
-        with open(path_packages) as f:
-            packages = json.load(f)
-            
-        if "dependencies" in packages:
-            from rpy2.robjects.packages import importr
-
-            utils = importr("utils")
-
-            for name, version in packages["dependencies"].items():
-                utils.install_packages(name, repos = R_REPO)
-
-        if "biocDependencies" in packages:
-            from rpy2.robjects.packages import importr
-            from rpy2 import robjects as ro
-
-            R = ro.r
-
-            utils = importr("utils")
-            utils.install_packages("BiocManager", repos = R_REPO)
-
-            biocManager = importr("BiocManager")
-
-            for name, version in packages["biocDependencies"].items():
-                biocManager.install(name, ask = False)
-
 class DevelopCommand(develop):
     def run(self):
         develop.run(self)
         remove_cache()
-        install_r_packages()
 
 class InstallCommand(install):
     def run(self):
         install.run(self)
         remove_cache()
-        install_r_packages()
         
 setup(
     name                 = PKGINFO["__name__"],

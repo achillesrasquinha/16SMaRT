@@ -21,6 +21,8 @@ DEFAULT = {
     "maximum_homopolymers":     8,
     "classification_cutoff":    80,
     "filter_taxonomy":          ["chloroplast", "mitochondria", "archaea", "eukaryota", "unknown"],
+    "taxonomy_level":           6,
+    "cutoff_level":             0.03,
 
     "silva_version":            "132",
     

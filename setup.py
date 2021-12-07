@@ -111,14 +111,15 @@ def install_r_packages():
 
         if "biocDependencies" in packages:
             from rpy2.robjects.packages import importr
+            from rpy2 import robjects as ro
+
+            R = ro.r
 
             utils = importr("utils")
             utils.install_packages("BiocManager", repos = R_REPO)
 
-            biocManager = importr("BiocManager")
-
             for name, version in packages["biocDependencies"].items():
-                biocManager.install(name)
+                R('BiocManager::install("%s")' % name)
 
 class DevelopCommand(develop):
     def run(self):

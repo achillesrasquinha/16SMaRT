@@ -1,7 +1,2 @@
 group,sra,layout,primer_f,primer_r,trimmed,min_length,max_length,country
 SK13,ERR3792283,paired,,,true,240,275,Australia
-SK13,ERR3792284,paired,,,true,240,275,Australia
-CB24,SRR14255540,paired,,,true,240,275,USA
-BZ1,ERR4144822,paired,CCTACGGGNGGCWGCAG,GACTACHVGGGTATCTAATCC,false,400,444,Austria
-BZ1,ERR4144823,paired,CCTACGGGNGGCWGCAG,GACTACHVGGGTATCTAATCC,false,400,444,Austria
-BH10,ERR3610261,paired,AGMGTTYGATYMYGGCTCAG,ATTACCGCGGCTGCTGG,false,400,507,South Korea

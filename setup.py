@@ -23,6 +23,8 @@ from setuptools.command.install import install
 PACKAGE     = "s3mart"
 SRCDIR      = "src"
 
+R_REPO      = "https://cloud.r-project.org"
+
 # A very awful patch for parse_requirements from pip
 def parse_requirements(filename, session = None):
     class FakeRequirement:
@@ -105,13 +107,13 @@ def install_r_packages():
             utils = importr("utils")
 
             for name, version in packages["dependencies"].items():
-                utils.install_packages(name, repos = "https://cloud.r-project.org")
+                utils.install_packages(name, repos = R_REPO)
 
         if "biocDependencies" in packages:
             from rpy2.robjects.packages import importr
 
             utils = importr("utils")
-            utils.install_packages("BiocManager", repos = "https://cloud.r-project.org")
+            utils.install_packages("BiocManager", repos = R_REPO)
 
             base  = importr("base")
             base.source("http://www.bioconductor.org/biocLite.R")

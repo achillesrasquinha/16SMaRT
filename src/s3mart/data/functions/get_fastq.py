@@ -1,12 +1,16 @@
 import os.path as osp
 from s3mart import settings, __name__ as NAME
 
+from s3mart.data.functions.check_quality import fastqc_check
+
 from bpyutils.util.ml      import get_data_dir
+from bpyutils.util.types   import build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
-    get_files
+    get_files,
+    makedirs
 )
-from bpyutils import log
+from bpyutils import log, parallel
 
 logger = log.get_logger(name = NAME)
 
@@ -15,6 +19,11 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
 
     jobs        = kwargs.get("jobs", settings.get("jobs"))
     data_dir    = get_data_dir(NAME, data_dir)
+    
+    fastqc      = kwargs.get("fastqc",  True)
+
+    fastqc_dir = osp.join(data_dir, "fastqc")
+    makedirs(fastqc_dir, exist_ok = True)
 
     with ShellEnvironment(cwd = data_dir) as shell:
         sra_dir = osp.join(data_dir, sra)
@@ -59,3 +68,10 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
                 logger.error("Unable to download FASTQ file(s) for SRA %s." % sra)
         else:
             logger.warn("FASTQ file(s) for SRA %s already exist." % sra)
+
+        if fastqc:
+            logger.info("Checking quality of FASTQ files...")
+
+            with parallel.pool(processes = jobs) as pool:
+                function_ = build_fn(fastq_files, output_dir = fastqc_dir, *args, **kwargs)
+                list(pool.map(function_, fastq_files))

@@ -59,6 +59,8 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
     jobs     = kwargs.get("jobs", settings.get("jobs"))
 
+    fastqc   = kwargs.get("fastqc",  True)
+
     logger.info("Data directory at %s." % data_dir)
 
     if data:
@@ -66,7 +68,7 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
         with parallel.no_daemon_pool(processes = jobs) as pool:
             length   = len(data)
 
-            function = build_fn(get_fastq, data_dir = data_dir, *args, **kwargs)
+            function = build_fn(get_fastq, data_dir = data_dir, fastqc = fastqc, *args, **kwargs)
             results  = pool.imap(function, data)
 
             list(tq.tqdm(results, total = length))
@@ -75,11 +77,11 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
     data_dir = get_data_dir(NAME, data_dir)
 
-    fastqc   = kwargs.get("fastqc",  True)
+    # fastqc   = kwargs.get("fastqc",  True)
     multiqc  = kwargs.get("multiqc", True)
 
-    if fastqc:
-        check_quality(data_dir = data_dir, multiqc = multiqc, *args, **kwargs)
+    if multiqc:
+        check_quality(data_dir = data_dir, fastqc = False, multiqc = multiqc, *args, **kwargs)
 
     logger.info("Attempting to trim FASTQ files...")
     trim_seqs(data_dir = data_dir, data = data, *args, **kwargs)

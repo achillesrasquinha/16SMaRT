@@ -32,14 +32,17 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
 
     files = (merged_fasta, merged_group, silva_seed, silva_gold, silva_seed_tax)
     target_files = [{
-        "source": "merged.unique.good.unique.precluster.pick.pick.phylip.tre",
+        "source": "merged.unique.good.filter.unique.precluster.pick.pick.phylip.tre",
         "target": osp.join(data_dir, "output.tre")
     }, {
-        "source": "merged.unique.good.unique.precluster.pick.pick.opti_mcc.%s.cons.taxonomy" % cutoff_level,
+        "source": "merged.unique.good.filter.unique.precluster.pick.pick.opti_mcc.%s.cons.taxonomy" % cutoff_level,
         "target": osp.join(data_dir, "output.taxonomy"),
     }, {
-        "source": "merged.unique.good.unique.precluster.pick.count_table",
+        "source": "merged.unique.good.filter.unique.precluster.pick.count_table",
         "target": osp.join(data_dir, "output.count_table")
+    }, {
+        "source": "merged.unique.good.filter.unique.precluster.pick.pick.opti_mcc.list",
+        "target": osp.join(data_dir, "output.list")
     }]
 
     with make_temp_dir(root_dir = CACHE) as tmp_dir:

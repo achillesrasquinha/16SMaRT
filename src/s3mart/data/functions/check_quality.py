@@ -35,18 +35,18 @@ def check_quality(data_dir = None, multiqc = False, *args, **kwargs):
     
     logger.info("Checking quality of FASTQ files...")
 
-    files    = get_files(data_dir, "*.fastq")
+    # files    = get_files(data_dir, "*.fastq")
 
     fastqc_dir = osp.join(data_dir, "fastqc")
     makedirs(fastqc_dir, exist_ok = True)
 
-    with parallel.no_daemon_pool(processes = jobs) as pool:
-        length   = len(files)
+    # with parallel.no_daemon_pool(processes = jobs) as pool:
+    #     length   = len(files)
 
-        function = build_fn(fastqc_check, output_dir = fastqc_dir, threads = jobs)
-        results  = pool.imap(function, files)
+    #     function = build_fn(fastqc_check, output_dir = fastqc_dir, threads = jobs)
+    #     results  = pool.imap(function, files)
 
-        list(tq.tqdm(results, total = length))
+    #     list(tq.tqdm(results, total = length))
 
     if multiqc:
         logger.info("Running MultiQC...")

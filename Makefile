@@ -212,12 +212,13 @@ docker-build: clean docker-pull ## Build the Docker Image.
 
 	for folder in `ls ${BASEDIR}/docker/files`; do \
 		docker build \
-			--cache-from $(DOCKER_IMAGE) \
+			--cache-from $(DOCKER_IMAGE):$$folder \
+			--cache-from $(DOCKER_IMAGE):latest \
 			${BASEDIR}/docker/files/$$folder --tag $(DOCKER_IMAGE):$$folder $(DOCKER_BUILD_ARGS) ; \
 	done
 
 	@docker build \
-		--cache-from $(DOCKER_IMAGE) \
+		--cache-from $(DOCKER_IMAGE):latest \
 		$(BASEDIR) --tag $(DOCKER_IMAGE) $(DOCKER_BUILD_ARGS)
 
 docker-push: ## Push Docker Image to Registry.

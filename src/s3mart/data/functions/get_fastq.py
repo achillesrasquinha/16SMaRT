@@ -73,5 +73,5 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
             logger.info("Checking quality of FASTQ files...")
 
             with parallel.pool(processes = jobs) as pool:
-                function_ = build_fn(fastqc_check, output_dir = fastqc_dir, *args, **kwargs)
+                function_ = build_fn(fastqc_check, output_dir = fastqc_dir, threads = jobs)
                 list(pool.map(function_, fastq_files))

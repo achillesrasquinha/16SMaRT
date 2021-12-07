@@ -106,7 +106,6 @@ def render_plots(input = None, data_dir = None, *args, **kwargs):
 
     mothur_data    = {
         # "list_file": "",
-
     }
 
-    build_plots(data = data)
+    build_plots(data = data, mothur_data = mothur_data)

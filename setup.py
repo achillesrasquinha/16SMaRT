@@ -115,9 +115,6 @@ def install_r_packages():
             utils = importr("utils")
             utils.install_packages("BiocManager", repos = R_REPO)
 
-            base  = importr("base")
-            base.source("http://www.bioconductor.org/biocLite.R")
-
             biocManager = importr("BiocManager")
 
             for name, version in packages["biocDependencies"].items():

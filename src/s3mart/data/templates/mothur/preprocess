@@ -1,8 +1,11 @@
+pcr.seqs(fasta={{ silva_seed }}, start={{ silva_seed_start }}, end={{ silva_seed_end }}, keepdots=F, processors={{ processors }})
+
 unique.seqs(fasta={{ merged_fasta }})
 count.seqs(name=current, group={{ merged_group }})
 
 align.seqs(fasta=current, reference={{ silva_seed_pcr }}, processors={{ processors }})
 screen.seqs(fasta=current, count=current, maxhomop={{ maxhomop }}, processors={{ processors }})
+filter.seqs(fasta=current, vertical=T, trump=.)
 
 pre.cluster(fasta=current, count=current, processors={{ processors }})
 

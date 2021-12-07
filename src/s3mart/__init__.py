@@ -36,6 +36,8 @@ settings = Settings(location = PATH["CACHE"], defaults = {
     "maximum_homopolymers":     DEFAULT["maximum_homopolymers"],
     "classification_cutoff":    DEFAULT["classification_cutoff"],
     "filter_taxonomy":          DEFAULT["filter_taxonomy"],
+    "taxonomy_level":           DEFAULT["taxonomy_level"],
+    "cutoff_level":             DEFAULT["cutoff_level"],
 
     "silva_version":            DEFAULT["silva_version"],
     "silva_seed_pcr_start":     DEFAULT["silva_seed_pcr_start"],

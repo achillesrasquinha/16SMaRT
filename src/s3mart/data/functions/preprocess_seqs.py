@@ -28,12 +28,14 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
     silva_gold = kwargs["silva_gold"]
     silva_seed_tax = kwargs["silva_seed_tax"]
 
+    cutoff_level   = settings.get("cutoff_level")
+
     files = (merged_fasta, merged_group, silva_seed, silva_gold, silva_seed_tax)
     target_files = [{
         "source": "merged.unique.good.unique.precluster.pick.pick.phylip.tre",
         "target": osp.join(data_dir, "output.tre")
     }, {
-        "source": "merged.unique.good.unique.precluster.pick.pick.opti_mcc.0.03.cons.taxonomy",
+        "source": "merged.unique.good.unique.precluster.pick.pick.opti_mcc.%s.cons.taxonomy" % cutoff_level,
         "target": osp.join(data_dir, "output.taxonomy"),
     }, {
         "source": "merged.unique.good.unique.precluster.pick.count_table",
@@ -69,8 +71,10 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
             maxhomop              = settings.get("maximum_homopolymers"),
             classification_cutoff = settings.get("classification_cutoff"),
             filter_taxonomy       = filter_taxonomy,
+            taxonomy_level        = settings.get("taxonomy_level"),
+            cutoff_level          = settings.get("cutoff_level"),
 
-            processors       = jobs
+            processors            = jobs
         )
 
         with ShellEnvironment(cwd = tmp_dir) as shell:

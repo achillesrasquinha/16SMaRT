@@ -14,8 +14,9 @@ remove.seqs(fasta=current, accnos=current, count=current)
 classify.seqs(fasta=current, count=current, reference={{ silva_seed }}, taxonomy={{ silva_seed_tax }}, cutoff={{ classification_cutoff }}, processors={{ processors }})
 remove.lineage(fasta=current, count=current, taxonomy=current, taxon={{ "-".join(filter_taxonomy) }})
 
-cluster.split(fasta=current, count=current, taxonomy=current, splitmethod=classify, taxlevel=6, cutoff=0.03)
-make.shared(list=current, count=current, label=0.03)
-classify.otu(list=current, taxonomy=current, label=0.03)
+cluster.split(fasta=current, count=current, taxonomy=current, splitmethod=classify, taxlevel={{ taxonomy_level }}, cutoff={{ cutoff_level }})
+make.shared(list=current, count=current, label={{ cutoff_level }})
+classify.otu(list=current, taxonomy=current, label={{ cutoff_level }})
+
 dist.seqs(fasta=current, output=lt, processors={{ processors }})
 clearcut(phylip=current)

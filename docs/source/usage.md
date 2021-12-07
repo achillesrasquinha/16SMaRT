@@ -11,6 +11,8 @@
 * [Input Data](#input-data)
     * [CSV DataSheet](#csv-datasheet)
 * [Quality Control](#quality-control)
+* [Preprocessing](#preprocessing)
+* [Analysis](#analysis)
 
 ## Input Data
 
@@ -59,6 +61,12 @@ Each SRA ID is then fetched and saved onto disk within your data directory.
 ```
 fastqc=False; multiqc=False
 ```
+
+## Preprocessing
+
+| Key       | Type  | Default 
+|-----------|-------|--------
+|           |       |          
 
 ## Analysis
 

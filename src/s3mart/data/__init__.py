@@ -106,11 +106,12 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
 def render_plots(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
 
+
     mothur_data    = {
         "tree":     osp.join(data_dir, "output.tre"),
         "list":     osp.join(data_dir, "output.list"),
         "shared":   osp.join(data_dir, "output.shared"),
-        "taxanomy": osp.join(data_dir, "output.taxonomy"),
+        "taxonomy": osp.join(data_dir, "output.taxonomy"),
     }
 
     build_plots(data = data, mothur_data = mothur_data)

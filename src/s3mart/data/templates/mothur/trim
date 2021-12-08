@@ -1,6 +1,6 @@
 {% if layout == "paired" %}
 make.file(inputdir={{ inputdir }}, prefix={{ prefix }})
-make.contigs(file=current{% if oligos %}, oligos={{ oligos }}{% endif %}, processors={{ processors }})
+make.contigs(file=current, processors={{ processors }})
 {% else %}
 fastq.info(file={{ fastq_file }}{% if trim_type == "true" %}, pacbio=T{% endif %})
 {% endif %}

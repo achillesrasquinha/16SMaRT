@@ -1,4 +1,4 @@
-from rpy2.robjects.libs import phyloseq as pseq
+from rpy2.robjects.lib import phyloseq as pseq
 
 def plot(*args, **kwargs):
     mothur_data = kwargs["mothur_data"]

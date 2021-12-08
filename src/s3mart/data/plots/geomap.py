@@ -22,7 +22,6 @@ def plot(*args, **kwargs):
             data    = map_data,
             mapping = gg.aes_string(x = "long", y = "lat", fill = "region")
         )
-        + gg.scale_fill_viridis_c(option = "C")
         + gg.theme_void()
         + gg.theme(legend_position = "none")
     )

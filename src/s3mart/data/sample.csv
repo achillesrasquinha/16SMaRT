@@ -1,3 +1,4 @@
 group,sra,layout,primer_f,primer_r,trimmed,min_length,max_length,country
 SK13,ERR3792283,paired,,,true,240,275,Australia
 SK13,ERR3792284,paired,,,true,240,275,Australia
+CB24,SRR14255540,paired,,,true,240,275,USA

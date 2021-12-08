@@ -43,6 +43,9 @@ def preprocess_seqs(data_dir = None, *args, **kwargs):
     }, {
         "source": "merged.unique.good.unique.precluster.pick.pick.opti_mcc.list",
         "target": osp.join(data_dir, "output.list")
+    }, {
+        "source": "merged.unique.good.unique.precluster.pick.pick.opti_mcc.shared",
+        "target": osp.join(data_dir, "output.shared")
     }]
 
     with make_temp_dir(root_dir = CACHE) as tmp_dir:

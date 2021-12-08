@@ -19,6 +19,5 @@ cluster.split(fasta=current, count=current, taxonomy=current, taxlevel={{ taxono
 make.shared(list=current, count=current, label={{ cutoff_level }})
 classify.otu(list=current, taxonomy=current, label={{ cutoff_level }})
 
-get.oturep(column=current, fasta=current, count=current, list=current, cutoff={{ cutoff_level }})
 dist.seqs(fasta=current, output=lt, processors={{ processors }})
 clearcut(phylip=current)

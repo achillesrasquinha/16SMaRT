@@ -24,8 +24,11 @@ def build_plots(*args, **kwargs):
 
     logger.info("Building Plots...")
 
-    with parallel.no_daemon_pool(processes = jobs) as pool:
-        length    = len(PLOTS)
-        function_ = build_fn(_import_and_plot, *args, **kwargs)
+    # with parallel.no_daemon_pool(processes = jobs) as pool:
+    #     length    = len(PLOTS)
+    #     function_ = build_fn(_import_and_plot, *args, **kwargs)
 
-        list(tq.tqdm(pool.imap(function_, PLOTS), total = length))
+    #     list(tq.tqdm(pool.imap(function_, PLOTS), total = length))
+
+    for plot_name in PLOTS:
+        _import_and_plot(plot_name, *args, **kwargs)

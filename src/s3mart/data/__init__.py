@@ -110,7 +110,7 @@ def render_plots(input = None, data_dir = None, *args, **kwargs):
         "tree":     osp.join(data_dir, "output.tre"),
         "list":     osp.join(data_dir, "output.list"),
         "shared":   osp.join(data_dir, "output.shared"),
-        "taxanomy": osp.join(data_dir, "output.taxanomy"),
+        "taxanomy": osp.join(data_dir, "output.taxonomy"),
     }
 
     build_plots(data = data, mothur_data = mothur_data)

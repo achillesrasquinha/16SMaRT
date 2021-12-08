@@ -11,6 +11,4 @@ def plot(*args, **kwargs):
         mothur_constaxonomy_file = mothur_data["taxanomy"]
     )
 
-    print(pseq_data)
-
     # pseq.plot_bar(pseq_data)

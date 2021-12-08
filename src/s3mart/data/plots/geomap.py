@@ -17,14 +17,14 @@ def plot(*args, **kwargs):
     gp    = gg.ggplot(map_world)
     pp    = (gp
         + gg.aes_string(x = "long", y = "lat", group = "group")
-        # + gg.geom_polygon(fill = "lightgray", colour = "white")
-        # + gg.geom_polygon(
-        #     data    = map_data,
-        #     mapping = gg.aes_string(x = "long", y = "lat", fill = "region")
-        # )
-        # # + gg.coord_map()
-        # + gg.theme_void()
-        # + gg.theme(legend_position = "none")
+        + gg.geom_polygon(fill = "lightgray", colour = "white")
+        + gg.geom_polygon(
+            data    = map_data,
+            mapping = gg.aes_string(x = "long", y = "lat", fill = "region")
+        )
+        + gg.scale_fill_viridis_c(option = "C")
+        + gg.theme_void()
+        + gg.theme(legend_position = "none")
     )
 
     pp.plot()

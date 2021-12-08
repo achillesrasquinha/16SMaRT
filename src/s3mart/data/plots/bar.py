@@ -1,5 +1,6 @@
 from rpy2.robjects.packages import importr
 
+from s3mart.data.plots.util import save_plot
 from s3mart import settings
 
 def plot(*args, **kwargs):
@@ -12,5 +13,7 @@ def plot(*args, **kwargs):
         mothur_group_file   = mothur_data["taxonomy"],
         cutoff = settings.get("cutoff_level")
     )
+    
+    ggplot = pseq.plot_bar(pseq_data)
 
-    print(pseq_data)
+    save_plot(ggplot, *args, **kwargs)

@@ -17,7 +17,7 @@ def _import_and_plot(plot_name, *args, **kwargs):
     logger.info("Plotting %s..." % plot_name)
 
     plot_fn = import_handler("s3mart.data.plots.%s.plot" % plot_name)
-    plot_fn(*args, **kwargs)
+    plot_fn(target_file = "%s.png" % plot_name, *args, **kwargs)
 
 def build_plots(*args, **kwargs):
     jobs = kwargs.get("jobs", settings.get("jobs"))

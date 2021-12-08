@@ -1,13 +1,11 @@
-import rpy2.robjects as ro
-from   rpy2.robjects.lib import ggplot2 as gg
+from rpy2.robjects.lib import ggplot2 as gg
 
 from bpyutils.util.types import lmap
 
-R = ro.r
+from s3mart.data.plots.util import save_plot
 
 def plot(*args, **kwargs):
     data  = kwargs.get("data")
-    file_ = kwargs.get("file_", "output.png")
 
     countries = lmap(lambda x: x["country"], data)
 
@@ -26,6 +24,4 @@ def plot(*args, **kwargs):
         + gg.theme(legend_position = "none")
     )
 
-    pp.plot()
-
-    R("dev.copy(png, '%s')" % file_)
+    save_plot(ggplot = pp, *args, **kwargs)

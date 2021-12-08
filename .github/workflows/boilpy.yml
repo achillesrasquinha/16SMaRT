@@ -1,14 +1,14 @@
 name: Template
 
-on:
-  push:
+on: [push]
   
 jobs:
   template:
     name: Template
     runs-on: ubuntu-latest
+
     steps:
-      - uses: achillesrasquinha/boilpy-action
+      - uses: achillesrasquinha/boilpy-action@develop
       - name: Updating template
         run: |
           echo "Updating template..."

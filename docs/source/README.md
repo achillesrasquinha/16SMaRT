@@ -92,6 +92,14 @@ fastqc=False; multiqc=False
 
 # Analysis
 
+## Abundance Chart
+
+<div align="center">
+
+| Raw Data | Rarified Data |
+|----------|---------------|
+| <img src="_static/plots/abundance_bar.png" height="420"/> | <img src="_static/plots/abundance_bar-resampled.png" height="420"/> |
+
 ## Alpha Diversity
 
 <div align="justify">

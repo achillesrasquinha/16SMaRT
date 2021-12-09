@@ -2,11 +2,15 @@
 
 ## Introduction
 
+<div align="center">
+
 | Molecule of a 30S Subunit from thermus thermophilus | 16S ribosomal RNA |
 |---------------------------------------|-------------------|
 | ![](_static/thermus-thermophilus.gif) | <img src="_static/16S-rRNA.png" height="320"/> |
 
 ***Source:*** [Wikipedia](https://en.wikipedia.org/wiki/Thermus_thermophilus)
+
+</div>
 
 A vast majority of environmental microbiologists claim that only less than 2% of all bacteria in the environment can be cultured within laboratory conditions. Such a vast divide of being unable to culture a vast majority of bacteria in the environment might be due to lack of culturing techniques, need for specific nutrients that are unable to produce within laboratory conditions, or dependence on interactions with other bacteria in order to live and grow.
 

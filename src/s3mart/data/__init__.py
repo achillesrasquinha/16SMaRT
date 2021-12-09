@@ -9,8 +9,9 @@ from bpyutils.util._csv    import read as read_csv
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.types   import build_fn
 from bpyutils.util.string  import check_url, safe_decode
-from bpyutils.util.system  import write
+from bpyutils.util.system  import write, read
 from bpyutils import parallel, log, request as req
+from bpyutils._compat import iteritems
 
 from s3mart.data.functions import (
     get_fastq,
@@ -18,7 +19,8 @@ from s3mart.data.functions import (
     trim_seqs,
     merge_seqs,
     preprocess_seqs,
-    build_plots
+    build_plots,
+    patch_tree_file
 )
 from s3mart.data.util  import install_silva
 
@@ -106,9 +108,15 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
 def render_plots(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
 
+    tree_file = osp.join(data_dir, "output.tre")
+    list_file = osp.join(data_dir, "output.list")
+    target_tree_file = osp.join(data_dir, "patched.tre")
+
+    patch_tree_file(tree_file, list_file, target_tree_file)
+
     mothur_data    = {
-        "tree":     osp.join(data_dir, "output.tre"),
-        "list":     osp.join(data_dir, "output.list"),
+        "tree":     target_tree_file,
+        "list":     list_file,
         "shared":   osp.join(data_dir, "output.shared"),
         "taxonomy": osp.join(data_dir, "output.taxonomy"),
     }

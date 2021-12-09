@@ -55,7 +55,7 @@ def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
 
     success    = False
 
-    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output", False))
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
 
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(

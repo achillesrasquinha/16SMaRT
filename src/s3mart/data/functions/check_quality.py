@@ -34,7 +34,7 @@ def check_quality(data_dir = None, multiqc = False, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
     # jobs     = kwargs.get("jobs", settings.get("jobs"))
 
-    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output", False))
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
     
     logger.info("Checking quality of FASTQ files...")
 

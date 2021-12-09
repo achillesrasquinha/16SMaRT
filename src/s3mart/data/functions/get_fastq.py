@@ -21,7 +21,7 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
     jobs        = kwargs.get("jobs", settings.get("jobs"))
     data_dir    = get_data_dir(NAME, data_dir)
 
-    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output", False))
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
     
     fastqc      = kwargs.get("fastqc", True)
 

@@ -10,7 +10,7 @@ env:
   PIP_USE_DEPRECATED: "legacy-resolver"
 
   # S3MART_JOBS: 32
-  S3MART_DATA_DIR: /data
+  # S3MART_DATA_DIR: /data
 
   BPYUTILS_VERBOSE: "true"
   

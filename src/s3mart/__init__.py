@@ -46,6 +46,7 @@ settings = Settings(location = PATH["CACHE"], defaults = {
     "seed":                     DEFAULT["seed"],
 
     "keep_temp_files":          DEFAULT["keep_temp_files"],
+    
     "minimal_output":           DEFAULT["minimal_output"]
 })
 

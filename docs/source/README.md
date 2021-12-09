@@ -120,12 +120,16 @@ Alpha diversity is a metric that describes the diversity or *richness* of the ba
 
 ## Beta Diversity
 
-<div align="center">
+<div align="justify">
 
 Beta diversity estimates give researchers a methodology to describe differences between samples in microbial communities across samples, or how “related” one community is to another. “Relatedness” can be described using information from phylogenetic distances, individual taxa occurrence rate, or both. Currently, this pipeline utilizes Bray-Curtis ordination. This methodology is commonly used in ecology studies and utilizes only the abundances of each species across the samples to calculate their dissimilarity. It does not require phylogenetic distances that may take valuable computational storage space/processing time to generate. Future optimization will consider the Weighted UniFrac distance, a similarity index that does use the phylogeny “weighed” by occurrence rate.
 
 </div>
 
+<div align="center">
+
 | Raw Data | Rarified Data |
 |----------|---------------|
 | <img src="_static/plots/beta_diversity.png" height="420"/> | <img src="_static/plots/beta_diversity-resampled.png" height="420"/> |
+
+</div>

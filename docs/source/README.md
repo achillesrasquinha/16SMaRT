@@ -103,10 +103,8 @@ Alpha diversity is a metric that describes the diversity or *richness* of the ba
 <div align="center">
 
 | Raw Data | Rarified Data |
-|---------------------------------------|-------------------|
-| <img src="_static/plots/alpha_diversity.png" height="320"/> | <img src="_static/plots/alpha_diversity-resampled.png" height="320"/> |
-
-***Source:*** [Wikipedia](https://en.wikipedia.org/wiki/Thermus_thermophilus)
+|----------|---------------|
+| <img src="_static/plots/alpha_diversity.png" height="500"/> | <img src="_static/plots/alpha_diversity-resampled.png" height="500"/> |
 
 </div>
 

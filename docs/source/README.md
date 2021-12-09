@@ -35,6 +35,9 @@ A vast majority of environmental microbiologists claim that only less than 2% of
 * [Quality Control](#quality-control)
 * [Preprocessing](#preprocessing)
 * [Analysis](#analysis)
+    * [Abundance](#abundance)
+    * [Alpha Diversity](#alpha-diversity)
+    * [Beta Diversity](#beta-diversity)
 
 # Input Data
 

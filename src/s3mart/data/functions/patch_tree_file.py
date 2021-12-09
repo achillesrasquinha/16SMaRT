@@ -15,7 +15,10 @@ def patch_tree_file(tree_file, list_file, target_file):
         if key.startswith("Otu"):
             values = value.split(",")
             for val in values:
-                lookup[val] = key
+                if val not in lookup:
+                    lookup[val] = key
+                else:
+                    raise ValueError("Duplicate found: %s" % val)
 
     tree = next(Phylo.parse(tree_file, _PHYLO_FORMAT))
     for terminal in tree.get_terminals():

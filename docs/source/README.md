@@ -3,10 +3,10 @@
   <h1>
       16SMaRT
   </h1>
-  <h4>16s rRNA Sequencing Meta-analysis Reconstruction Tool.</h4>
+  <h4>16s rRNA Sequencing Meta-analysis Reconstruction Tool</h4>
 </div>
 
-## Introduction
+# Introduction
 
 <div align="justify">
 
@@ -28,7 +28,7 @@ A vast majority of environmental microbiologists claim that only less than 2% of
 
 </div>
 
-## Table of Contents
+# Table of Contents
 
 * [Input Data](#input-data)
     * [CSV DataSheet](#csv-datasheet)
@@ -36,14 +36,14 @@ A vast majority of environmental microbiologists claim that only less than 2% of
 * [Preprocessing](#preprocessing)
 * [Analysis](#analysis)
 
-## Input Data
+# Input Data
 
 The input data can be passed to **16SMaRT** in two different ways using the `input` argument, either:
 
 * a comma-seperated datasheet containing [NCBI SRA](https://www.ncbi.nlm.nih.gov/sra) IDs (or a URL to a CSV file).
 * a directory containing a list of FASTQ files.
 
-### CSV DataSheet
+## CSV DataSheet
 
 The CSV DataSheet must be of the following format.
 
@@ -76,7 +76,7 @@ input="<YOUR_URL_TO_CSV_FILE>"
 
 Each SRA ID is then fetched and saved onto disk within your data directory.
 
-## Quality Control
+# Quality Control
 
 **16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files. Quality Control can be disabled by simply providing the parameter as follows:
 
@@ -84,11 +84,10 @@ Each SRA ID is then fetched and saved onto disk within your data directory.
 fastqc=False; multiqc=False
 ```
 
-## Preprocessing
+# Preprocessing
 
 | Key       | Type  | Default 
 |-----------|-------|--------
 |           |       |          
 
-## Analysis
-
+# Analysis

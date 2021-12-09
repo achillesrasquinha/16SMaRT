@@ -100,6 +100,8 @@ fastqc=False; multiqc=False
 |----------|---------------|
 | <img src="_static/plots/abundance_bar.png" height="420"/> | <img src="_static/plots/abundance_bar-resampled.png" height="420"/> |
 
+</div>
+
 ## Alpha Diversity
 
 <div align="justify">

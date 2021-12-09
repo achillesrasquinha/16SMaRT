@@ -29,5 +29,7 @@ DEFAULT = {
     "silva_seed_pcr_start":     6388,
     "silva_seed_pcr_end":       13861,
 
+    "seed":                     1,
+
     "keep_temp_files":          False
 }

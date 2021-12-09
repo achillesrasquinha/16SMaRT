@@ -9,7 +9,7 @@ from bpyutils.util._csv    import read as read_csv
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.types   import build_fn
 from bpyutils.util.string  import check_url, safe_decode
-from bpyutils.util.system  import write, read
+from bpyutils.util.system  import write, read, makedirs
 from bpyutils import parallel, log, request as req
 from bpyutils._compat import iteritems
 
@@ -107,6 +107,8 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
 
 def render_plots(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
+    plot_dir  = osp.join(data_dir, "plots")
+    makedirs(plot_dir, exist_ok = True)
 
     tree_file = osp.join(data_dir, "output.tre")
     list_file = osp.join(data_dir, "output.list")
@@ -121,4 +123,4 @@ def render_plots(input = None, data_dir = None, *args, **kwargs):
         "taxonomy": osp.join(data_dir, "output.taxonomy"),
     }
 
-    build_plots(data = data, mothur_data = mothur_data)
+    build_plots(data = data, mothur_data = mothur_data, target_dir = plot_dir)

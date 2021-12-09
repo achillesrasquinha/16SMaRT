@@ -43,7 +43,9 @@ settings = Settings(location = PATH["CACHE"], defaults = {
     "silva_seed_pcr_start":     DEFAULT["silva_seed_pcr_start"],
     "silva_seed_pcr_end":       DEFAULT["silva_seed_pcr_end"],
     
-    "keep_temp_files":          DEFAULT["keep_temp_files"] ,
+    "seed":                     DEFAULT["seed"],
+
+    "keep_temp_files":          DEFAULT["keep_temp_files"],
 })
 
 def get_version_str():

@@ -1,4 +1,10 @@
-# Usage
+<div align="center">
+  <img src=".github/assets/logo.png" height="200">
+  <h1>
+      16SMaRT
+  </h1>
+  <h4>16s rRNA Sequencing Meta-analysis Reconstruction Tool.</h4>
+</div>
 
 ## Introduction
 

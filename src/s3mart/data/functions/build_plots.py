@@ -12,9 +12,10 @@ from s3mart import __name__ as NAME, settings
 logger = log.get_logger(name = NAME)
 
 PLOTS = [
-    "geomap",
-    "bar",
-    "alpha_diversity"
+    "world_map",
+    "abundance_bar",
+    "alpha_diversity",
+    "beta_diversity"
 ]
 
 def _import_and_plot(plot_name, *args, **kwargs):

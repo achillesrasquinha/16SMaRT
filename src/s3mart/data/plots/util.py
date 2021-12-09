@@ -7,7 +7,7 @@ from s3mart import settings
 
 R = ro.r
 
-def save_plot(ggplot, *args, **kwargs):
+def save_plot(plot, *args, **kwargs):
     target_file = kwargs.pop("target_file")
     suffix      = kwargs.get("suffix", None)
     plot_kwargs = kwargs.get("plot_kwargs", {})

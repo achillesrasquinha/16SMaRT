@@ -91,3 +91,24 @@ fastqc=False; multiqc=False
 |           |       |          
 
 # Analysis
+
+## Alpha Diversity
+
+<div align="justify">
+
+Alpha diversity is a metric that describes the diversity or *richness* of the bacterial community of a sample. These indices approximate the number of different species or operational taxonomic units (OTUs) present. Alpha diversity can be estimated in a variety of ways, this pipeline considers Observed, Chao1, ACE, Shannon, Simpson, Inverse-Simpson and Fisher estimates. Each of these metrics has different assumptions or weaknesses, so all of them have been considered. For example, Observed metrics simply use the raw observed counts tabulated from rarified or non-rarefied sequence data whereas the Chao1 primarily considers total “richness” of the various species, the number of “rare” taxa only occurring once or twice and assumes a Poisson distribution. Bacterial communities do generally follow this distribution, as there are many “rare” taxa in nature, so this metric is often preferred in microbial community analysis as it addresses potential skew. Shannon metrics provide additional information, as they consider both “richness” and “evenness”, the proportion of each species compared to the total number of species.
+
+</div>
+
+<div align="center">
+
+| Raw Data | Rarified Data |
+|---------------------------------------|-------------------|
+| <img src="_static/plots/alpha_diversity.png" height="320"/> | <img src="_static/plots/alpha_diversity-resampled.png" height="320"/> |
+
+***Source:*** [Wikipedia](https://en.wikipedia.org/wiki/Thermus_thermophilus)
+
+</div>
+
+## Beta Diversity
+

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="../.github/assets/logo.png" height="200">
+  <img src="../../.github/assets/logo.png" height="200">
   <h1>
       16SMaRT
   </h1>

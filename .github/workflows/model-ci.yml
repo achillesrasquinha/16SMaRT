@@ -34,7 +34,7 @@ jobs:
           pip install -e .
       - name: Run Pipeline
         run: |
-          bpyutils --run-ml s3mart -p "check=True; data_dir=/data; jobs=$S3MART_JOBS; minimal_output=True"
+          bpyutils --run-ml s3mart -p "check=True; data_dir=/data; jobs=$S3MART_JOBS; minimal_output=True;"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2
         with:

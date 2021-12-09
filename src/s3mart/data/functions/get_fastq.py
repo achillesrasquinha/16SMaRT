@@ -8,9 +8,10 @@ from bpyutils.util.types   import build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     get_files,
-    makedirs
+    makedirs,
+    remove
 )
-from bpyutils import log, parallel
+from bpyutils import log, parallel, settings
 
 logger = log.get_logger(name = NAME)
 
@@ -19,8 +20,10 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
 
     jobs        = kwargs.get("jobs", settings.get("jobs"))
     data_dir    = get_data_dir(NAME, data_dir)
+
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output", False))
     
-    fastqc      = kwargs.get("fastqc",  True)
+    fastqc      = kwargs.get("fastqc", True)
 
     fastqc_dir = osp.join(data_dir, "fastqc")
     makedirs(fastqc_dir, exist_ok = True)
@@ -68,6 +71,9 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
                 logger.error("Unable to download FASTQ file(s) for SRA %s." % sra)
         else:
             logger.warn("FASTQ file(s) for SRA %s already exist." % sra)
+
+        if minimal_output:
+            remove(path_sra, force = True)
 
         if fastqc:
             logger.info("Checking quality of FASTQ files...")

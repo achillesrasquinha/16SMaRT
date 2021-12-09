@@ -31,5 +31,6 @@ DEFAULT = {
 
     "seed":                     1,
 
-    "keep_temp_files":          False
+    "keep_temp_files":          False,
+    "minimal_output":           False
 }

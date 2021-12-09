@@ -13,7 +13,8 @@ from bpyutils.util.types   import lmap, lfilter, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     makedirs,
-    make_temp_dir, get_files, copy, write
+    make_temp_dir, get_files, copy, write,
+    remove
 )
 from bpyutils.util.string    import get_random_str
 from bpyutils.exception      import PopenError
@@ -51,6 +52,10 @@ def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
     trim_type  = config.get("trim_type")
 
     group      = config.pop("group")
+
+    success    = False
+
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output", False))
 
     target_types = ("fasta", "group", "summary")
     target_path  = dict_from_list(
@@ -137,8 +142,13 @@ def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
                         logger.info("[group %s] Successfully copied filtered files at %s." % (group, target_dir))
             except PopenError as e:
                 logger.error("[group %s] Unable to filter files. Error: %s" % (group, e))
+
+                success = True
     else:
         logger.warn("[group %s] Filtered files already exists." % group)
+
+    if success and minimal_output:
+        remove(*files)
 
 def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir = data_dir)

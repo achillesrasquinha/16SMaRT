@@ -9,9 +9,10 @@ from bpyutils.util.types   import build_fn
 from bpyutils.util.system  import (
     ShellEnvironment, popen,
     makedirs,
-    get_files
+    get_files,
+    remove
 )
-from bpyutils import parallel, log
+from bpyutils import log
 
 logger = log.get_logger(name = NAME)
 
@@ -31,7 +32,9 @@ def fastqc_check(file_, output_dir = None, threads = None, force = False):
 
 def check_quality(data_dir = None, multiqc = False, *args, **kwargs):    
     data_dir = get_data_dir(NAME, data_dir)
-    jobs     = kwargs.get("jobs", settings.get("jobs"))     
+    # jobs     = kwargs.get("jobs", settings.get("jobs"))
+
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output", False))
     
     logger.info("Checking quality of FASTQ files...")
 
@@ -52,3 +55,6 @@ def check_quality(data_dir = None, multiqc = False, *args, **kwargs):
         logger.info("Running MultiQC...")
 
         popen("multiqc {fastqc_dir}".format(fastqc_dir = fastqc_dir), cwd = data_dir)
+
+    if minimal_output:
+        remove(fastqc_dir, recursive = True)

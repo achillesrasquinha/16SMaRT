@@ -98,7 +98,7 @@ fastqc=False; multiqc=False
 
 | Raw Data | Rarified Data |
 |----------|---------------|
-| <img src="_static/plots/abundance_bar.png" height="420"/> | <img src="_static/plots/abundance_bar-resampled.png" height="420"/> |
+| <img src="_static/plots/abundance_bar.png" height="500"/> | <img src="_static/plots/abundance_bar-resampled.png" height="500"/> |
 
 </div>
 

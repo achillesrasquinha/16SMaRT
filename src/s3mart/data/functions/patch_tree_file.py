@@ -1,16 +1,15 @@
 from Bio import Phylo
 
-from bpyutils.util._csv    import read as read_csv
-from bpyutils.util.system  import read
+from bpyutils.util._csv import read as read_csv
 from bpyutils._compat import iteritems
 
 _PHYLO_FORMAT = "newick"
 
 def patch_tree_file(tree_file, list_file, target_file):
     lookup = { }
-    data = read_csv(list_file, delimiter = "\t")
+    data   = read_csv(list_file, delimiter = "\t")
 
-    data = data[0]
+    data   = data[0]
 
     for key, value in iteritems(data):
         if key.startswith("Otu"):

@@ -6,3 +6,4 @@ jinja2
 tqdm
 requests
 rpy2
+BioPython

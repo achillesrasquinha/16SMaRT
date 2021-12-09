@@ -8,7 +8,7 @@ A vast majority of environmental microbiologists claim that only less than 2% of
 
 ***Metagenomics*** is the study of genetic material (or genomes) extracted directly from all environmental samples. Such studies are in contrast with a traditional reduction-based approach in microbiology wherein a specific strain in consideration is isolated, purified and eventually its genome sequenced. Metagenomics helps us understand the ecology of the bacteria living within it, analyse them in their natural state and finally, understand the importance in human as well as animal health
 
-**16s rRNA** is the most common structural-based metagenomics experimentone can conduct for an observed community of bacteria. 16s rRNA-based experiments helps one perform a general survey of *"what kinds of bacteria areavailable within the community and by how much?"*. One of the key advantage of considering a 16s rRNA-based experiment is that such a region is universally conserved amongst almost all bacteria yet has enough variability to distinguish various populations across various samples.
+**16s rRNA** is the most common structural-based metagenomics experimentone can conduct for an observed community of bacteria. 16s rRNA-based experiments helps one perform a general survey of ***"what kinds of bacteria are available within the community and by how much?"***. One of the key advantage of considering a 16s rRNA-based experiment is that such a region is universally conserved amongst almost all bacteria yet has enough variability to distinguish various populations across various samples.
 
 <div align="center">
 

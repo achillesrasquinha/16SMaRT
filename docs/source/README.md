@@ -71,7 +71,9 @@ Each SRA ID is then fetched and the FASTQ files are saved onto disk within your 
 
 # Quality Control
 
-**16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files. Quality Control can be disabled by simply providing the parameter as follows:
+**16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files. The output results of FASTQC can be obtained within the `<data_dir>/fastqc` whereas the MultiQC report can be obtained at `<data_dir>/multiqc_report.html` file.
+
+Quality Control can be disabled by simply providing the parameter as follows:
 
 ```
 fastqc=False; multiqc=False

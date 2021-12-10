@@ -84,9 +84,17 @@ singularity run \
 
 ### Basic Usage
 
-* [**`--input`**]()
+* [**`input`**]()
 
     *Path to input CSV file, data directory of FASTQ files, URL to CSV file.*
+
+* [**`fastqc`**]()
+
+    *Run FASTQC after downloading SRAs.* (boolean, default - `True`)
+
+* [**`multiqc`**]()
+
+    *Run MultiQC after performing FASTQC.* (boolean, default - `True`)
 
 
 Check out the [docs](docs/source) page to understand how to use this pipeline.

@@ -11,7 +11,7 @@ from bpyutils.util.system  import (
     makedirs,
     remove
 )
-from bpyutils import log, parallel, settings
+from bpyutils import log, parallel
 
 logger = log.get_logger(name = NAME)
 

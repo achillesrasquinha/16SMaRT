@@ -7,8 +7,8 @@
 </div>
 
 <p align="center">
-    <a href='https://github.com/achillesrasquinha/16SMaRT/actions?query=workflow:"Continuous Integration"'>
-      <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/16SMaRT/Continuous Integration?style=flat-square">
+    <a href='https://github.com/achillesrasquinha/16SMaRT/actions?query=workflow:"Model CI"'>
+      <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/16SMaRT/Model CI?style=flat-square">
     </a>
     <a href='https://github.com/achillesrasquinha/16SMaRT/actions?query=workflow:"Docker"'>
       <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/16SMaRT/Docker?style=flat-square&label=docker">

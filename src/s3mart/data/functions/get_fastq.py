@@ -82,4 +82,4 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
                 list(pool.imap(function_, fastq_files))
 
         if minimal_output:
-            remove(path_sra, force = True)
+            remove(path_sra)

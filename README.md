@@ -26,7 +26,7 @@
 **16SMaRT** is a bioinformatics analysis pipeline for 16s rRNA gene sequencing data. 16SMaRT is a "one-click" solution towards performing microbial community analysis of amplicon sequencing data. 16SMaRT aims to be your go-to solution for your next microbiome/metagenomics project. The primary objective of 16SMaRT analysis is to determine what genes are present and in what proportions in comparision across a range of samples. It currently supports single-end or paired-end [Illumina](https://www.illumina.com/) MiSeq data.
 
 16SMaRT is written in Python using [boilpy's](https://github.com/achillesrasquinha/boilpy) data-pipeline boilerplate. 
-16SMaRT is built on top of a considerable amount of dependencies and hence, the recommended way to install it is by using [docker](#docker) thus making installation in "one-click" and perfectly reproducable results. 16SMaRT is built with considering maximizing computation resources in mind thereby making it blazingly fast even on a local machine for a decent amount of samples. For a large number of studies, it is recommended to run 16SMaRT on a High-Performance Computing system using [singularity](#singularity).
+16SMaRT is built on top of a considerable amount of dependencies and hence, the recommended way to install it is by using [docker](#using-docker) thus making installation in "one-click" and perfectly reproducable results. 16SMaRT is built with considering maximizing computation resources in mind thereby making it blazingly fast even on a local machine for a decent amount of samples. For a large number of studies, it is recommended to run 16SMaRT on a High-Performance Computing system using [singularity](#running-on-hpc-systems-using-singularity).
 
 </div>
 

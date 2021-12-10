@@ -52,9 +52,9 @@
 
 ### Using [Docker](https://www.docker.com/)
 
-First, install docker onto your system (can be followed via [docker's documentation](https://docs.docker.com/engine/install))
+First, install docker onto your system (can be followed via [docker's documentation](https://docs.docker.com/engine/install)).
 
-You can run 16SMaRT by simply running the following command:
+Then, you can run simply run 16SMaRT by the following command:
 
 ```
 docker run \

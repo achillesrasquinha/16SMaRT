@@ -26,7 +26,6 @@
 * [Quick Start](#quick-start)
 * [Usage](#usage)
 * [Support](#support)
-* [References](#references)
 * [Citation](#citation)
 * [License](#license)
 
@@ -80,15 +79,13 @@ Check out the [docs](docs/source) page to understand how to use this pipeline.
 
 Have any queries? Post an issue on the [GitHub Issue Tracker](https://github.com/achillesrasquinha/16SMaRT/issues).
 
-## References
-
-A comprehensive list of references for the tools used is listed [here](REFERENCES.md).
-
 ## Citation
 
 If you use this software in your work, please cite it using the following:
 
 > Furbeck, R., & Rasquinha, A. (2021). 16SMaRT - 16s rRNA Sequencing Meta-analysis Reconstruction Tool. (Version 0.1.0) [Computer software]. [https://github.com/achillesrasquinha/16SMaRT](https://github.com/achillesrasquinha/16SMaRT)
+
+A comprehensive list of references for the tools used is listed [here](REFERENCES.md).
 
 ## License
 

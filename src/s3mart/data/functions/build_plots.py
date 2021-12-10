@@ -24,7 +24,7 @@ def _import_and_plot(plot_name, *args, **kwargs):
     target_dir = kwargs["target_dir"]
 
     plot_fn = import_handler("s3mart.data.plots.%s.plot" % plot_name)
-    plot_fn(target_file = osp.join(target_dir, "%s.png") % plot_name, *args, **kwargs)
+    plot_fn(target_file = osp.join(target_dir, "%s.html") % plot_name, *args, **kwargs)
 
 def build_plots(*args, **kwargs):
     jobs = kwargs.get("jobs", settings.get("jobs"))
@@ -33,11 +33,11 @@ def build_plots(*args, **kwargs):
 
     logger.info("Building Plots to %s..." % target_dir)
 
-    # with parallel.no_daemon_pool(processes = jobs) as pool:
-    #     length    = len(PLOTS)
-    #     function_ = build_fn(_import_and_plot, *args, **kwargs)
+    with parallel.no_daemon_pool(processes = jobs) as pool:
+        length    = len(PLOTS)
+        function_ = build_fn(_import_and_plot, *args, **kwargs)
 
-    #     list(tq.tqdm(pool.imap(function_, PLOTS), total = length))
+        list(tq.tqdm(pool.imap(function_, PLOTS), total = length))
 
-    for plot_name in PLOTS:
-        _import_and_plot(plot_name, *args, **kwargs)
+    # for plot_name in PLOTS:
+    #     _import_and_plot(plot_name, *args, **kwargs)

@@ -19,7 +19,14 @@ def save_plot(plot, *args, **kwargs):
 
         target_file = osp.join(dirname, "%s-%s%s" % (prefix, suffix, ext))
     
-    R.ggsave(target_file, **plot_kwargs)
+    # R.ggsave(target_file, **plot_kwargs)
+
+    ggplotly    = importr("plotly")
+    htmlwidgets = importr("htmlwidgets")
+    
+    plot        = ggplotly.ggplotly(plot)
+
+    htmlwidgets.saveWidget(plot, file = target_file)
 
 def normalize_pseq(pseq_data):
     phyloseq  = importr("phyloseq")

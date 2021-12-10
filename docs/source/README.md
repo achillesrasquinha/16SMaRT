@@ -73,7 +73,7 @@ Each SRA ID is then fetched and the FASTQ files are saved onto disk within your 
 
 <div align="justify">
 
-**16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files. The output results of FASTQC can be obtained within the `<data_dir>/fastqc` whereas the MultiQC report can be obtained at `<data_dir>/multiqc_report.html` file.
+**16SMaRT** uses [FASTQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/) and [MultiQC](https://multiqc.info/) for Quality Control. By default, this is done right after reading FASTQ files. The output results of FASTQC for each FASTQ file can be obtained within the `<data_dir>/fastqc` whereas the MultiQC report can be obtained at `<data_dir>/multiqc_report.html` file.
 
 </div>
 

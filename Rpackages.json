@@ -2,7 +2,8 @@
     "dependencies": {
         "ggplot2": "",
         "plotly": "",
-        "sf": ""
+        "sf": "",
+        "dplyr": ""
     },
     "biocDependencies": {
         "phyloseq": "",

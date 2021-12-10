@@ -13,9 +13,6 @@
     <a href='https://github.com/achillesrasquinha/16SMaRT/actions?query=workflow:"Docker"'>
       <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/16SMaRT/Docker?style=flat-square&label=docker">
     </a>
-    <a href="https://coveralls.io/github/achillesrasquinha/16SMaRT">
-      <img src="https://img.shields.io/coveralls/github/achillesrasquinha/16SMaRT.svg?style=flat-square">
-    </a>
     <a href="https://git.io/boilpy">
       <img src="https://img.shields.io/badge/made%20with-boilpy-red.svg?style=flat-square">
     </a>

@@ -9,7 +9,7 @@ from bpyutils.util._csv    import read as read_csv
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.types   import build_fn
 from bpyutils.util.string  import check_url, safe_decode
-from bpyutils.util.system  import write, read, makedirs
+from bpyutils.util.system  import write, read, makedirs, get_files, remove
 from bpyutils import parallel, log, request as req
 from bpyutils._compat import iteritems
 
@@ -90,7 +90,7 @@ def preprocess_data(input = None, data_dir = None, minimal_output = False, *args
     trim_seqs(data_dir = data_dir, data = data, minimal_output = minimal_output, *args, **kwargs)
 
     logger.info("Merging FASTQs...")
-    merge_seqs(data_dir = data_dir)
+    merge_seqs(data_dir = data_dir, minimal_output = minimal_output)
 
     logger.info("Installing SILVA...")
     silva_paths = install_silva()
@@ -102,6 +102,10 @@ def preprocess_data(input = None, data_dir = None, minimal_output = False, *args
         silva_seed = silva_paths["seed"], silva_gold = silva_paths["gold"],
         silva_seed_tax = silva_paths["taxonomy"], *args, **kwargs
     )
+
+    if minimal_output:
+        files = get_files(data_dir, "merged.*")
+        remove(*files)
 
     logger.info("Render Plots...")
     render_plots(input = input, data_dir = data_dir, *args, **kwargs)

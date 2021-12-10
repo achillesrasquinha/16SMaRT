@@ -12,10 +12,10 @@ from s3mart import __name__ as NAME, settings
 logger = log.get_logger(name = NAME)
 
 PLOTS = [
-    # "world_map",
-    # "abundance_bar",
-    # "alpha_diversity",
-    # "beta_diversity",
+    "world_map",
+    "abundance_bar",
+    "alpha_diversity",
+    "beta_diversity",
     "phylo_tree"
 ]
 

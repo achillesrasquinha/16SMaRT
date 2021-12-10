@@ -1,7 +1,9 @@
+pcr.seqs(fasta={{ silva_seed }}, start={{ silva_seed_start }}, end={{ silva_seed_end }}, keepdots=F, processors={{ processors }})
+
 unique.seqs(fasta={{ merged_fasta }})
 count.seqs(name=current, group={{ merged_group }})
 
-align.seqs(fasta=current, reference={{ silva_seed }}, processors={{ processors }})
+align.seqs(fasta=current, reference={{ silva_seed_pcr }}, processors={{ processors }})
 screen.seqs(fasta=current, count=current, maxhomop={{ maxhomop }}, processors={{ processors }})
 unique.seqs(fasta=current, count=current)
 
@@ -10,7 +12,7 @@ pre.cluster(fasta=current, count=current, processors={{ processors }})
 chimera.vsearch(fasta=current, reference={{ silva_gold }})
 remove.seqs(fasta=current, accnos=current, count=current)
 
-classify.seqs(fasta=current, count=current, reference={{ silva_seed }}, taxonomy={{ silva_seed_tax }}, cutoff={{ classification_cutoff }}, processors={{ processors }})
+classify.seqs(fasta=current, count=current, reference={{ silva_seed_pcr }}, taxonomy={{ silva_seed_tax }}, cutoff={{ classification_cutoff }}, processors={{ processors }})
 remove.lineage(fasta=current, count=current, taxonomy=current, taxon={{ "-".join(filter_taxonomy) }})
 
 cluster.split(fasta=current, count=current, taxonomy=current, taxlevel={{ taxonomy_level }}, cutoff={{ cutoff_level }})

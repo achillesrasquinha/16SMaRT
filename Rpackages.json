@@ -6,6 +6,7 @@
     },
     "biocDependencies": {
         "phyloseq": "",
-        "ggtree": ""
+        "ggtree": "",
+        "treeio": ""
     }
 }

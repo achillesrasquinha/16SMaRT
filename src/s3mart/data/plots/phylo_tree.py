@@ -7,6 +7,8 @@ def plot(*args, **kwargs):
     mothur_data = kwargs["mothur_data"]
 
     ggt = importr("ggtree")
+
+    # ggt.ggtree()
     
     # pseq_data   = pseq.import_mothur(
     #     mothur_shared_file  = mothur_data["shared"],

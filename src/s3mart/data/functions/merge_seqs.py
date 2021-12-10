@@ -6,18 +6,24 @@ from s3mart import __name__ as NAME
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.system  import (
     ShellEnvironment,
-    make_temp_dir, get_files, move
+    make_temp_dir, get_files, move,
+    remove
 )
 from bpyutils import log
 
-from s3mart.data.functions.trim_seqs import _FILENAME_TRIMMED
+from s3mart.data.functions.trim_seqs import _FILENAME_TRIMMED, _DATA_DIR_NAME_TRIMMED
 from s3mart.data.util import build_mothur_script
+from s3mart import settings
 
 logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
 
-def merge_seqs(data_dir = None, force = False):
+def merge_seqs(data_dir = None, force = False, *args, **kwargs):
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
+
+    success  = False
+
     data_dir = get_data_dir(NAME, data_dir = data_dir)
 
     logger.info("Finding files in directory: %s" % data_dir)
@@ -55,7 +61,13 @@ def merge_seqs(data_dir = None, force = False):
                         move(*merged_group, dest = output_group)
 
                         logger.success("Successfully merged.")
+
+                        success = True
                     else:
                         logger.error("Error merging files.")
     else:
         logger.warn("No files found to merge.")
+
+    if success and minimal_output:
+        trimmed_dir = osp.join(data_dir, _DATA_DIR_NAME_TRIMMED)
+        remove(trimmed_dir, recursive = True)

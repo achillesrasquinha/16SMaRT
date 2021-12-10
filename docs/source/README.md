@@ -61,18 +61,12 @@ The CSV DataSheet must be of the following format.
 | [**`min_length`**]() | start length used to screen a sequence.
 | [**`max_length`**]() | end length used to screen a sequence.
 
-Take a look at a [sample.csv](https://github.com/achillesrasquinha/16SMaRT/blob/develop/src/s3mart/data/sample.csv) used in our sample pipeline.
+For example, take a look at a [sample.csv](https://github.com/achillesrasquinha/16SMaRT/blob/develop/src/s3mart/data/sample.csv) used in our sample pipeline.
 
 You can then provide the parameter as follows:
 
 ```
-input=/work/input.csv
-```
-
-or 
-
-```
-input="<YOUR_URL_TO_CSV_FILE>"
+input="/work/input.csv|<YOUR_URL_TO_CSV_FILE>"
 ```
 
 Each SRA ID is then fetched and saved onto disk within your data directory.

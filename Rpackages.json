@@ -5,6 +5,7 @@
         "sf": ""
     },
     "biocDependencies": {
-        "phyloseq": ""
+        "phyloseq": "",
+        "ggtree": ""
     }
 }

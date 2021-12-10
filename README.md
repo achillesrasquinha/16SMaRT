@@ -82,7 +82,7 @@ Have any queries? Post an issue on the [GitHub Issue Tracker](https://github.com
 
 ## References
 
-A comprehensive list of references for the tools used is listed [here](REFERENCES.md)
+A comprehensive list of references for the tools used is listed [here](REFERENCES.md).
 
 ## Citation
 

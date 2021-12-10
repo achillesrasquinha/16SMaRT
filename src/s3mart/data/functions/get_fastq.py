@@ -72,12 +72,14 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
         else:
             logger.warn("FASTQ file(s) for SRA %s already exist." % sra)
 
-        if minimal_output:
-            remove(path_sra, force = True)
+        fastq_files = get_files(sra_dir, "*.fastq")
 
         if fastqc:
             logger.info("Checking quality of FASTQ files...")
 
             with parallel.pool(processes = jobs) as pool:
                 function_ = build_fn(fastqc_check, output_dir = fastqc_dir, threads = jobs)
-                list(pool.map(function_, fastq_files))
+                list(pool.imap(function_, fastq_files))
+
+        if minimal_output:
+            remove(path_sra, force = True)

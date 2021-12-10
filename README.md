@@ -82,6 +82,13 @@ singularity run \
 
 ## Usage
 
+### Basic Usage
+
+* [**`--input`**]()
+
+    *Path to input CSV file, data directory of FASTQ files, URL to CSV file.*
+
+
 Check out the [docs](docs/source) page to understand how to use this pipeline.
 
 ## Support

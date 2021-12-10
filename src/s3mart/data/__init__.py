@@ -55,7 +55,7 @@ def get_input_data(input = None, data_dir = None, *args, **kwargs):
 
     return data_dir, data
 
-def get_data(input = None, data_dir = None, minimal_output = False, *args, **kwargs):
+def get_data(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
 
     data_dir = get_data_dir(NAME, data_dir)
@@ -70,27 +70,28 @@ def get_data(input = None, data_dir = None, minimal_output = False, *args, **kwa
         with parallel.no_daemon_pool(processes = jobs) as pool:
             length   = len(data)
 
-            function = build_fn(get_fastq, data_dir = data_dir, fastqc = fastqc, minimal_output = minimal_output, *args, **kwargs)
+            function = build_fn(get_fastq, data_dir = data_dir, fastqc = fastqc, *args, **kwargs)
             results  = pool.imap(function, data)
 
             list(tq.tqdm(results, total = length))
 
-def preprocess_data(input = None, data_dir = None, minimal_output = False, *args, **kwargs):
+def preprocess_data(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
     data_dir = get_data_dir(NAME, data_dir)
+
+    minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
 
     # fastqc   = kwargs.get("fastqc",  True)
     multiqc  = kwargs.get("multiqc", True)
 
     if multiqc:
-        check_quality(data_dir = data_dir, fastqc = False, multiqc = multiqc,
-            minimal_output = minimal_output, *args, **kwargs)
+        check_quality(data_dir = data_dir, fastqc = False, multiqc = multiqc, *args, **kwargs)
 
     logger.info("Attempting to trim FASTQ files...")
-    trim_seqs(data_dir = data_dir, data = data, minimal_output = minimal_output, *args, **kwargs)
+    trim_seqs(data_dir = data_dir, data = data, *args, **kwargs)
 
     logger.info("Merging FASTQs...")
-    merge_seqs(data_dir = data_dir, minimal_output = minimal_output)
+    merge_seqs(data_dir = data_dir)
 
     logger.info("Installing SILVA...")
     silva_paths = install_silva()

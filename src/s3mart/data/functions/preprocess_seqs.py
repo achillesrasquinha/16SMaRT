@@ -66,10 +66,10 @@ def preprocess_seqs(data_dir = None, **kwargs):
             merged_group = osp.join(tmp_dir, osp.basename(merged_group)),
 
             silva_seed       = osp.join(tmp_dir, osp.basename(silva_seed)),
-            silva_seed_start = settings.get("silva_seed_pcr_start"),
-            silva_seed_end   = settings.get("silva_seed_pcr_end"),
+            silva_seed_start = settings.get("silva_pcr_start"),
+            silva_seed_end   = settings.get("silva_pcr_end"),
 
-            silva_seed_pcr   = osp.join(tmp_dir, "%s.pcr%s" % (silva_seed_splitext[0], silva_seed_splitext[1])),
+            silva_pcr   = osp.join(tmp_dir, "%s.pcr%s" % (silva_seed_splitext[0], silva_seed_splitext[1])),
             
             silva_seed_tax   = osp.join(tmp_dir, osp.basename(silva_seed_tax)),
             silva_gold       = osp.join(tmp_dir, osp.basename(silva_gold)),

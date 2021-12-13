@@ -40,8 +40,8 @@ settings = Settings(location = PATH["CACHE"], defaults = {
     "cutoff_level":             DEFAULT["cutoff_level"],
 
     "silva_version":            DEFAULT["silva_version"],
-    "silva_seed_pcr_start":     DEFAULT["silva_seed_pcr_start"],
-    "silva_seed_pcr_end":       DEFAULT["silva_seed_pcr_end"],
+    "silva_pcr_start":     DEFAULT["silva_pcr_start"],
+    "silva_pcr_end":       DEFAULT["silva_pcr_end"],
     
     "seed":                     DEFAULT["seed"],
 

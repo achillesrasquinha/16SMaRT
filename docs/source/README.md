@@ -87,6 +87,9 @@ fastqc=False; multiqc=False
 | [**`classification_cutoff`**]() | integer | mothur's [pdiffs](https://mothur.org/wiki/classify.seqs/#cutoff) parameter called during [trim.seqs](https://mothur.org/wiki/classify.seqs) (default - 80).
 | [**`cutoff_level`**]()          | float   | The cutoff parameter allows you to specify a consensus confidence threshold for your taxonomy (default - 0.03).
 | [**`filter_taxonomy`**]()       | array   | Taxonomy to be removed (default - `["chloroplast", "mitochondria", "archaea", "eukaryota", "unknown"]`).
+| [**`taxonomy_level`**]()        | integer | mothur's [taxlevel](https://mothur.org/wiki/merge.otus/#taxlevel) parameter called during [trim.seqs](https://mothur.org/wiki/merge.otus) (default - 6).
+| [**`silva_pcr_start`**]()       | integer | Start length when performing a PCR over SILVA DB.
+| [**`silva_pcr_end`**]()         | integer | End length when performing a PCR over SILVA DB.
 | [**`silva_version`**]()         | string  | SILVA Version to be downloaded. Available versions are listed [here](https://mothur.org/wiki/silva_reference_files/) (default - 132).
 | [**`minimal_output`**]()        | boolean | A minimal output optimizes the entire pipeline to utilize minimal disk resources (i.e., all intermediate resources will be deleted) (default - False).
 | [**`jobs`**]()                  | integer | Number of jobs to use while performing a pipeline run. (default - number of CPUs)

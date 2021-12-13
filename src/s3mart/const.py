@@ -26,8 +26,8 @@ DEFAULT = {
 
     "silva_version":            "132",
     
-    "silva_seed_pcr_start":     6388,
-    "silva_seed_pcr_end":       13861,
+    "silva_pcr_start":     6388,
+    "silva_pcr_end":       13861,
 
     "seed":                     1,
 

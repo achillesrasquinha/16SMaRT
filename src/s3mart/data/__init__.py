@@ -28,7 +28,7 @@ logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
 
-def get_input_data(input = None, data_dir = None, *args, **kwargs):
+def get_input_data(input = None, data_dir = None):
     data_dir = get_data_dir(NAME, data_dir)
 
     if input:

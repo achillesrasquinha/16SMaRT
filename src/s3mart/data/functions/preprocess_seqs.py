@@ -17,7 +17,7 @@ logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
 
-def preprocess_seqs(data_dir = None, *args, **kwargs):
+def preprocess_seqs(data_dir = None, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
     jobs     = kwargs.get("jobs", settings.get("jobs"))
 

@@ -1,11 +1,8 @@
 import os, os.path as osp
 
-import tqdm as tq
-
 from s3mart import settings, __name__ as NAME
 
 from bpyutils.util.ml      import get_data_dir
-from bpyutils.util.types   import build_fn
 from bpyutils.util.system  import (
     ShellEnvironment, popen,
     makedirs,
@@ -16,7 +13,7 @@ from bpyutils import log
 
 logger = log.get_logger(name = NAME)
 
-def fastqc_check(file_, output_dir = None, threads = None, force = False):
+def fastqc_check(file_, output_dir = None, threads = None):
     output_dir = output_dir or os.cwd()
     threads    = threads or settings.get("jobs")
 
@@ -30,7 +27,7 @@ def fastqc_check(file_, output_dir = None, threads = None, force = False):
     else:
         logger.warn("FASTQC for file %s already exists." % file_)
 
-def check_quality(data_dir = None, multiqc = False, *args, **kwargs):    
+def check_quality(data_dir = None, multiqc = False, **kwargs):    
     data_dir = get_data_dir(NAME, data_dir)
     # jobs     = kwargs.get("jobs", settings.get("jobs"))
 

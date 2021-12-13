@@ -36,7 +36,7 @@ def _get_fastq_file_line(fname):
 
     return "%s %s" % (prefix, fname)
 
-def _mothur_trim_files(config, data_dir = None, *args, **kwargs):
+def _mothur_trim_files(config, data_dir = None, **kwargs):
     logger.info("Using config %s to filter files." % config)
 
     jobs       = kwargs.get("jobs", settings.get("jobs"))

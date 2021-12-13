@@ -1,10 +1,10 @@
 # imports - standard imports
 import subprocess as sp
 
-class GeomeatError(Exception):
+class S3martError(Exception):
     pass
 
-class PopenError(GeomeatError, sp.CalledProcessError):
+class PopenError(S3martError, sp.CalledProcessError):
     pass
 
 class DependencyNotFoundError(ImportError):

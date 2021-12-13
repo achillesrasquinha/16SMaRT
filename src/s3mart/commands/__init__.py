@@ -59,7 +59,7 @@ def to_params(kwargs):
 
     return params
 
-def _command(*args, **kwargs):
+def _command(**kwargs):
     a = to_params(kwargs)
 
     if not a.verbose:

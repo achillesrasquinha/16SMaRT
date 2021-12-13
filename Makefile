@@ -27,6 +27,7 @@ TOX						= ${VENVBIN}tox
 COVERALLS			   ?= ${VENVBIN}coveralls
 DOCSTR_COVERAGE		   ?= ${VENVBIN}docstr-coverage
 IPYTHON					= ${VENVBIN}ipython
+PYLINT					= ${VENVBIN}pylint
 
 JUPYTER					= ${VENVBIN}jupyter
 
@@ -257,6 +258,8 @@ start: ## Start app.
 notebooks: ## Launch Notebooks
 	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)
 
+lint: ## Perform Lint
+	$(PYLINT) $(PROJDIR) --output-format=colorized
 
 help: ## Show help and exit.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)

@@ -19,7 +19,7 @@ logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
 
-def merge_seqs(data_dir = None, force = False, *args, **kwargs):
+def merge_seqs(data_dir = None, force = False, **kwargs):
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
 
     success  = False

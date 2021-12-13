@@ -77,9 +77,14 @@ fastqc=False; multiqc=False
 
 # Preprocessing
 
-| Key       | Type  | Default 
-|-----------|-------|--------
-|           |       |          
+| Key | Type  | Default 
+|-----|-------|--------
+| `minimal_output`    | boolean | A minimal output optimizes the entire pipeline to utilize minimal disk resources (i.e., all intermediate resources will be deleted).
+| `trim_chunks`       | integer | Number of group configurations to run parallely during trimming.
+| `quality_average`   | integer | Calculate the average quality score for each sequence and remove those that have an average below the value provided.
+| `maximum_ambiguity` | integer | mothur's [maxambig](https://mothur.org/wiki/trim.seqs/#maxambig) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs/#maxambig).
+| 
+| `jobs`              | integer | Number of jobs to use while performing a pipeline run.
 
 # Analysis
 

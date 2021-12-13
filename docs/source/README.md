@@ -79,14 +79,17 @@ fastqc=False; multiqc=False
 
 | Key | Type  | Default 
 |-----|-------|--------
-| [**`minimal_output`**]()       | boolean | A minimal output optimizes the entire pipeline to utilize minimal disk resources (i.e., all intermediate resources will be deleted).
-| [**`trim_chunks`**]()          | integer | Number of group configurations to run parallely during trimming.
-| [**`quality_average`**]()      | integer | Calculate the average quality score for each sequence and remove those that have an average below the value provided.
-| [**`maximum_ambiguity`**]()    | integer | mothur's [maxambig](https://mothur.org/wiki/trim.seqs/#maxambig) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs).
-| [**`maximum_homopolymers`**]() | integer | mothur's [maxhomop](https://mothur.org/wiki/trim.seqs/#maxhomop) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs).
-| [**`primer_difference`**]()    | integer | mothur's [pdiffs](https://mothur.org/wiki/trim.seqs/#bdiffs--pdiffs--ldiffs--sdiffs--tdiffs) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs).
-| [**`silva_version`**]()        | string  | SILVA Version to be downloaded. Available versions are listed [here](https://mothur.org/wiki/silva_reference_files/).
-| [**`jobs`**]()                 | integer | Number of jobs to use while performing a pipeline run.
+| [**`trim_chunks`**]()           | integer | Number of group configurations to run parallely during trimming (default - 8).
+| [**`quality_average`**]()       | integer | Calculate the average quality score for each sequence and remove those that have an average below the value provided. (default - 35)
+| [**`maximum_ambiguity`**]()     | integer | mothur's [maxambig](https://mothur.org/wiki/trim.seqs/#maxambig) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs) (default - 0).
+| [**`maximum_homopolymers`**]()  | integer | mothur's [maxhomop](https://mothur.org/wiki/trim.seqs/#maxhomop) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs) (default - 8).
+| [**`primer_difference`**]()     | integer | mothur's [pdiffs](https://mothur.org/wiki/trim.seqs/#bdiffs--pdiffs--ldiffs--sdiffs--tdiffs) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs) (default - 5).
+| [**`classification_cutoff`**]() | integer | mothur's [pdiffs](https://mothur.org/wiki/classify.seqs/#cutoff) parameter called during [trim.seqs](https://mothur.org/wiki/classify.seqs) (default - 80).
+| [**`cutoff_level`**]()          | float   | The cutoff parameter allows you to specify a consensus confidence threshold for your taxonomy (default - 0.03).
+| [**`filter_taxonomy`**]()       | array   | Taxonomy to be removed (default - `["chloroplast", "mitochondria", "archaea", "eukaryota", "unknown"]`).
+| [**`silva_version`**]()         | string  | SILVA Version to be downloaded. Available versions are listed [here](https://mothur.org/wiki/silva_reference_files/) (default - 132).
+| [**`minimal_output`**]()        | boolean | A minimal output optimizes the entire pipeline to utilize minimal disk resources (i.e., all intermediate resources will be deleted) (default - False).
+| [**`jobs`**]()                  | integer | Number of jobs to use while performing a pipeline run. (default - number of CPUs)
 
 # Analysis
 

@@ -140,10 +140,10 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
                         )
 
                         logger.info("[group %s] Successfully copied filtered files at %s." % (group, target_dir))
+                
+                        success = True
             except PopenError as e:
                 logger.error("[group %s] Unable to filter files. Error: %s" % (group, e))
-
-                success = True
     else:
         logger.warn("[group %s] Filtered files already exists." % group)
 

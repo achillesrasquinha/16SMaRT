@@ -79,12 +79,14 @@ fastqc=False; multiqc=False
 
 | Key | Type  | Default 
 |-----|-------|--------
-| `minimal_output`    | boolean | A minimal output optimizes the entire pipeline to utilize minimal disk resources (i.e., all intermediate resources will be deleted).
-| `trim_chunks`       | integer | Number of group configurations to run parallely during trimming.
-| `quality_average`   | integer | Calculate the average quality score for each sequence and remove those that have an average below the value provided.
-| `maximum_ambiguity` | integer | mothur's [maxambig](https://mothur.org/wiki/trim.seqs/#maxambig) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs/#maxambig).
-| 
-| `jobs`              | integer | Number of jobs to use while performing a pipeline run.
+| [`minimal_output`]()       | boolean | A minimal output optimizes the entire pipeline to utilize minimal disk resources (i.e., all intermediate resources will be deleted).
+| [`trim_chunks`]()          | integer | Number of group configurations to run parallely during trimming.
+| [`quality_average`]()      | integer | Calculate the average quality score for each sequence and remove those that have an average below the value provided.
+| [`maximum_ambiguity`]()    | integer | mothur's [maxambig](https://mothur.org/wiki/trim.seqs/#maxambig) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs).
+| [`maximum_homopolymers`]() | integer | mothur's [maxhomop](https://mothur.org/wiki/trim.seqs/#maxhomop) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs).
+| [`primer_difference`]()    | integer | mothur's [pdiffs](https://mothur.org/wiki/trim.seqs/#bdiffs--pdiffs--ldiffs--sdiffs--tdiffs) parameter called during [trim.seqs](https://mothur.org/wiki/trim.seqs).
+| [`silva_version`]()        | string  | SILVA Version to be downloaded. Available versions are listed [here](https://mothur.org/wiki/silva_reference_files/).
+| `jobs`                 | integer | Number of jobs to use while performing a pipeline run.
 
 # Analysis
 

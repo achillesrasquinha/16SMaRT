@@ -1,6 +1,6 @@
 from rpy2.robjects.packages import importr
 
-from s3mart.data.plots.util import save_plot, normalize_pseq
+from s3mart.data.plots.util import save_plot, rarefy_pseq
 from s3mart import settings
 
 def plot(*args, **kwargs):
@@ -17,15 +17,11 @@ def plot(*args, **kwargs):
         cutoff = settings.get("cutoff_level")
     )
 
-    pseq_data_resampled = normalize_pseq(pseq_data)
-    
-    plot_kwargs = { "width": 10, "height": 8 }
-
-    kwargs["plot_kwargs"] = plot_kwargs
+    pseq_data_rarefied = rarefy_pseq(pseq_data)
     
     ordinate_data = pseq.ordinate(pseq_data)
     plot = pseq.plot_ordination(pseq_data, ordinate_data, type = "samples")
     save_plot(plot, *args, **kwargs)
 
-    plot = pseq.plot_ordination(pseq_data_resampled, ordinate_data, type = "samples")
-    save_plot(plot, suffix = "resampled", *args, **kwargs)
+    plot = pseq.plot_ordination(pseq_data_rarefied, ordinate_data, type = "samples")
+    save_plot(plot, suffix = "rarefied", *args, **kwargs)

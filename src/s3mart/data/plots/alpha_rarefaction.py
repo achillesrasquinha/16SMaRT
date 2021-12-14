@@ -6,7 +6,8 @@ from s3mart import settings
 def plot(*args, **kwargs):
     mothur_data = kwargs["mothur_data"]
 
-    pseq = importr("phyloseq")
+    pseq  = importr("phyloseq")
+    vegan = importr("vegan")
     
     pseq_data   = pseq.import_mothur(
         mothur_shared_file  = mothur_data["shared"],
@@ -19,8 +20,8 @@ def plot(*args, **kwargs):
 
     pseq_data_rarefied = rarefy_pseq(pseq_data)
     
-    plot = pseq.plot_richness(pseq_data)
+    plot = vegan.rarecurve(pseq.otu_table(pseq_data))
     save_plot(plot, *args, **kwargs)
 
-    plot = pseq.plot_richness(pseq_data_rarefied)
+    plot = pseq.plot_richness(pseq.otu_table(pseq_data_rarefied))
     save_plot(plot, suffix = "rarefied", *args, **kwargs)

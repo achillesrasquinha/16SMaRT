@@ -1,6 +1,6 @@
 from rpy2.robjects.packages import importr
 
-from s3mart.data.plots.util import save_plot, normalize_pseq
+from s3mart.data.plots.util import save_plot, rarefy_pseq
 from s3mart import settings
 
 def plot(*args, **kwargs):
@@ -19,6 +19,6 @@ def plot(*args, **kwargs):
     plot = pseq.plot_bar(pseq_data, fill = "Rank2")
     save_plot(plot, *args, **kwargs)
     
-    pseq_data_resampled = normalize_pseq(pseq_data)
-    plot = pseq.plot_bar(pseq_data_resampled, fill = "Rank2")
-    save_plot(plot, suffix = "resampled", *args, **kwargs)
+    pseq_data_rarefied = rarefy_pseq(pseq_data)
+    plot = pseq.plot_bar(pseq_data_rarefied, fill = "Rank2")
+    save_plot(plot, suffix = "rarefied", *args, **kwargs)

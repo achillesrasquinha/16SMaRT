@@ -26,7 +26,7 @@ The unseen microbial world impacts us every day. From causing to preventing dise
     * [CSV DataSheet](#csv-datasheet)
 * [Quality Control](#quality-control)
 * [Preprocessing](#preprocessing)
-* [Analysis](#analysis)
+* [Diversity Analysis](#diversity-analysis)
     * [Abundance](#abundance)
     * [Alpha Diversity](#alpha-diversity)
     * [Beta Diversity](#beta-diversity)
@@ -94,7 +94,7 @@ fastqc=False; multiqc=False
 | [**`minimal_output`**]()        | boolean | A minimal output optimizes the entire pipeline to utilize minimal disk resources (i.e., all intermediate resources will be deleted) (default - False).
 | [**`jobs`**]()                  | integer | Number of jobs to use while performing a pipeline run. (default - number of CPUs)
 
-# Analysis
+# Diversity Analysis
 
 ## Abundance Chart
 

@@ -10,10 +10,11 @@ logger = log.get_logger(name = NAME)
 
 PLOTS = [
     "world_map",
+    "alpha_rarefaction",
     "abundance_bar",
     "alpha_diversity",
     "beta_diversity",
-    "phylo_tree"
+    "phylo_tree",
 ]
 
 def _import_and_plot(plot_name, *args, **kwargs):

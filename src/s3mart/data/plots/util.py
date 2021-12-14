@@ -26,9 +26,9 @@ def save_plot(plot, *args, **kwargs):
     
     plot        = ggplotly.ggplotly(plot)
 
-    htmlwidgets.saveWidget(plot, file = target_file)
+    htmlwidgets.saveWidget(plot, file = target_file, libdir = "libs")
 
-def normalize_pseq(pseq_data):
+def rarefy_pseq(pseq_data):
     phyloseq  = importr("phyloseq")
     resampled = phyloseq.rarefy_even_depth(pseq_data, rngseed = settings.get("seed"))
 

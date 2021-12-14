@@ -3,7 +3,8 @@
         "ggplot2": "",
         "plotly": "",
         "sf": "",
-        "dplyr": ""
+        "dplyr": "",
+        "vegan": ""
     },
     "biocDependencies": {
         "phyloseq": "",

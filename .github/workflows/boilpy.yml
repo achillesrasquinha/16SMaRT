@@ -8,6 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v2
+      - name: Show ref
+        run: |
+          echo "Checking out $GITHUB_REF..."
       - uses: achillesrasquinha/boilpy-action@develop
       - name: Updating template
         run: |

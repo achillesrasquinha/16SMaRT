@@ -62,7 +62,7 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
         if not fastq_files:
             logger.info("Downloading FASTQ file(s) for SRA %s..." % sra)
             args = "--split-files" if layout == "paired" else "" 
-            code = shell("fasterq-dump --threads {threads} {args} {sra}".format(
+            code = shell("parallel-fastq-dump --threads {threads} {args} {sra}".format(
                 threads = jobs, args = args, sra = sra), cwd = sra_dir)
 
             if not code:

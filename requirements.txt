@@ -7,3 +7,4 @@ tqdm
 requests
 rpy2
 BioPython
+parallel-fastq-dump

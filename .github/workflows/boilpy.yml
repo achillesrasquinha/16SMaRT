@@ -7,12 +7,14 @@ jobs:
     name: Template
     runs-on: ubuntu-latest
 
+    container: ghcr.io/achillesrasquinha/boilpy-action
+
     steps:
       - uses: actions/checkout@v2
       - name: Show ref
         run: |
           echo "Checking out $GITHUB_REF..."
-      - uses: achillesrasquinha/boilpy-action@develop
       - name: Updating template
         run: |
           echo "Updating template..."
+          boilpy-action --update $GITHUB_WORKSPACE --verbose

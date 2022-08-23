@@ -1,6 +1,7 @@
 s3mart
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 Release v\ |version|. (:ref:`Installation <install:>`)
@@ -14,11 +15,16 @@ Release v\ |version|. (:ref:`Installation <install:>`)
 =======
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
 ===
 
 Release v\ |version|. (:ref:`Installation <install:>`)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master

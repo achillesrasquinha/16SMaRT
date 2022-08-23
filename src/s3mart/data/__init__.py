@@ -2,6 +2,7 @@ import os.path as osp
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import tqdm as tq
 
 from s3mart.config  import PATH
@@ -135,6 +136,8 @@ def render_plots(input = None, data_dir = None, *args, **kwargs):
 =======
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
 from s3mart.config import PATH
 from s3mart import __name__ as NAME
 
@@ -159,6 +162,10 @@ def get_data(data_dir = None, check = False, *args, **kwargs):
 def preprocess_data(data_dir = None, check = False, *args, **kwargs):
     data_dir = get_data_dir(data_dir)
 <<<<<<< HEAD
+<<<<<<< HEAD
+    # do something ...
+>>>>>>> template/master
+=======
     # do something ...
 >>>>>>> template/master
 =======

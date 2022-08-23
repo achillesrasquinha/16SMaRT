@@ -1,8 +1,11 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from __future__ import absolute_import
 
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 
@@ -10,6 +13,9 @@ from __future__ import absolute_import
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -29,6 +35,7 @@ from s3mart.__attr__ import (
     __build__,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     __description__,
     __author__
 )
@@ -39,6 +46,8 @@ from s3mart.const       import DEFAULT
 from bpyutils.cache       import Cache
 from bpyutils.config      import Settings
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 
@@ -54,6 +63,9 @@ from bpyutils.config      import Settings
 from bpyutils.util.jobs   import run_all as run_all_jobs, run_job
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -61,6 +73,7 @@ from bpyutils.util.jobs   import run_all as run_all_jobs, run_job
 cache = Cache(dirname = __name__)
 cache.create()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 settings = Settings(location = PATH["CACHE"], defaults = {
@@ -85,6 +98,10 @@ settings = Settings(location = PATH["CACHE"], defaults = {
     
     "minimal_output":           DEFAULT["minimal_output"]
 })
+=======
+settings = Settings()
+
+>>>>>>> template/master
 =======
 settings = Settings()
 

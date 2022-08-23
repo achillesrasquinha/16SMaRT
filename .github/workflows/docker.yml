@@ -12,6 +12,7 @@ env:
   DOCKER_USERNAME: ${{ github.actor }}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   PROJECT: s3mart
 
 jobs:
@@ -20,12 +21,17 @@ jobs:
 =======
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
   PROJECT: ${{ github.event.repository.name }}
 
 jobs:
   build-docker:
     name: Build and Push
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -41,9 +47,12 @@ jobs:
           echo $GITHUB_TOKEN | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       - name: Pull latest image
         run: |
           make docker-pull
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 =======
@@ -54,6 +63,7 @@ jobs:
       - name: Push Image
         run: |
           make docker-push
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -82,6 +92,8 @@ jobs:
              ${DOCKER_IMAGE}
 
           singularity push /output/${SINGULARITY_IMAGE} oras://${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}:singularity
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 =======

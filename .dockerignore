@@ -1,7 +1,10 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 .git
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 .git
@@ -13,6 +16,10 @@ docker/s3mart
 .gitignore
 .releasrc
 <<<<<<< HEAD
+<<<<<<< HEAD
+Makefile
+>>>>>>> template/master
+=======
 Makefile
 >>>>>>> template/master
 =======

@@ -73,7 +73,11 @@ __build__                   = get_revision(pardir(__file__, 2), short = True, ra
 __author__                  = "Rebecca Furbeck, Achilles Rasquinha"
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 __email__                   = "rafurbeck@gmail.como"
+=======
+__email__                   = "rafurbeck@gmail.com"
+>>>>>>> template/master
 =======
 __email__                   = "rafurbeck@gmail.com"
 >>>>>>> template/master

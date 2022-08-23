@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # imports - standard imports
 import traceback
 
@@ -18,6 +19,8 @@ from s3mart.exception      import DependencyNotFoundError
 =======
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
 from s3mart.commands.util 	import cli_format
 from bpyutils.util._dict        import merge_dict
 from bpyutils.util.system   	import (touch)
@@ -29,6 +32,9 @@ from s3mart 	import cli
 from bpyutils._compat		    import iteritems
 from s3mart.__attr__ import __name__
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -58,8 +64,12 @@ def command(**ARGUMENTS):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             traceback_str = traceback.format_exc()
             cli.echo(traceback_str)
+=======
+            pretty_print_error(e)
+>>>>>>> template/master
 =======
             pretty_print_error(e)
 >>>>>>> template/master
@@ -88,7 +98,11 @@ def to_params(kwargs):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 def _command(**kwargs):
+=======
+def _command(*args, **kwargs):
+>>>>>>> template/master
 =======
 def _command(*args, **kwargs):
 >>>>>>> template/master

@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 git+https://github.com/achillesrasquinha/bpyutils.git@develop#egg=bpyutils
 # git+https://github.com/achillesrasquinha/deeply.git
 multiqc
@@ -10,6 +11,11 @@ requests
 rpy2
 BioPython
 parallel-fastq-dump
+=======
+
+bpyutils
+git+https://github.com/achillesrasquinha/deeply.git@develop#egg=deeply
+>>>>>>> template/master
 =======
 
 bpyutils

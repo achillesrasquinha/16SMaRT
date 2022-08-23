@@ -3,6 +3,10 @@ recommonmark
 sphinx-autobuild
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> template/master
 =======
 
 >>>>>>> template/master

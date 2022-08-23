@@ -2,6 +2,11 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+# SHELL				   := /bin/bash
+
+>>>>>>> template/master
 =======
 # SHELL				   := /bin/bash
 
@@ -39,7 +44,10 @@ DOCSTR_COVERAGE		   ?= ${VENVBIN}docstr-coverage
 IPYTHON					= ${VENVBIN}ipython
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 PYLINT					= ${VENVBIN}pylint
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 =======
@@ -56,6 +64,11 @@ TWINE					= ${VENVBIN}twine
 DOCKER_IMAGE		   ?= ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+DOCKER_BUILDKIT		   ?= 1
+
+>>>>>>> template/master
 =======
 DOCKER_BUILDKIT		   ?= 1
 
@@ -84,7 +97,11 @@ define log
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@echo "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}"
+=======
+	@printf "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}\n"
+>>>>>>> template/master
 =======
 	@printf "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}\n"
 >>>>>>> template/master
@@ -116,7 +133,10 @@ info: ## Display Information
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 upgrade-tools: # Upgrade pip, setuptools, wheel to latest
@@ -126,6 +146,9 @@ endif
 	$(PIP) install --upgrade pip setuptools wheel $(OUT)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -137,7 +160,11 @@ requirements: ## Build Requirements
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 install: clean info requirements ## Install dependencies and module.
+=======
+install: clean info upgrade-tools requirements ## Install dependencies and module.
+>>>>>>> template/master
 =======
 install: clean info upgrade-tools requirements ## Install dependencies and module.
 >>>>>>> template/master
@@ -161,12 +188,15 @@ endif
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	$(call log,INFO,Installing ${PROJECT} (${ENVIRONMENT}))
 ifeq (${ENVIRONMENT},development)
 	$(PYTHON) setup.py develop $(OUT)
 else
 	$(PYTHON) setup.py install $(OUT)
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 # https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html#summary
@@ -178,6 +208,9 @@ ifeq (${ENVIRONMENT},development)
 else
 	$(PIP) install $(BASEDIR) $(OUT)
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -223,7 +256,10 @@ endif
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 ifeq (${ENVIRONMENT},development)
@@ -231,6 +267,9 @@ ifeq (${ENVIRONMENT},development)
 endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -288,6 +327,7 @@ endif
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 docker-pull:
 	$(call log,INFO,Pulling latest Docker Image)
 
@@ -311,6 +351,8 @@ docker-build: clean docker-pull ## Build the Docker Image.
 		--cache-from $(DOCKER_IMAGE):latest \
 		$(BASEDIR) --tag $(DOCKER_IMAGE) $(DOCKER_BUILD_ARGS)
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 docker-pull: ## Pull Latest Docker Images
@@ -342,6 +384,9 @@ docker-test: clean ## Testing within Docker Image.
 	
 	@docker run --rm -it $(DOCKER_IMAGE) "tox"
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -381,6 +426,7 @@ start: ## Start app.
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 notebooks: ## Launch Notebooks
 	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)
 
@@ -389,11 +435,16 @@ lint: ## Perform Lint
 =======
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
 
 notebooks: ## Launch Notebooks
 	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master

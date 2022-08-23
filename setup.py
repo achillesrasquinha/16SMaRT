@@ -2,7 +2,13 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import os.path as osp
+=======
+import sys
+import os.path as osp
+import glob
+>>>>>>> template/master
 =======
 import sys
 import os.path as osp
@@ -23,6 +29,11 @@ from setuptools.command.install import install
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> template/master
 =======
 
 
@@ -51,12 +62,15 @@ def parse_requirements(filename, session = None):
     def sanitize_line(line):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         line = line.strip()
         return line
 
     def check_line(line):
         return line and not line.startswith("#") and not line.startswith("git")
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
         if "git+" in line:
@@ -74,6 +88,9 @@ def parse_requirements(filename, session = None):
     def check_line(line):
         return line and not line.startswith("#")
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -144,7 +161,11 @@ class InstallCommand(install):
         
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 setup(
+=======
+metadata = dict(
+>>>>>>> template/master
 =======
 metadata = dict(
 >>>>>>> template/master
@@ -205,8 +226,11 @@ metadata = dict(
     }
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 )
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 )
@@ -214,6 +238,10 @@ metadata = dict(
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+setup(**metadata)
+>>>>>>> template/master
+=======
 setup(**metadata)
 >>>>>>> template/master
 =======

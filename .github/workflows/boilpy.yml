@@ -2,7 +2,12 @@ name: Template
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 on: [push]
+=======
+on:
+  push:
+>>>>>>> template/master
 =======
 on:
   push:
@@ -16,6 +21,7 @@ jobs:
   template:
     name: Template
     runs-on: ubuntu-latest
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 
@@ -33,11 +39,17 @@ jobs:
 =======
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
     steps:
       - uses: achillesrasquinha/boilpy-action@develop
       - name: Updating template
         run: |
 <<<<<<< HEAD
+<<<<<<< HEAD
+          echo "Updating template..."
+>>>>>>> template/master
+=======
           echo "Updating template..."
 >>>>>>> template/master
 =======

@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 FROM ghcr.io/achillesrasquinha/s3mart:base
 
 ENV S3MART_PATH=/usr/local/src/s3mart \
@@ -27,6 +28,8 @@ WORKDIR $WORKSPACEDIR
 
 ENTRYPOINT ["/entrypoint.sh"]
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 
@@ -61,6 +64,9 @@ RUN if [[ "${DEVELOPMENT}" ]]; then \
 
 ENTRYPOINT ["/entrypoint"]
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master

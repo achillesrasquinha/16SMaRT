@@ -1,6 +1,7 @@
 <div align="center">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <img src=".github/assets/logo.png" height="200">
   <h1>
       16SMaRT
@@ -16,6 +17,8 @@
       <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/16SMaRT/Docker?style=flat-square&label=docker">
     </a>
 =======
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
   <img src=".github/assets/logo.png" height="128">
@@ -42,6 +45,9 @@
 		  <img src="https://img.shields.io/pypi/pyversions/s3mart.svg?style=flat-square">
 	  </a>
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master
@@ -50,6 +56,7 @@
     </a>
 </p>
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <div align="justify">
@@ -149,6 +156,8 @@ A comprehensive list of references for the tools used is listed [here](REFERENCE
 =======
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
 ### Table of Contents
 * [Features](#features)
 * [Quick Start](#quick-start)
@@ -207,6 +216,9 @@ $ docker run \
 
 ### License
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 =======
 >>>>>>> template/master

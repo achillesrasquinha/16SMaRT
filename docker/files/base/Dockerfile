@@ -13,7 +13,7 @@ RUN apt-get update && \
     tar xzvf $HOME/sra-toolkit.tar.gz -C $HOME && \
     cp -R $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64/bin/* /usr/local/bin && \
     # SRA Toolkit configuration
-    wget -nv https://raw.githubusercontent.com/ncbi/ncbi-vdb/master/libs/kfg/default.kfg -P $HOME/.ncbi && \
+    wget -nv https://raw.githubusercontent.com/ncbi/ncbi-vdb/2.11.2/libs/kfg/default.kfg -P $HOME/.ncbi && \
     export VDB_CONFIG=$HOME/.ncbi/default.kfg && \
     mkdir -p /usr/share/man/man1 && \
     apt-get install -y --no-install-recommends \

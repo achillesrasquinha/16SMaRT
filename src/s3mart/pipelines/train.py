@@ -1,7 +1,12 @@
 from __future__ import absolute_import
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 from s3mart.data.get_data import get_data_dir
+=======
+from s3mart.__attr__ import __name__ as NAME
+from s3mart.data import get_data_dir
+>>>>>>> template/master
 =======
 from s3mart.__attr__ import __name__ as NAME
 from s3mart.data import get_data_dir
@@ -13,7 +18,11 @@ def build_model():
 
 def train(data_dir = None, artifacts_dir = None, *args, **kwargs):
 <<<<<<< HEAD
+<<<<<<< HEAD
     data_dir = get_data_dir(data_dir)
+=======
+    data_dir = get_data_dir(NAME, data_dir)
+>>>>>>> template/master
 =======
     data_dir = get_data_dir(NAME, data_dir)
 >>>>>>> template/master

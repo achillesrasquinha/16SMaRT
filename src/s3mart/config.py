@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import os.path as osp
 
 from s3mart.__attr__ import __name__ as NAME
@@ -8,6 +9,8 @@ from bpyutils.config      import get_config_path
 from bpyutils.util.system  import pardir
 from bpyutils.util.environ import getenv
 =======
+=======
+>>>>>>> template/master
 from __future__ import absolute_import
 
 import os.path as osp
@@ -16,6 +19,9 @@ from s3mart.__attr__ import __name__ as NAME
 
 from bpyutils.config      import get_config_path
 from bpyutils.util.system import pardir
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 
 PATH = dict()
@@ -23,7 +29,11 @@ PATH = dict()
 PATH["BASE"]  = pardir(__file__, 1)
 PATH["DATA"]  = osp.join(PATH["BASE"], "data")
 <<<<<<< HEAD
+<<<<<<< HEAD
 PATH["CACHE"] = getenv("PATH_CACHE", get_config_path(NAME), prefix = CONST["prefix"])
+=======
+PATH["CACHE"] = get_config_path(NAME)
+>>>>>>> template/master
 =======
 PATH["CACHE"] = get_config_path(NAME)
 >>>>>>> template/master

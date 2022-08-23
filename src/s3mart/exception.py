@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # imports - standard imports
 import subprocess as sp
 
@@ -8,6 +9,11 @@ class S3martError(Exception):
 class PopenError(S3martError, sp.CalledProcessError):
     pass
 
+=======
+class S3martError(Exception):
+    pass
+
+>>>>>>> template/master
 =======
 class S3martError(Exception):
     pass

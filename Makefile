@@ -1,6 +1,11 @@
 .PHONY: shell test help requirements
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+# SHELL				   := /bin/bash
+
+>>>>>>> template/master
 =======
 # SHELL				   := /bin/bash
 
@@ -33,7 +38,10 @@ COVERALLS			   ?= ${VENVBIN}coveralls
 DOCSTR_COVERAGE		   ?= ${VENVBIN}docstr-coverage
 IPYTHON					= ${VENVBIN}ipython
 <<<<<<< HEAD
+<<<<<<< HEAD
 PYLINT					= ${VENVBIN}pylint
+=======
+>>>>>>> template/master
 =======
 >>>>>>> template/master
 
@@ -47,6 +55,11 @@ TWINE					= ${VENVBIN}twine
 
 DOCKER_IMAGE		   ?= ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+DOCKER_BUILDKIT		   ?= 1
+
+>>>>>>> template/master
 =======
 DOCKER_BUILDKIT		   ?= 1
 
@@ -70,7 +83,11 @@ define log
 	$(eval TIMESTAMP = $(shell date +%H:%M:%S))
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	@echo "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}"
+=======
+	@printf "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}\n"
+>>>>>>> template/master
 =======
 	@printf "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}\n"
 >>>>>>> template/master
@@ -98,13 +115,19 @@ info: ## Display Information
 	@echo "Python Environment: ${PYTHON_ENVIRONMENT}"
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> template/master
 upgrade-tools: # Upgrade pip, setuptools, wheel to latest
 ifneq (${VERBOSE},true)
 	$(eval OUT = > /dev/null)
 endif
 	$(PIP) install --upgrade pip setuptools wheel $(OUT)
 
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 requirements: ## Build Requirements
 	$(call log,INFO,Building Requirements)
@@ -113,7 +136,11 @@ requirements: ## Build Requirements
 	@cat $(BASEDIR)/requirements/production.txt  > $(BASEDIR)/requirements.txt
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 install: clean info requirements ## Install dependencies and module.
+=======
+install: clean info upgrade-tools requirements ## Install dependencies and module.
+>>>>>>> template/master
 =======
 install: clean info upgrade-tools requirements ## Install dependencies and module.
 >>>>>>> template/master
@@ -133,12 +160,15 @@ else
 endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	$(call log,INFO,Installing ${PROJECT} (${ENVIRONMENT}))
 ifeq (${ENVIRONMENT},development)
 	$(PYTHON) setup.py develop $(OUT)
 else
 	$(PYTHON) setup.py install $(OUT)
 =======
+=======
+>>>>>>> template/master
 # https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html#summary
 # setup.py install is deprecated.
 	$(call log,INFO,Installing ${PROJECT} (${ENVIRONMENT}))
@@ -147,6 +177,9 @@ ifeq (${ENVIRONMENT},development)
 	$(PIP) install -e $(BASEDIR) $(OUT)
 else
 	$(PIP) install $(BASEDIR) $(OUT)
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 endif
 
@@ -189,11 +222,17 @@ endif
 	$(PYTEST) -s -n $(JOBS) --cov $(PROJDIR) $(IARGS) -vv $(ARGS)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> template/master
 ifeq (${ENVIRONMENT},development)
 	$(call browse,file:///${BASEDIR}/htmlcov/index.html)
 endif
 
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 doc-coverage: install ## Display documentation coverage.
 	$(DOCSTR_COVERAGE) $(PROJDIR)
@@ -248,6 +287,7 @@ ifeq (${launch},true)
 endif
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 docker-pull:
 	$(call log,INFO,Pulling latest Docker Image)
 
@@ -271,6 +311,8 @@ docker-build: clean docker-pull ## Build the Docker Image.
 		--cache-from $(DOCKER_IMAGE):latest \
 		$(BASEDIR) --tag $(DOCKER_IMAGE) $(DOCKER_BUILD_ARGS)
 =======
+=======
+>>>>>>> template/master
 docker-pull: ## Pull Latest Docker Images
 	$(call log,INFO,Pulling latest Docker Image)
 
@@ -299,6 +341,9 @@ docker-test: clean ## Testing within Docker Image.
 	$(call log,INFO,Building Docker Image)
 	
 	@docker run --rm -it $(DOCKER_IMAGE) "tox"
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 
 docker-push: ## Push Docker Image to Registry.
@@ -335,16 +380,22 @@ start: ## Start app.
 	$(PYTHON) -m flask run
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 notebooks: ## Launch Notebooks
 	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)
 
 lint: ## Perform Lint
 	$(PYLINT) $(PROJDIR) --output-format=colorized
 =======
+=======
+>>>>>>> template/master
 
 notebooks: ## Launch Notebooks
 	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)
 
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 
 help: ## Show help and exit.

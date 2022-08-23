@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 env:
 <<<<<<< HEAD
+<<<<<<< HEAD
   # ci variables
   SRA_TOOLKIT_VERSION: "2.9.6"
   TRIM_GALORE_VERSION: "0.6.6"
@@ -21,13 +22,21 @@ env:
   PIP_USE_DEPRECATED: "legacy-resolver"
 
 >>>>>>> template/master
+=======
+  PIP_USE_DEPRECATED: "legacy-resolver"
+
+>>>>>>> template/master
 jobs:
   train:
     name: Train
     runs-on: ubuntu-latest
     container:
 <<<<<<< HEAD
+<<<<<<< HEAD
       image: ghcr.io/achillesrasquinha/s3mart:base
+=======
+      image: ghcr.io/achillesrasquinha/dl
+>>>>>>> template/master
 =======
       image: ghcr.io/achillesrasquinha/dl
 >>>>>>> template/master
@@ -41,6 +50,7 @@ jobs:
         run: |
           pip install -r requirements-dev.txt
 <<<<<<< HEAD
+<<<<<<< HEAD
           pip install -e .
       - name: Run Pipeline
         run: |
@@ -50,6 +60,12 @@ jobs:
         with:
           name: data
           path: /data
+=======
+          python setup.py develop
+      - name: Run Pipeline
+        run: |
+          bpyutils --run-ml s3mart
+>>>>>>> template/master
 =======
           python setup.py develop
       - name: Run Pipeline

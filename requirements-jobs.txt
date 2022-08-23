@@ -2,6 +2,10 @@ sphinx
 recommonmark
 sphinx-autobuild
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+>>>>>>> template/master
 =======
 
 >>>>>>> template/master
@@ -9,6 +13,7 @@ ipykernel
 nbsphinx
 pylint
 autopep8
+<<<<<<< HEAD
 <<<<<<< HEAD
 pytest
 pytest-cov
@@ -30,6 +35,8 @@ BioPython
 parallel-fastq-dump
 =======
 >>>>>>> template/master
+=======
+>>>>>>> template/master
 pipenv
 jedi<0.18
 ipython
@@ -43,7 +50,10 @@ jupyter
 
 Flask
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> template/master
 pytest
 pytest-cov
 pytest-xdist
@@ -56,4 +66,7 @@ docstr-coverage
 
 bpyutils
 git+https://github.com/achillesrasquinha/deeply.git@develop#egg=deeply
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master

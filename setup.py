@@ -1,7 +1,13 @@
 # pylint: disable=E0602
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import os.path as osp
+=======
+import sys
+import os.path as osp
+import glob
+>>>>>>> template/master
 =======
 import sys
 import os.path as osp
@@ -16,6 +22,11 @@ from setuptools.command.develop import develop
 from setuptools.command.install import install
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> template/master
 =======
 
 
@@ -39,12 +50,15 @@ def parse_requirements(filename, session = None):
             
     def sanitize_line(line):
 <<<<<<< HEAD
+<<<<<<< HEAD
         line = line.strip()
         return line
 
     def check_line(line):
         return line and not line.startswith("#") and not line.startswith("git")
 =======
+=======
+>>>>>>> template/master
         if "git+" in line:
             line = line.replace("git+", "")
 
@@ -59,6 +73,9 @@ def parse_requirements(filename, session = None):
 
     def check_line(line):
         return line and not line.startswith("#")
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 
     return [
@@ -126,7 +143,11 @@ class InstallCommand(install):
         remove_cache()
         
 <<<<<<< HEAD
+<<<<<<< HEAD
 setup(
+=======
+metadata = dict(
+>>>>>>> template/master
 =======
 metadata = dict(
 >>>>>>> template/master
@@ -183,11 +204,18 @@ metadata = dict(
         "develop": DevelopCommand
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 )
 =======
+=======
+>>>>>>> template/master
 )
 
 
 
+<<<<<<< HEAD
+setup(**metadata)
+>>>>>>> template/master
+=======
 setup(**metadata)
 >>>>>>> template/master

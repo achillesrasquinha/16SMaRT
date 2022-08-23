@@ -1,6 +1,9 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 .git
 =======
+=======
+>>>>>>> template/master
 .git
 .venv
 .vscode
@@ -9,5 +12,9 @@ docker/s3mart
 .env
 .gitignore
 .releasrc
+<<<<<<< HEAD
+Makefile
+>>>>>>> template/master
+=======
 Makefile
 >>>>>>> template/master

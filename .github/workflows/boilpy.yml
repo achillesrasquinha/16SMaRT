@@ -1,7 +1,12 @@
 name: Template
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 on: [push]
+=======
+on:
+  push:
+>>>>>>> template/master
 =======
 on:
   push:
@@ -11,6 +16,7 @@ jobs:
   template:
     name: Template
     runs-on: ubuntu-latest
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     container: ghcr.io/achillesrasquinha/boilpy-action
@@ -25,9 +31,15 @@ jobs:
           echo "Updating template..."
           boilpy-action --update $GITHUB_WORKSPACE --verbose
 =======
+=======
+>>>>>>> template/master
     steps:
       - uses: achillesrasquinha/boilpy-action@develop
       - name: Updating template
         run: |
+<<<<<<< HEAD
+          echo "Updating template..."
+>>>>>>> template/master
+=======
           echo "Updating template..."
 >>>>>>> template/master

@@ -1,5 +1,6 @@
 s3mart
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 Release v\ |version|. (:ref:`Installation <install:>`)
@@ -11,10 +12,15 @@ Release v\ |version|. (:ref:`Installation <install:>`)
     :target: https://ci.appveyor.com/project/achillesrasquinha/ccapi
 
 =======
+=======
+>>>>>>> template/master
 ===
 
 Release v\ |version|. (:ref:`Installation <install:>`)
 
+<<<<<<< HEAD
+>>>>>>> template/master
+=======
 >>>>>>> template/master
 .. image:: https://img.shields.io/coveralls/github/achillesrasquinha/ccapi.svg?style=flat-square
     :target: https://coveralls.io/github/achillesrasquinha/ccapi

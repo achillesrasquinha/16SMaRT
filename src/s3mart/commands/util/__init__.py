@@ -13,8 +13,13 @@ def group_commands(group, commands):
 
     for command in commands:
 <<<<<<< HEAD
+<<<<<<< HEAD
         _, tail = command.rsplit(".", 1)
         tails   = ("", tail, "command")
+=======
+        head, tail = command.rsplit(".", 1)
+        tails      = ("", tail, "command")
+>>>>>>> template/master
 =======
         head, tail = command.rsplit(".", 1)
         tails      = ("", tail, "command")

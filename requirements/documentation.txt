@@ -1,5 +1,9 @@
 sphinx
 recommonmark
 sphinx-autobuild
+<<<<<<< HEAD
+=======
+
+>>>>>>> template/master
 ipykernel
 nbsphinx

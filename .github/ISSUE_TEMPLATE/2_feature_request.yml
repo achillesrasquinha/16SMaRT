@@ -5,7 +5,11 @@ body:
   - type: markdown
     attributes:
       value: |
+<<<<<<< HEAD
         👋 There might be some [easy bugs](https://https://github.com/achillesrasquinha/s3mart/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22+label%3Abug) to tackle for new contributors.
+=======
+        👋 There might be some [easy bugs](https://https://github.com//s3mart/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22good+first+issue%22+label%3Abug) to tackle for new contributors.
+>>>>>>> template/master
   - type: textarea
     attributes:
       label: Description

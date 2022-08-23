@@ -12,8 +12,13 @@ def group_commands(group, commands):
     commands = sequencify(commands, type_ = tuple)
 
     for command in commands:
+<<<<<<< HEAD
         _, tail = command.rsplit(".", 1)
         tails   = ("", tail, "command")
+=======
+        head, tail = command.rsplit(".", 1)
+        tails      = ("", tail, "command")
+>>>>>>> template/master
 
         for i, tail in enumerate(tails):
             try:

@@ -1,4 +1,5 @@
 s3mart
+<<<<<<< HEAD
 =======
 
 Release v\ |version|. (:ref:`Installation <install:>`)
@@ -9,6 +10,12 @@ Release v\ |version|. (:ref:`Installation <install:>`)
 .. image:: https://img.shields.io/appveyor/ci/achillesrasquinha/ccapi.svg?style=flat-square&logo=appveyor
     :target: https://ci.appveyor.com/project/achillesrasquinha/ccapi
 
+=======
+===
+
+Release v\ |version|. (:ref:`Installation <install:>`)
+
+>>>>>>> template/master
 .. image:: https://img.shields.io/coveralls/github/achillesrasquinha/ccapi.svg?style=flat-square
     :target: https://coveralls.io/github/achillesrasquinha/ccapi
 
@@ -27,4 +34,7 @@ Release v\ |version|. (:ref:`Installation <install:>`)
 .. image:: https://img.shields.io/badge/donate-💵-f44336.svg?style=flat-square
     :target: https://paypal.me/achillesrasquinha
 
+<<<<<<< HEAD
 A meta-analysis for meat across geographies.
+=======
+>>>>>>> template/master

@@ -9,11 +9,6 @@ default_context:
   jupyter: "y"
   sqlite: "y"
   pypy: "y"
-<<<<<<< HEAD
-  travis: "n"
-  appveyor: "n"
-=======
->>>>>>> template/master
   description: "A meta-analysis for meat across geographies."
   author: "Rebecca Furbeck, Achilles Rasquinha"
   email: "rafurbeck@gmail.com"

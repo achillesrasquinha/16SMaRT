@@ -3,7 +3,7 @@ FROM  python:3.9
 LABEL maintainer=achillesrasquinha@gmail.com
 
 ENV TERM=xterm-256color \
-    SRA_TOOLKIT_VERSION=2.9.6 \
+    SRA_TOOLKIT_VERSION=3.0.0 \
     MOTHUR_VERSION=1.46.1 \
     VSEARCH_VERSION=2.18.0
 

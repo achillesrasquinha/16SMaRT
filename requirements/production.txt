@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-git+https://github.com/achillesrasquinha/bpyutils.git@develop#egg=bpyutils
+bpyutils
 # git+https://github.com/achillesrasquinha/deeply.git
 multiqc
 cutadapt
@@ -9,7 +8,3 @@ requests
 rpy2
 BioPython
 parallel-fastq-dump
-=======
-
-bpyutils
->>>>>>> template/master

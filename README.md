@@ -1,5 +1,4 @@
 <div align="center">
-<<<<<<< HEAD
   <img src=".github/assets/logo.png" height="200">
   <h1>
       16SMaRT
@@ -14,37 +13,11 @@
     <a href='https://github.com/achillesrasquinha/16SMaRT/actions?query=workflow:"Docker"'>
       <img src="https://img.shields.io/github/workflow/status/achillesrasquinha/16SMaRT/Docker?style=flat-square&label=docker">
     </a>
-=======
-  <img src=".github/assets/logo.png" height="128">
-  <h1>
-      s3mart
-  </h1>
-  <h4></h4>
-</div>
-
-<p align="center">
-    <a href='https://github.com//s3mart//actions?query=workflow:"Continuous Integration"'>
-      <img src="https://img.shields.io/github/workflow/status//s3mart/Continuous Integration?style=flat-square">
-    </a>
-    <a href="https://coveralls.io/github//s3mart">
-      <img src="https://img.shields.io/coveralls/github//s3mart.svg?style=flat-square">
-    </a>
-    <a href="https://pypi.org/project/s3mart/">
-      <img src="https://img.shields.io/pypi/v/s3mart.svg?style=flat-square">
-    </a>
-    <a href="https://pypi.org/project/s3mart/">
-      <img src="https://img.shields.io/pypi/l/s3mart.svg?style=flat-square">
-    </a>
-    <a href="https://pypi.org/project/s3mart/">
-		  <img src="https://img.shields.io/pypi/pyversions/s3mart.svg?style=flat-square">
-	  </a>
->>>>>>> template/master
     <a href="https://git.io/boilpy">
       <img src="https://img.shields.io/badge/made%20with-boilpy-red.svg?style=flat-square">
     </a>
 </p>
 
-<<<<<<< HEAD
 <div align="justify">
 
 **16SMaRT** is a bioinformatics analysis pipeline for 16s rRNA gene sequencing data. 16SMaRT is a "one-click" solution towards performing microbial community analysis of amplicon sequencing data. 16SMaRT aims to be your go-to solution for your next microbiome/metagenomics project. The primary objective of 16SMaRT analysis is to determine what genes are present and in what proportions in comparison across a range of samples. It currently supports single-end or paired-end [Illumina](https://www.illumina.com/) MiSeq data.
@@ -139,65 +112,6 @@ If you use this software in your work, please cite it using the following:
 A comprehensive list of references for the tools used is listed [here](REFERENCES.md).
 
 ## License
-=======
-### Table of Contents
-* [Features](#features)
-* [Quick Start](#quick-start)
-* [Usage](#usage)
-* [License](#license)
-
-### Features
-* Python 2.7+ and Python 3.4+ compatible.
-
-### Quick Start
-
-```shell
-$ pip install s3mart
-```
-
-Check out [installation](docs/source/install.rst) for more details.
-
-### Usage
-
-#### Application Interface
-
-```python
->>> import s3mart
-```
-
-
-#### Command-Line Interface
-
-```console
-$ s3mart
-Usage: s3mart [OPTIONS] COMMAND [ARGS]...
-
-  
-
-Options:
-  --version   Show the version and exit.
-  -h, --help  Show this message and exit.
-
-Commands:
-  help     Show this message and exit.
-  version  Show version and exit.
-```
-
-
-### Docker
-
-Using `s3mart's` Docker Image can be done as follows:
-
-```
-$ docker run \
-    --rm \
-    -it \
-    /s3mart \
-      --verbose
-```
-
-### License
->>>>>>> template/master
 
 This repository has been released under the [MIT License](LICENSE).
 

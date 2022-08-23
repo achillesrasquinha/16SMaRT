@@ -1,16 +1,8 @@
 # imports - module imports
-<<<<<<< HEAD
-from bpyutils.cli.util      import *
-from s3mart.cli.parser     import get_args
-from bpyutils.util._dict    import merge_dict
-from bpyutils.util.types    import get_function_arguments
-=======
 from bpyutils.cli.util     import *
 from s3mart.cli.parser import get_args
 from bpyutils.util._dict   import merge_dict
 from bpyutils.util.types   import get_function_arguments
->>>>>>> template/master
-
 
 def command(fn):
     args    = get_args()

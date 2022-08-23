@@ -1,20 +1,6 @@
 # imports - compatibility imports
 from __future__ import absolute_import
 
-<<<<<<< HEAD
-# imports - standard imports
-import traceback
-
-from s3mart.commands.util 	import cli_format
-from bpyutils.util._dict        import merge_dict
-from bpyutils.util.system   	import touch
-from bpyutils.config			import environment
-from bpyutils import log
-from s3mart 	import cli
-from bpyutils._compat		    import iteritems
-from s3mart.__attr__      	import __name__
-from s3mart.exception      import DependencyNotFoundError
-=======
 from s3mart.commands.util 	import cli_format
 from bpyutils.util._dict        import merge_dict
 from bpyutils.util.system   	import (touch)
@@ -22,10 +8,9 @@ from bpyutils.util.error        import pretty_print_error
 from bpyutils.config			import environment
 from bpyutils.exception         import DependencyNotFoundError
 from bpyutils import log
-from s3mart 	import cli
+from s3mart import cli
 from bpyutils._compat		    import iteritems
 from s3mart.__attr__ import __name__
->>>>>>> template/master
 
 logger   = log.get_logger(level = log.DEBUG)
 
@@ -50,12 +35,7 @@ def command(**ARGUMENTS):
         if not isinstance(e, DependencyNotFoundError):
             cli.echo()
 
-<<<<<<< HEAD
-            traceback_str = traceback.format_exc()
-            cli.echo(traceback_str)
-=======
             pretty_print_error(e)
->>>>>>> template/master
 
             cli.echo(cli_format("""\
 An error occured while performing the above command. This could be an issue with
@@ -76,11 +56,7 @@ def to_params(kwargs):
 
     return params
 
-<<<<<<< HEAD
-def _command(**kwargs):
-=======
 def _command(*args, **kwargs):
->>>>>>> template/master
     a = to_params(kwargs)
 
     if not a.verbose:

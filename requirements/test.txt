@@ -2,15 +2,8 @@ pytest
 pytest-cov
 pytest-xdist
 pytest-sugar
-<<<<<<< HEAD
-tox
-coveralls
-pluggy<1,>=0.12.0
-docstr-coverage
-=======
 pytest-clarity; python_version >= '3.6'
 tox
 coveralls
 pluggy<1,>=0.12.0
 docstr-coverage
->>>>>>> template/master

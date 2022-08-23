@@ -1,10 +1,7 @@
 .PHONY: shell test help requirements
 
-<<<<<<< HEAD
-=======
 # SHELL				   := /bin/bash
 
->>>>>>> template/master
 BASEDIR					= $(shell pwd)
 -include ${BASEDIR}/.env
 
@@ -32,10 +29,7 @@ TOX						= ${VENVBIN}tox
 COVERALLS			   ?= ${VENVBIN}coveralls
 DOCSTR_COVERAGE		   ?= ${VENVBIN}docstr-coverage
 IPYTHON					= ${VENVBIN}ipython
-<<<<<<< HEAD
 PYLINT					= ${VENVBIN}pylint
-=======
->>>>>>> template/master
 
 JUPYTER					= ${VENVBIN}jupyter
 
@@ -46,14 +40,9 @@ SPHINXAUTOBUILD			= ${VENVBIN}sphinx-autobuild
 TWINE					= ${VENVBIN}twine
 
 DOCKER_IMAGE		   ?= ${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}
-<<<<<<< HEAD
-=======
 DOCKER_BUILDKIT		   ?= 1
 
->>>>>>> template/master
-
 SQLITE				   ?= sqlite
-
 
 JOBS				   ?= $(shell $(PYTHON) -c "import multiprocessing as mp; print(mp.cpu_count())")
 PYTHON_ENVIRONMENT      = $(shell $(PYTHON) -c "import sys;v=sys.version_info;print('py%s%s'%(v.major,v.minor))")
@@ -69,11 +58,7 @@ define log
 	$(eval BULLET 	 = "→")
 	$(eval TIMESTAMP = $(shell date +%H:%M:%S))
 
-<<<<<<< HEAD
-	@echo "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}"
-=======
 	@printf "${BULLET} ${$1}[${TIMESTAMP}]${CLEAR} ${BOLD}$2${CLEAR}\n"
->>>>>>> template/master
 endef
 
 define browse
@@ -97,26 +82,19 @@ endif
 info: ## Display Information
 	@echo "Python Environment: ${PYTHON_ENVIRONMENT}"
 
-<<<<<<< HEAD
-=======
 upgrade-tools: # Upgrade pip, setuptools, wheel to latest
 ifneq (${VERBOSE},true)
 	$(eval OUT = > /dev/null)
 endif
 	$(PIP) install --upgrade pip setuptools wheel $(OUT)
 
->>>>>>> template/master
 requirements: ## Build Requirements
 	$(call log,INFO,Building Requirements)
 	@find $(BASEDIR)/requirements -maxdepth 1 -type f | grep -v 'jobs' | xargs awk '{print}' > $(BASEDIR)/requirements-dev.txt
 	@find $(BASEDIR)/requirements -maxdepth 1 -type f | xargs awk '{print}' > $(BASEDIR)/requirements-jobs.txt
 	@cat $(BASEDIR)/requirements/production.txt  > $(BASEDIR)/requirements.txt
 
-<<<<<<< HEAD
-install: clean info requirements ## Install dependencies and module.
-=======
 install: clean info upgrade-tools requirements ## Install dependencies and module.
->>>>>>> template/master
 ifneq (${VERBOSE},true)
 	$(eval OUT = > /dev/null)
 endif
@@ -132,13 +110,6 @@ else
 	$(PIP) install -r $(BASEDIR)/requirements-dev.txt  $(PIP_ARGS) $(OUT)
 endif
 
-<<<<<<< HEAD
-	$(call log,INFO,Installing ${PROJECT} (${ENVIRONMENT}))
-ifeq (${ENVIRONMENT},development)
-	$(PYTHON) setup.py develop $(OUT)
-else
-	$(PYTHON) setup.py install $(OUT)
-=======
 # https://blog.ganssle.io/articles/2021/10/setup-py-deprecated.html#summary
 # setup.py install is deprecated.
 	$(call log,INFO,Installing ${PROJECT} (${ENVIRONMENT}))
@@ -147,7 +118,6 @@ ifeq (${ENVIRONMENT},development)
 	$(PIP) install -e $(BASEDIR) $(OUT)
 else
 	$(PIP) install $(BASEDIR) $(OUT)
->>>>>>> template/master
 endif
 
 	$(call log,SUCCESS,Installation Successful)
@@ -188,13 +158,10 @@ endif
 
 	$(PYTEST) -s -n $(JOBS) --cov $(PROJDIR) $(IARGS) -vv $(ARGS)
 
-<<<<<<< HEAD
-=======
 ifeq (${ENVIRONMENT},development)
 	$(call browse,file:///${BASEDIR}/htmlcov/index.html)
 endif
 
->>>>>>> template/master
 doc-coverage: install ## Display documentation coverage.
 	$(DOCSTR_COVERAGE) $(PROJDIR)
 
@@ -247,30 +214,6 @@ ifeq (${launch},true)
 	$(call browse,file:///${DOCSDIR}/build/index.html)
 endif
 
-<<<<<<< HEAD
-docker-pull:
-	$(call log,INFO,Pulling latest Docker Image)
-
-	for folder in `ls ${BASEDIR}/docker/files`; do \
-		docker pull $(DOCKER_IMAGE):$$folder; \
-	done
-
-	docker pull $(DOCKER_IMAGE):latest
-
-docker-build: clean docker-pull ## Build the Docker Image.
-	$(call log,INFO,Building Docker Image)
-
-	for folder in `ls ${BASEDIR}/docker/files`; do \
-		docker build \
-			--cache-from $(DOCKER_IMAGE):$$folder \
-			--cache-from $(DOCKER_IMAGE):latest \
-			${BASEDIR}/docker/files/$$folder --tag $(DOCKER_IMAGE):$$folder $(DOCKER_BUILD_ARGS) ; \
-	done
-
-	@docker build \
-		--cache-from $(DOCKER_IMAGE):latest \
-		$(BASEDIR) --tag $(DOCKER_IMAGE) $(DOCKER_BUILD_ARGS)
-=======
 docker-pull: ## Pull Latest Docker Images
 	$(call log,INFO,Pulling latest Docker Image)
 
@@ -299,7 +242,6 @@ docker-test: clean ## Testing within Docker Image.
 	$(call log,INFO,Building Docker Image)
 	
 	@docker run --rm -it $(DOCKER_IMAGE) "tox"
->>>>>>> template/master
 
 docker-push: ## Push Docker Image to Registry.
 	@docker push $(DOCKER_IMAGE) --all-tags
@@ -334,18 +276,11 @@ endif
 start: ## Start app.
 	$(PYTHON) -m flask run
 
-<<<<<<< HEAD
 notebooks: ## Launch Notebooks
 	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)
 
 lint: ## Perform Lint
 	$(PYLINT) $(PROJDIR) --output-format=colorized
-=======
-
-notebooks: ## Launch Notebooks
-	$(JUPYTER) notebook --notebook-dir $(NOTEBOOKSDIR) $(ARGS)
-
->>>>>>> template/master
 
 help: ## Show help and exit.
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z_-]+:.*?## / {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)

@@ -70,17 +70,9 @@ __name__                    = "s3mart"
 __command__                 = "s3mart"
 __version__                 = read(osp.join(pardir(__file__), "VERSION"))
 __build__                   = get_revision(pardir(__file__, 2), short = True, raise_err = False)
-<<<<<<< HEAD
 __author__                  = "Rebecca Furbeck, Achilles Rasquinha"
 __email__                   = "rafurbeck@gmail.como"
 __description__             = "A meta-analysis for meat across geographies."
 __keywords__                = ['meta', 'analysis', 'geo', 'meat']
-__url__                     = "1"
-=======
-__author__                  = ""
-__email__                   = ""
-__description__             = ""
-__keywords__                = []
-__url__                     = "https://github.com//s3mart"
->>>>>>> template/master
+__url__                     = "https://github.com/achillesrasquinha/16SMaRT"
 __license__                 = "MIT License"

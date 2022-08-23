@@ -10,11 +10,19 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_REGISTRY: ghcr.io
   DOCKER_USERNAME: ${{ github.actor }}
+<<<<<<< HEAD
   PROJECT: s3mart
 
 jobs:
   build-docker:
     name: Build Docker
+=======
+  PROJECT: ${{ github.event.repository.name }}
+
+jobs:
+  build-docker:
+    name: Build and Push
+>>>>>>> template/master
     runs-on: ubuntu-latest
       
     steps:
@@ -25,15 +33,19 @@ jobs:
       - name: Login to Registry
         run: |
           echo $GITHUB_TOKEN | docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME --password-stdin
+<<<<<<< HEAD
       - name: Pull latest image
         run: |
           make docker-pull
+=======
+>>>>>>> template/master
       - name: Build Image
         run: |
           make docker-build
       - name: Push Image
         run: |
           make docker-push
+<<<<<<< HEAD
 
   build-singularity:
     needs:
@@ -60,3 +72,5 @@ jobs:
              ${DOCKER_IMAGE}
 
           singularity push /output/${SINGULARITY_IMAGE} oras://${DOCKER_REGISTRY}/${DOCKER_USERNAME}/${PROJECT}:singularity
+=======
+>>>>>>> template/master

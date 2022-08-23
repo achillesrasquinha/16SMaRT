@@ -1,6 +1,12 @@
 # pylint: disable=E0602
 
+<<<<<<< HEAD
 import os.path as osp
+=======
+import sys
+import os.path as osp
+import glob
+>>>>>>> template/master
 import io
 import shutil
 
@@ -9,6 +15,11 @@ from setuptools import setup, find_packages
 from setuptools.command.develop import develop
 from setuptools.command.install import install
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> template/master
 # import pip
 
 # try:
@@ -27,11 +38,28 @@ def parse_requirements(filename, session = None):
             self.req = name
             
     def sanitize_line(line):
+<<<<<<< HEAD
         line = line.strip()
         return line
 
     def check_line(line):
         return line and not line.startswith("#") and not line.startswith("git")
+=======
+        if "git+" in line:
+            line = line.replace("git+", "")
+
+            if "#egg=" in line:
+                _, name = line.split("#egg=")
+                name    = name.strip()
+                line    = "%s @ %s" % (name, line)
+
+        line = line.strip()
+
+        return line
+
+    def check_line(line):
+        return line and not line.startswith("#")
+>>>>>>> template/master
 
     return [
         FakeRequirement(sanitize_line(line)) for line in open(filename) if check_line(line)
@@ -97,7 +125,11 @@ class InstallCommand(install):
         install.run(self)
         remove_cache()
         
+<<<<<<< HEAD
 setup(
+=======
+metadata = dict(
+>>>>>>> template/master
     name                 = PKGINFO["__name__"],
     version              = PKGINFO["__version__"],
     url                  = PKGINFO["__url__"],
@@ -150,4 +182,12 @@ setup(
         "install": InstallCommand,
         "develop": DevelopCommand
     }
+<<<<<<< HEAD
 )
+=======
+)
+
+
+
+setup(**metadata)
+>>>>>>> template/master

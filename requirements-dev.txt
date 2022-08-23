@@ -1,10 +1,15 @@
 sphinx
 recommonmark
 sphinx-autobuild
+<<<<<<< HEAD
+=======
+
+>>>>>>> template/master
 ipykernel
 nbsphinx
 pylint
 autopep8
+<<<<<<< HEAD
 pytest
 pytest-cov
 pytest-xdist
@@ -23,6 +28,8 @@ requests
 rpy2
 BioPython
 parallel-fastq-dump
+=======
+>>>>>>> template/master
 pipenv
 jedi<0.18
 ipython
@@ -35,3 +42,18 @@ twine
 jupyter
 
 Flask
+<<<<<<< HEAD
+=======
+pytest
+pytest-cov
+pytest-xdist
+pytest-sugar
+pytest-clarity; python_version >= '3.6'
+tox
+coveralls
+pluggy<1,>=0.12.0
+docstr-coverage
+
+bpyutils
+git+https://github.com/achillesrasquinha/deeply.git@develop#egg=deeply
+>>>>>>> template/master

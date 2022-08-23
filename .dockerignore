@@ -1,1 +1,13 @@
+<<<<<<< HEAD
 .git
+=======
+.git
+.venv
+.vscode
+ci
+docker/s3mart
+.env
+.gitignore
+.releasrc
+Makefile
+>>>>>>> template/master

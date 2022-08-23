@@ -3,6 +3,7 @@ name: Model CI
 on: [push, pull_request]
 
 env:
+<<<<<<< HEAD
   # ci variables
   SRA_TOOLKIT_VERSION: "2.9.6"
   TRIM_GALORE_VERSION: "0.6.6"
@@ -16,12 +17,20 @@ env:
   
   # system variables
 
+=======
+  PIP_USE_DEPRECATED: "legacy-resolver"
+
+>>>>>>> template/master
 jobs:
   train:
     name: Train
     runs-on: ubuntu-latest
     container:
+<<<<<<< HEAD
       image: ghcr.io/achillesrasquinha/s3mart:base
+=======
+      image: ghcr.io/achillesrasquinha/dl
+>>>>>>> template/master
 
     steps:
       - uses: actions/checkout@v2
@@ -31,6 +40,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements-dev.txt
+<<<<<<< HEAD
           pip install -e .
       - name: Run Pipeline
         run: |
@@ -40,3 +50,9 @@ jobs:
         with:
           name: data
           path: /data
+=======
+          python setup.py develop
+      - name: Run Pipeline
+        run: |
+          bpyutils --run-ml s3mart
+>>>>>>> template/master

@@ -7,6 +7,8 @@ ENV TERM=xterm-256color \
     MOTHUR_VERSION=1.48.0 \
     VSEARCH_VERSION=2.18.0
 
+COPY ./user-settings.mkfg $HOME/.ncbi/user-settings.mkfg
+
 RUN apt-get update && \
     # SRA Toolkit
     wget -nv https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz && \

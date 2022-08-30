@@ -2,7 +2,7 @@ FROM ghcr.io/achillesrasquinha/s3mart:base
 
 ARG DEVELOPMENT=false
 
-ENV S3MART_PATH=/usr/local/src/s3mart \
+ENV S3MART_PATH=/s3mart \
     WORKSPACEDIR=/work
 
 WORKDIR $S3MART_PATH

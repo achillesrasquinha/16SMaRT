@@ -4,7 +4,7 @@ import os.path as osp
 import json
 import sys
 
-R_REPO      = "https://cloud.r-project.org"
+R_REPO = "https://cloud.r-project.org"
 
 def install_r_packages(path_packages):
     path_packages = osp.abspath(path_packages)

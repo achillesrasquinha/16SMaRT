@@ -7,7 +7,7 @@ ENV TERM=xterm-256color \
     MOTHUR_VERSION=1.48.0 \
     VSEARCH_VERSION=2.18.0
 
-COPY ./user-settings.mkfg $HOME/.ncbi/user-settings.mkfg
+COPY ./user-settings.mkfg /root/.ncbi/user-settings.mkfg
 
 RUN apt-get update && \
     # SRA Toolkit

@@ -42,6 +42,7 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
                 logger.success("Successfully prefeteched SRA %s." % sra)
 
                 logger.info("Validating SRA %s..." % sra)
+                sra_dir = osp.join(sra_dir, sra)
                 logger.info("Performing vdb-validate for SRA %s in directory %s." % (sra, sra_dir))
                 code = shell("vdb-validate {dir}".format(dir = sra_dir))
 

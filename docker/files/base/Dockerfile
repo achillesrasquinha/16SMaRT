@@ -4,7 +4,7 @@ LABEL maintainer=achillesrasquinha@gmail.com
 
 ENV TERM=xterm-256color \
     SRA_TOOLKIT_VERSION=3.0.0 \
-    MOTHUR_VERSION=1.46.1 \
+    MOTHUR_VERSION=1.48.0 \
     VSEARCH_VERSION=2.18.0
 
 RUN apt-get update && \

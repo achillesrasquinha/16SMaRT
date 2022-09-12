@@ -1,6 +1,8 @@
 name: Model CI
 
 on:
+  push:
+  pull:
   workflow_run:
     workflows: ["Docker"]
     branches: ["develop"]

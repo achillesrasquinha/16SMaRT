@@ -33,6 +33,8 @@ RUN apt-get update && \
     ./configure CFLAGS="-O3" CXXFLAGS="-O3" && \
     make && \
     make install && \
+    mkdir -p /root/.ncbi && \
+    vdb-config --report-cloud-identity yes && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \

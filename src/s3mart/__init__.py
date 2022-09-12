@@ -19,7 +19,8 @@ from s3mart.__attr__ import (
 
     __author__
 )
-from s3mart.config      import PATH, DEFAULT
+from s3mart.config      import PATH
+from s3mart.const       import DEFAULT
 from s3mart.__main__    import main
 
 from bpyutils.cache       import Cache

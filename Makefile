@@ -1,6 +1,6 @@
 .PHONY: shell test help requirements
 
-# SHELL				   := /bin/bash
+SHELL				   := /bin/bash
 
 BASEDIR					= $(shell pwd)
 -include ${BASEDIR}/.env

@@ -10,7 +10,7 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_REGISTRY: ghcr.io
   DOCKER_USERNAME: ${{ github.actor }}
-  PROJECT: ${{ github.event.repository.name }}
+  PROJECT: s3mart
 
 jobs:
   build-docker:

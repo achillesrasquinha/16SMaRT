@@ -1,0 +1,10 @@
+bpyutils
+# git+https://github.com/achillesrasquinha/deeply.git
+multiqc
+cutadapt
+jinja2
+tqdm
+requests
+rpy2
+BioPython
+parallel-fastq-dump

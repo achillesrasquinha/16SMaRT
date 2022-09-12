@@ -21,7 +21,7 @@ jobs:
     name: Train
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/achillesrasquinha/s3mart:base
+      image: ghcr.io/achillesrasquinha/s3mart:latest
 
     steps:
       - uses: actions/checkout@v2

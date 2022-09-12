@@ -228,7 +228,7 @@ docker-pull: ## Pull Latest Docker Images
 docker-build: clean docker-pull requirements ## Build the Docker Image.
 	$(call log,INFO,Building Docker Image)
 
-	@[[ -f "${BASEDIR}/docker-compose.yml" ]] && docker-compose build
+# @[[ -f "${BASEDIR}/docker-compose.yml" ]] && docker-compose build
 
 	if [[ -d "${BASEDIR}/docker/files" ]]; then \
 		for folder in `ls ${BASEDIR}/docker/files`; do \

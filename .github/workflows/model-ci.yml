@@ -2,11 +2,11 @@ name: Model CI
 
 on:
   push:
-  workflow_run:
-    workflows: ["Docker"]
-    branches: ["develop"]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: ["Docker"]
+  #   branches: ["develop"]
+  #   types:
+  #     - completed
 
 env:
   # ci variables

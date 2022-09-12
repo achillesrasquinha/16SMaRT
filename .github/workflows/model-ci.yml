@@ -42,7 +42,7 @@ jobs:
           pip install -e .
       - name: Run Pipeline
         run: |
-          vdb-config --interactive & sleep 3; kill $!
+          vdb-config --interactive & sleep 3;
           bpyutils --run-ml s3mart -p "check=True; data_dir=/data; jobs=32; minimal_output=True"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v2

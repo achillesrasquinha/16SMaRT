@@ -18,14 +18,14 @@ logger = log.get_logger(name = NAME)
 def get_fastq(meta, data_dir = None, *args, **kwargs):
     sra, layout = meta["sra"], meta["layout"]
 
-    jobs        = kwargs.get("jobs", settings.get("jobs"))
-    data_dir    = get_data_dir(NAME, data_dir)
+    jobs = kwargs.get("jobs", settings.get("jobs"))
+    data_dir = get_data_dir(NAME, data_dir)
 
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
     
-    fastqc      = kwargs.get("fastqc", True)
+    fastqc = kwargs.get("fastqc", True)
 
-    fastqc_dir  = osp.join(data_dir, "fastqc")
+    fastqc_dir = osp.join(data_dir, "fastqc")
     makedirs(fastqc_dir, exist_ok = True)
 
     with ShellEnvironment(cwd = data_dir) as shell:

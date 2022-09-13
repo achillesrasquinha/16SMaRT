@@ -61,7 +61,7 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
     data_dir = get_data_dir(NAME, data_dir)
     jobs     = kwargs.get("jobs", settings.get("jobs"))
 
-    fastqc   = kwargs.get("fastqc", True)
+    fastqc   = kwargs.pop("fastqc", True)
 
     logger.info("Data directory at %s." % data_dir)
 

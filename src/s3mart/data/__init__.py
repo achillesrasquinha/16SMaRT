@@ -6,6 +6,7 @@ from s3mart.config  import PATH
 from s3mart import settings, __name__ as NAME
 
 from bpyutils.util._csv    import read as read_csv
+from bpyutils.util.array   import group_by
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.types   import build_fn
 from bpyutils.util.string  import check_url, safe_decode
@@ -48,32 +49,39 @@ def get_input_data(input = None, data_dir = None, *args, **kwargs):
     else:
         input = osp.join(PATH["DATA"], "sample.csv")
 
-    data = []
+    groups = {}
 
     if osp.isfile(input):
-        data = read_csv(input)
+        data   = read_csv(input)
+        groups = group_by(data, "group")
 
-    return data_dir, data
+    return data_dir, groups
+
+def get_fastq_group(group, data_dir = None, *args, **kwargs):
+    jobs = kwargs.get("jobs", settings.get("jobs"))
+    fastqc = kwargs.pop("fastqc", True)
+
+    with parallel.no_daemon_pool(processes = jobs) as pool:
+        length = len(group)
+
+        function = build_fn(get_fastq, data_dir = data_dir, fastqc = fastqc, *args, **kwargs)
+        results  = pool.imap(function, group)
+
+        list(tq.tqdm(results, total = length))
 
 def get_data(input = None, data_dir = None, *args, **kwargs):
-    data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
+    data_dir, groups = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
 
     data_dir = get_data_dir(NAME, data_dir)
     jobs     = kwargs.get("jobs", settings.get("jobs"))
 
-    fastqc   = kwargs.pop("fastqc", True)
-
     logger.info("Data directory at %s." % data_dir)
 
-    if data:
+    if groups:
         logger.info("Fetching FASTQ files...")
         with parallel.no_daemon_pool(processes = jobs) as pool:
-            length   = len(data)
-
-            function = build_fn(get_fastq, data_dir = data_dir, fastqc = fastqc, *args, **kwargs)
-            results  = pool.imap(function, data)
-
-            list(tq.tqdm(results, total = length))
+            function = build_fn(get_fastq_group, data_dir = data_dir, *args, **kwargs)
+            list(pool.imap(function, groups))
 
 def preprocess_data(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)

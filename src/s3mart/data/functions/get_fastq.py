@@ -32,7 +32,7 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
         sra_dir = osp.join(data_dir, sra)
 
         logger.info("Checking if SRA %s is prefetched..." % sra)
-        path_sra = osp.join(sra_dir, "%s.sra" % sra)
+        path_sra = osp.join(sra_dir, sra, "%s.sra" % sra)
 
         if not osp.exists(path_sra):
             logger.info("Performing prefetch for SRA %s in directory %s." % (sra, sra_dir))

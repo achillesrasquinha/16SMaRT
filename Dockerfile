@@ -9,10 +9,7 @@ WORKDIR $S3MART_PATH
 
 COPY ./docker/entrypoint.sh /entrypoint.sh
 
-COPY ./Rpackages.json /Rpackages.json
-COPY ./script/r-setup.py /r-setup.py
-RUN pip install rpy2 && \
-    python /r-setup.py /Rpackages.json
+RUN python /r-setup.py /Rpackages.json
 
 COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt

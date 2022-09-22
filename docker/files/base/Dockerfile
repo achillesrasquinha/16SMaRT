@@ -9,6 +9,9 @@ ENV TERM=xterm-256color \
 
 COPY ./user-settings.mkfg /root/.ncbi/user-settings.mkfg
 
+COPY ./Rpackages.json /Rpackages.json
+COPY ./script/r-setup.py /r-setup.py
+
 RUN apt-get update && \
     # SRA Toolkit
     wget -nv https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz && \
@@ -35,6 +38,8 @@ RUN apt-get update && \
     make install && \
     mkdir -p /root/.ncbi && \
     vdb-config --report-cloud-identity yes && \
+    pip install rpy2 && \
+    python /r-setup.py /Rpackages.json \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \

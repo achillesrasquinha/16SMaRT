@@ -1,14 +1,8 @@
 {
     "dependencies": {
-        "ggplot2": "",
-        "plotly": "",
-        "sf": "",
-        "dplyr": "",
-        "vegan": ""
+        
     },
     "biocDependencies": {
-        "phyloseq": "",
-        "ggtree": "",
-        "treeio": ""
+        
     }
 }

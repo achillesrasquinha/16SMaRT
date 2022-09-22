@@ -206,6 +206,10 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
                         "min_length": sample["min_length"],
                         "max_length": sample["max_length"]
                     })
+                else:
+                    logger.warn("No FASTQ files found for group %s of type (layout: %s, trimmed: %s)" % (group, layout, trim_type))
+            else:
+                logger.warn("No FASTQ files found for group %s" % group)
 
     if mothur_configs:
         logger.info("Filtering files using mothur using %s jobs...." % jobs)

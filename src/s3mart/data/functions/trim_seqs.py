@@ -168,6 +168,7 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
 
     study_group    = data
 
+    logger.info("Found %s groups." % len(study_group))
     logger.info("Building configs for mothur...")
 
     for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):

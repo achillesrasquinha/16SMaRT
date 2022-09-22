@@ -12,7 +12,7 @@ from bpyutils.util.types   import build_fn
 from bpyutils.util.string  import check_url, safe_decode
 from bpyutils.util.system  import write, read, makedirs, get_files, remove
 from bpyutils import parallel, log, request as req
-from bpyutils._compat import iteritems
+from bpyutils._compat import iteritems, itervalues
 
 from s3mart.data.functions import (
     get_fastq,
@@ -81,7 +81,7 @@ def get_data(input = None, data_dir = None, *args, **kwargs):
         logger.info("Fetching FASTQ files...")
         with parallel.no_daemon_pool(processes = jobs) as pool:
             function = build_fn(get_fastq_group, data_dir = data_dir, *args, **kwargs)
-            list(pool.imap(function, groups))
+            list(pool.imap(function, itervalues(groups)))
 
 def preprocess_data(input = None, data_dir = None, *args, **kwargs):
     data_dir, data = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
@@ -89,11 +89,11 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
 
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
 
-    # fastqc   = kwargs.get("fastqc",  True)
-    multiqc  = kwargs.get("multiqc", True)
+    # fastqc  = kwargs.get("fastqc",  True)
+    multiqc = kwargs.get("multiqc", True)
 
     if multiqc:
-        check_quality(data_dir = data_dir, fastqc = False, multiqc = multiqc, *args, **kwargs)
+        check_quality(data_dir = data_dir, multiqc = multiqc, *args, **kwargs)
 
     logger.info("Attempting to trim FASTQ files...")
     trim_seqs(data_dir = data_dir, data = data, *args, **kwargs)

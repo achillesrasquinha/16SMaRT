@@ -80,6 +80,8 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
             with parallel.pool(processes = jobs) as pool:
                 function_ = build_fn(fastqc_check, output_dir = fastqc_dir, threads = jobs)
                 list(pool.imap(function_, fastq_files))
+        else:
+            logger.warn("Skipping FASTQC quality check.")
 
         if minimal_output:
             remove(path_sra)

@@ -230,11 +230,11 @@ docker-build: clean docker-pull requirements ## Build the Docker Image.
 
 # @[[ -f "${BASEDIR}/docker-compose.yml" ]] && docker-compose build
 
-	if [[ -d "${BASEDIR}/docker/files" ]]; then \
-		for folder in `ls ${BASEDIR}/docker/files`; do \
-			docker build ${BASEDIR}/docker/files/$$folder --tag $(DOCKER_IMAGE):$$folder $(DOCKER_BUILD_ARGS) ; \
-		done \
-	fi
+# if [[ -d "${BASEDIR}/docker/files" ]]; then \
+# 	for folder in `ls ${BASEDIR}/docker/files`; do \
+# 		docker build ${BASEDIR}/docker/files/$$folder --tag $(DOCKER_IMAGE):$$folder $(DOCKER_BUILD_ARGS) ; \
+# 	done \
+# fi
 
 	@[[ -f "${BASEDIR}/Dockerfile" ]] && docker build $(BASEDIR) --tag $(DOCKER_IMAGE) $(DOCKER_BUILD_ARGS)
 

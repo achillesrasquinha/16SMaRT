@@ -7,7 +7,7 @@ from s3mart.config  import PATH
 from s3mart import settings, __name__ as NAME
 
 from bpyutils.util.ml      import get_data_dir
-from bpyutils.util.array   import chunkify, group_by
+from bpyutils.util.array   import chunkify, group_by, flatten
 from bpyutils.util._dict   import dict_from_list
 from bpyutils.util.types   import lmap, lfilter, build_fn
 from bpyutils.util.system  import (
@@ -158,8 +158,13 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     logger.info("Storing trimmed FASTQ files at %s." % trimmed_dir)
 
     mothur_configs = [ ]
+    
+    for group, values in iteritems(data):
+        for i, value in enumerate(values):
+            values[i]["group"] = group
+        data[group] = values
 
-    study_group    = group_by(data, "group")
+    study_group    = data
 
     logger.info("Building configs for mothur...")
 

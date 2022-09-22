@@ -9,6 +9,7 @@ WORKDIR $S3MART_PATH
 
 COPY ./docker/entrypoint.sh /entrypoint.sh
 
+COPY ./Rpackages.json /Rpackages.json
 RUN python /r-setup.py /Rpackages.json
 
 COPY ./requirements.txt /requirements.txt

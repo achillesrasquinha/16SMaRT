@@ -1,4 +1,4 @@
-git+https://github.com/achillesrasquinha/bpyutils.git@develop#egg=bpyutils
+# git+https://github.com/achillesrasquinha/bpyutils.git@develop#egg=bpyutils
 # git+https://github.com/achillesrasquinha/deeply.git
 multiqc
 cutadapt

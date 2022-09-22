@@ -89,6 +89,7 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
                 config["oligos"] = oligos_file
 
             mothur_file = osp.join(tmp_dir, "script")
+            
             build_mothur_script(
                 template = "mothur/trim",
                 output   = mothur_file,
@@ -97,6 +98,7 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
                 maxambig = settings.get("maximum_ambiguity"),
                 maxhomop = settings.get("maximum_homopolymers"),
                 pdiffs   = settings.get("primer_difference"),
+                proccessors = jobs,
                 **config
             )
 

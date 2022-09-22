@@ -1,10 +1,12 @@
 import os.path as osp
+import json
 
 import tqdm as tq
 
 from s3mart.config  import PATH
 from s3mart import settings, __name__ as NAME
 
+from bpyutils.util._dict   import autodict
 from bpyutils.util._csv    import read as read_csv
 from bpyutils.util.array   import group_by
 from bpyutils.util.ml      import get_data_dir
@@ -15,47 +17,20 @@ from bpyutils import parallel, log, request as req
 from bpyutils._compat import iteritems, itervalues
 
 from s3mart.data.functions import (
+    get_input_data,
     get_fastq,
     check_quality,
     trim_seqs,
     merge_seqs,
     preprocess_seqs,
     build_plots,
-    patch_tree_file
+    patch_tree_file,
 )
 from s3mart.data.util  import install_silva
 
 logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
-
-def get_input_data(input = None, data_dir = None, *args, **kwargs):
-    data_dir = get_data_dir(NAME, data_dir)
-
-    if input:
-        if check_url(input, raise_err = False):
-            response = req.get(input)
-            response.raise_for_status()
-
-            content  = response.content
-
-            input    = osp.join(data_dir, "input.csv")
-            write(input, safe_decode(content))
-        
-        input = osp.abspath(input)
-
-        if osp.isdir(input):
-            data_dir = input
-    else:
-        input = osp.join(PATH["DATA"], "sample.csv")
-
-    groups = {}
-
-    if osp.isfile(input):
-        data   = read_csv(input)
-        groups = group_by(data, "group")
-
-    return data_dir, groups
 
 def get_fastq_group(group, data_dir = None, *args, **kwargs):
     jobs = kwargs.get("jobs", settings.get("jobs"))
@@ -68,6 +43,50 @@ def get_fastq_group(group, data_dir = None, *args, **kwargs):
         results  = pool.imap(function, group)
 
         list(tq.tqdm(results, total = length))
+
+def check_data(input = None, data_dir = None, *args, **kwargs):
+    data_dir, groups = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
+
+    data_dir = get_data_dir(NAME, data_dir)
+
+    logger.info("Checking data integrity...")
+
+    stats = autodict()
+
+    global_total_sra = 0
+    global_total_sra_available = 0
+
+    for group, data in iteritems(groups):
+        n_sra_success = 0
+        total_sra     = len(data)
+
+        for d in data:
+            sra_id = d["sra"]
+
+            path_sra_fastq = osp.join(data_dir, sra_id)
+            files = get_files(path_sra_fastq, "*.fastq")
+
+            if not files:
+                logger.warning("No FASTQ files found for SRA ID: %s" % sra_id)
+                stats["sra"][sra_id]["fastq"] = False
+            else:
+                stats["sra"][sra_id]["fastq"] = files
+                n_sra_success += 1
+
+        stats["group"][group]["sra"] = {
+            "total": total_sra,
+            "available": n_sra_success
+        }
+
+        global_total_sra += total_sra
+        global_total_sra_available += n_sra_success
+
+    stats["global"] = {
+        "sra": global_total_sra,
+        "available": global_total_sra_available
+    }
+
+    write(osp.join(data_dir, "stats.json"), json.dumps(stats), force = True)
 
 def get_data(input = None, data_dir = None, *args, **kwargs):
     data_dir, groups = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
@@ -89,11 +108,13 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
 
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
 
-    # fastqc  = kwargs.get("fastqc",  True)
-    multiqc = kwargs.get("multiqc", True)
+    fastqc  = kwargs.get("fastqc",  True)
+    multiqc = fastqc and kwargs.get("multiqc", True)
 
     if multiqc:
         check_quality(data_dir = data_dir, multiqc = multiqc, *args, **kwargs)
+    else:
+        logger.warning("MultiQC is disabled. Skipping quality check.")
 
     logger.info("Attempting to trim FASTQ files...")
     trim_seqs(data_dir = data_dir, data = data, *args, **kwargs)

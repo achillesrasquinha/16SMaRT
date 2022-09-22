@@ -22,6 +22,7 @@ from bpyutils._compat import itervalues, iteritems
 from bpyutils import parallel, log
 
 from s3mart.data.util import build_mothur_script
+from s3mart.data.functions.get_input_data import get_input_data
 
 logger = log.get_logger(name = NAME)
 
@@ -153,8 +154,15 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
         remove(*files)
 
 def trim_seqs(data_dir = None, data = [], *args, **kwargs):
-    data_dir = get_data_dir(NAME, data_dir = data_dir)
-    jobs     = kwargs.get("jobs", settings.get("jobs"))
+    input = kwargs.pop("input", None)
+
+    data_dir, data_input = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
+    data_dir = get_data_dir(NAME, data_dir)
+
+    if not data:
+        data = data_input
+
+    jobs = kwargs.get("jobs", settings.get("jobs"))
 
     trimmed_dir = makedirs(osp.join(data_dir, _DATA_DIR_NAME_TRIMMED), exist_ok = True)
     logger.info("Storing trimmed FASTQ files at %s." % trimmed_dir)
@@ -162,11 +170,11 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     mothur_configs = [ ]
     
     for group, values in iteritems(data):
-        for i, value in enumerate(values):
+        for i, _ in enumerate(values):
             values[i]["group"] = group
         data[group] = values
 
-    study_group    = data
+    study_group = data
 
     logger.info("Found %s groups." % len(study_group))
     logger.info("Building configs for mothur...")

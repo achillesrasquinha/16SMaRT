@@ -5,7 +5,7 @@ make.contigs(file=current{% if oligos %}, oligos={{ oligos }}{% endif %}, proces
 fastq.info(file={{ fastq_file }}, pacbio=T)
 {% endif %}
 
-{% if trim_type == "FALSE" %}
+{% if trim_type == "false" %}
 trim.seqs(fasta=current{% if layout == "single" %}, qfile=current{% if oligos %}, oligos={{ oligos }}{% endif %}{% if trim_type == "false" and pdiffs is defined %}, pdiffs={{ pdiffs }}{% endif %}{% endif %}, qaverage={{ qaverage }}, processors={{ processors }})
 {% endif %}
 

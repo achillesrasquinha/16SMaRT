@@ -178,7 +178,7 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     logger.info("Found %s groups." % len(study_group))
     logger.info("Building configs for mothur...")
 
-    for layout, trim_type in itertools.product(("paired", "single"), ("TRUE", "FALSE")):
+    for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):
         for group, data in iteritems(study_group):
             if len(data):
                 filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)

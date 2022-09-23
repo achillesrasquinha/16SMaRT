@@ -12,6 +12,8 @@ env:
   DOCKER_USERNAME: ${{ github.actor }}
   PROJECT: s3mart
 
+  DOCKER_BUILD_BASE_IMAGES: true
+
 jobs:
   build-docker:
     name: Build and Push

@@ -166,7 +166,7 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     trimmed_dir = makedirs(osp.join(data_dir, _DATA_DIR_NAME_TRIMMED), exist_ok = True)
     logger.info("Storing trimmed FASTQ files at %s." % trimmed_dir)
 
-    mothur_configs = [ ]
+    mothur_configs = []
     
     for group, values in iteritems(data):
         for i, _ in enumerate(values):

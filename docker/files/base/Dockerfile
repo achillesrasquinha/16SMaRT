@@ -40,9 +40,9 @@ RUN apt-get update && \
     vdb-config --report-cloud-identity yes && \
     pip install rpy2 && \
     python /r-setup.py /Rpackages.json && \
-    wget http://opengene.org/fastp/fastp && \
-    chmod +x ./fastp && \
-    mv ./fastp /usr/local/bin && \
+    wget -nv http://opengene.org/fastp/fastp -O $HOME/fastp && \
+    chmod +x $HOME/fastp && \
+    mv $HOME/fastp /usr/local/bin && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \

@@ -1,4 +1,4 @@
-import os.path as osp
+import os, os.path as osp
 import itertools
 
 import tqdm as tq
@@ -157,7 +157,6 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     input = kwargs.pop("input", None)
 
     data_dir, data_input = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
-    data_dir = get_data_dir(NAME, data_dir)
 
     if not data:
         data = data_input
@@ -188,7 +187,11 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
                 for d in filtered:
                     sra_id  = d["sra"]
                     sra_dir = osp.join(data_dir, sra_id)
-                    fasta_files = get_files(sra_dir, "*.fastq")
+                    
+                    # fasta_files = get_files(sra_dir, "*.fastq")
+                    fasta_files = os.listdir(sra_dir)
+                    fasta_files = [osp.join(sra_dir, fasta_file) for fasta_file in fasta_files
+                        if fasta_file.endswith(".fastq")]
 
                     files += fasta_files
 

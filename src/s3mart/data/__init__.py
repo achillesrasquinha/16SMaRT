@@ -56,7 +56,9 @@ def check_data(input = None, data_dir = None, *args, **kwargs):
     global_total_sra = 0
     global_total_sra_available = 0
 
-    for group, data in iteritems(groups):
+    n_groups = len(groups)
+
+    for group, data in tq.tqdm(iteritems(groups), total = n_groups, desc = "Checking data integrity"):
         n_sra_success = 0
         total_sra     = len(data)
 
@@ -70,7 +72,10 @@ def check_data(input = None, data_dir = None, *args, **kwargs):
                 logger.warning("No FASTQ files found for SRA ID: %s" % sra_id)
                 stats["sra"][sra_id]["fastq"] = False
             else:
-                stats["sra"][sra_id]["fastq"] = files
+                stats["sra"][sra_id]["fastq"] = [{
+                    "path": path,
+                    "size": osp.getsize(path),
+                } for path in files]
                 n_sra_success += 1
 
         stats["group"][group]["sra"] = {

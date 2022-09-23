@@ -178,7 +178,7 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     logger.info("Found %s groups." % len(study_group))
     logger.info("Building configs for mothur...")
 
-    for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):
+    for layout, trim_type in itertools.product(("paired", "single"), ("TRUE", "FALSE")):
         for group, data in iteritems(study_group):
             if len(data):
                 filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)
@@ -187,7 +187,7 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
                 for d in filtered:
                     sra_id  = d["sra"]
                     sra_dir = osp.join(data_dir, sra_id)
-                    
+
                     # fasta_files = get_files(sra_dir, "*.fastq")
                     fasta_files = os.listdir(sra_dir)
                     fasta_files = [osp.join(sra_dir, fasta_file) for fasta_file in fasta_files

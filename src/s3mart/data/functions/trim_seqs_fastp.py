@@ -245,12 +245,17 @@ def trim_seqs_fastp(data_dir = None, data = [], *args, **kwargs):
                     sra_id  = d["sra"]
                     sra_dir = osp.join(data_dir, sra_id)
 
-                    # fasta_files = get_files(sra_dir, "*.fastq")
-                    fasta_files = os.listdir(sra_dir)
-                    fasta_files = [osp.join(sra_dir, fasta_file) for fasta_file in fasta_files
-                        if fasta_file.endswith(".fastq")]
+                    logger.info("Searching FASTQ files in directory %s..." % sra_dir)
 
-                    files += fasta_files
+                    fasta_files = get_files(sra_dir, "*.fastq")
+                    fasta_files_map = dict_from_list(fasta_files)
+                    
+                    for fasta_file in fasta_files:
+                        trimmed = osp.join(sra_dir, "%s.trimmed.fastq" % sra_id)
+                        if trimmed not in fasta_files_map:
+                            files.append(fasta_file)
+                        else:
+                            logger.warn("SRA %s already trimmed." % sra_id)
 
                 if files:
                     logger.info("Filtering FASTQ files for group %s of type (layout: %s, trimmed: %s)" % (group, layout, trim_type))

@@ -25,6 +25,7 @@ from s3mart.data.functions import (
     preprocess_seqs,
     build_plots,
     patch_tree_file,
+    trim_seqs_fastp
 )
 from s3mart.data.util  import install_silva
 

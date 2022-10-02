@@ -7,21 +7,21 @@ from s3mart.config  import PATH
 from s3mart import settings, __name__ as NAME
 
 from bpyutils.util.ml      import get_data_dir
-from bpyutils.util.array   import chunkify, group_by, flatten
+from bpyutils.util.array   import chunkify
 from bpyutils.util._dict   import dict_from_list
 from bpyutils.util.types   import lmap, lfilter, build_fn
 from bpyutils.util.system  import (
     ShellEnvironment,
     makedirs,
     make_temp_dir, get_files, copy, write,
-    remove
+    remove,
+    read
 )
 from bpyutils.util.string    import get_random_str
 from bpyutils.exception      import PopenError
 from bpyutils._compat import itervalues, iteritems
 from bpyutils import parallel, log
 
-from s3mart.data.util import build_mothur_script
 from s3mart.data.functions.get_input_data import get_input_data
 
 logger = log.get_logger(name = NAME)
@@ -82,65 +82,84 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
                 config["fastq_file"] = fastq_file
                 config["group"] = osp.join(tmp_dir, "%s.group" % prefix)
 
-            if trim_type == "false":
-                oligos_file = osp.join(tmp_dir, "primers.oligos")
-                oligos_data = "primer %s %s %s" % (primer_f, primer_r, group)
-                write(oligos_file, oligos_data)
+            if layout == "paired":
+                pass
+                # config["forward_fastq"] = osp.join(tmp_dir, "%s_1.fastq" % prefix)
+                # config["reverse_fastq"] = osp.join(tmp_dir, "%s_2.fastq" % prefix)
 
-                config["oligos"] = oligos_file
+            # if trim_type == "false":
+            #     primers_fasta_file = osp.join(tmp_dir, "primers.fasta")
+            #     primers_fasta_data = ">forward_primer\n%s\n>reverse_primer\n%s" % (primer_f, primer_r)
+            #     write(primers_fasta_file, primers_fasta_data)
 
-            mothur_file = osp.join(tmp_dir, "script")
+            #     print(read(primers_fasta_file))
+
+            #     config["primers_fasta_file"] = primers_fasta_file
+
+            # mothur_file = osp.join(tmp_dir, "script")
             
-            build_mothur_script(
-                template = "mothur/trim",
-                output   = mothur_file,
-                inputdir = tmp_dir, prefix = prefix, processors = jobs,
-                qaverage = settings.get("quality_average"),
-                maxambig = settings.get("maximum_ambiguity"),
-                maxhomop = settings.get("maximum_homopolymers"),
-                pdiffs   = settings.get("primer_difference"),
-                proccessors = jobs,
-                **config
-            )
+            # build_mothur_script(
+            #     template = "mothur/trim",
+            #     output   = mothur_file,
+            #     inputdir = tmp_dir, prefix = prefix, processors = jobs,
+            #     qaverage = settings.get("quality_average"),
+            #     maxambig = settings.get("maximum_ambiguity"),
+            #     maxhomop = settings.get("maximum_homopolymers"),
+            #     pdiffs   = settings.get("primer_difference"),
+            #     proccessors = jobs,
+            #     **config
+            # )
 
-            logger.info("[group %s] Running mothur..." % group)
+            logger.info("[group %s] Running fastp..." % group)
 
             try:
                 with ShellEnvironment(cwd = tmp_dir) as shell:
-                    code = shell("mothur %s" % mothur_file)
+                    if layout == "single":
+                        config_single = read(fastq_file)
+                        config_single = config_single.split("\n")
+                        
+                        config_single = lmap(lambda x: x.split(" "), config_single)
+                        
+                        for cfg in config_single:
+                            fasta_file = cfg[1]
+                            fasta_dir  = osp.dirname(fasta_file)
+                            fasta_name = osp.basename(fasta_file)
+                            sra_name   = osp.splitext(fasta_name)[0]
 
-                    if not code:
-                        logger.success("[group %s] mothur ran successfully." % group)
+                            shell("fastp -i {fasta_file} -e {quality_average} -yY {maxhomop} -n {maxambig} -o {trimmed} -w {jobs}".format(
+                                fasta_file = fasta_file,
 
-                        logger.info("[group %s] Attempting to copy filtered files." % group)
+                                quality_average = settings.get("quality_average"),
+                                maxhomop = settings.get("maximum_homopolymers"),
+                                maxambig = settings.get("maximum_ambiguity"),
 
-                        choice = (
-                            ".trim.contigs.good.fasta",
-                            ".contigs.good.groups",
-                            ".trim.contigs.good.summary"
-                        ) if layout == "paired" else (
-                            ".trim.good.fasta",
-                            ".good.group",
-                            ".trim.good.summary"
-                        )
-                            # group(s): are you f'king kiddin' me?
+                                trimmed = osp.join(fasta_dir, "%s.trimmed.fastq" % sra_name),
+                                jobs = min(jobs, 16)
+                            ))
 
-                        makedirs(target_dir, exist_ok = True)
-                
-                        copy(
-                            osp.join(tmp_dir, "%s%s" % (prefix, choice[0])),
-                            dest = target_path["fasta"]
-                        )
+                    if layout == "paired":
+                        for file in files:
+                            file_dir  = osp.dirname(file)
+                            file_name = osp.basename(file)
 
-                        copy(
-                            osp.join(tmp_dir, "%s%s" % (prefix, choice[1])),
-                            dest = target_path["group"]
-                        )
+                            sra_name  = osp.splitext(file_name)[0]
+                            sra_name  = sra_name.split("_")[0]
 
-                        copy(
-                            osp.join(tmp_dir, "%s%s" % (prefix, choice[2])),
-                            dest = target_path["summary"]
-                        )
+                            if "1.fastq" in file_name:
+                                forward = file
+                                reverse = osp.join(file_dir, "%s_2.fastq" % sra_name)
+
+                                shell("fastp -i {forward} -I {reverse} -e {quality_average} -n {maxambig} -yY {maxhomop} -m --merged_out {trimmed} -w {jobs}".format(
+                                    forward = forward, 
+                                    reverse = reverse,
+
+                                    quality_average = settings.get("quality_average"),
+                                    maxhomop = settings.get("maximum_homopolymers"),
+                                    maxambig = settings.get("maximum_ambiguity"),
+
+                                    trimmed = osp.join(file_dir, "%s.trimmed.fastq" % sra_name),
+                                    jobs = min(jobs, 16)
+                                ))
 
                         logger.info("[group %s] Successfully copied filtered files at %s." % (group, target_dir))
                 
@@ -153,7 +172,7 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
     if success and minimal_output:
         remove(*files)
 
-def trim_seqs(data_dir = None, data = [], *args, **kwargs):
+def trim_seqs_fastp(data_dir = None, data = [], *args, **kwargs):
     input = kwargs.pop("input", None)
 
     data_dir, data_input = get_input_data(input = input, data_dir = data_dir, *args, **kwargs)
@@ -176,23 +195,29 @@ def trim_seqs(data_dir = None, data = [], *args, **kwargs):
     study_group = data
 
     logger.info("Found %s groups." % len(study_group))
-    logger.info("Building configs for mothur...")
+    logger.info("Building configs for fastp...")
 
     for layout, trim_type in itertools.product(("paired", "single"), ("true", "false")):
         for group, data in iteritems(study_group):
             if len(data):
                 filtered = lfilter(lambda x: x["layout"] == layout and x["trimmed"] == trim_type, data)
-                files    = []
+                files = []
                 
                 for d in filtered:
                     sra_id  = d["sra"]
                     sra_dir = osp.join(data_dir, sra_id)
 
-                    fasta_files = os.listdir(sra_dir)
-                    fasta_files = [osp.join(sra_dir, fasta_file) for fasta_file in fasta_files
-                        if fasta_file.endswith(".fastq")]
+                    logger.info("Searching FASTQ files in directory %s..." % sra_dir)
 
-                    files += fasta_files
+                    fasta_files = get_files(sra_dir, "*.fastq")
+                    fasta_files_map = dict_from_list(fasta_files)
+                    
+                    for fasta_file in fasta_files:
+                        trimmed = osp.join(sra_dir, "%s.trimmed.fastq" % sra_id)
+                        if trimmed not in fasta_files_map:
+                            files.append(fasta_file)
+                        else:
+                            logger.warn("SRA %s already trimmed." % sra_id)
 
                 if files:
                     logger.info("Filtering FASTQ files for group %s of type (layout: %s, trimmed: %s)" % (group, layout, trim_type))

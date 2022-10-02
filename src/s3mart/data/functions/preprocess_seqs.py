@@ -7,7 +7,8 @@ from bpyutils.util.array   import sequencify
 from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.system  import (
     ShellEnvironment, makedirs,
-    make_temp_dir, copy, move
+    make_temp_dir, copy, move,
+    makedirs
 )
 from bpyutils import log
 
@@ -31,7 +32,7 @@ def preprocess_seqs(data_dir = None, **kwargs):
 
     merged_fasta = osp.join(data_dir, "merged.fasta")
     
-    # merged_group = osp.join(data_dir, "merged.group")
+    merged_group = osp.join(data_dir, "merged.group")
 
     silva_seed = kwargs.get("silva_seed", silva_paths["seed"])
     silva_gold = kwargs.get("silva_gold", silva_paths["gold"])
@@ -39,7 +40,7 @@ def preprocess_seqs(data_dir = None, **kwargs):
 
     cutoff_level   = settings.get("cutoff_level")
 
-    files = (merged_fasta, silva_seed, silva_gold, silva_seed_tax)
+    files = (merged_fasta, merged_group, silva_seed, silva_gold, silva_seed_tax)
     target_files = [{
         "source": "merged.unique.good.unique.precluster.pick.pick.phylip.tre",
         "target": osp.join(data_dir, "output.tre")
@@ -62,7 +63,7 @@ def preprocess_seqs(data_dir = None, **kwargs):
     # with make_temp_dir(root_dir = CACHE) as tmp_dir:
     # tmp_dir = make_temp_dir(root_dir = CACHE)
     # print(tmp_dir)
-    tmp_dir = "/tmp/s3mart"
+    tmp_dir = "/work/s3mart"
     makedirs(tmp_dir, exist_ok = True)
 
     copy(*files, dest = tmp_dir)
@@ -79,7 +80,7 @@ def preprocess_seqs(data_dir = None, **kwargs):
         template = "mothur/preprocess",
         output   = mothur_file,
         merged_fasta = osp.join(tmp_dir, osp.basename(merged_fasta)),
-        # merged_group = osp.join(tmp_dir, osp.basename(merged_group)),
+        merged_group = osp.join(tmp_dir, osp.basename(merged_group)),
 
         silva_seed       = osp.join(tmp_dir, osp.basename(silva_seed)),
         silva_seed_start = settings.get("silva_pcr_start"),

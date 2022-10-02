@@ -31,14 +31,14 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
     groups  = get_files(data_dir, "%s.group" % _FILENAME_TRIMMED)
 
-    if trimmed and groups:
+    if trimmed: #  and groups
         logger.info("Merging %s filter and %s group files." % (len(trimmed), len(groups)))
 
         output_fastq = osp.join(data_dir, "merged.fastq")
         output_fasta = osp.join(data_dir, "merged.fasta")
         output_group = osp.join(data_dir, "merged.group")
 
-        if not any(osp.exists(f) for f in (output_fasta, output_group)) or force:
+        if not any(osp.exists(f) for f in (output_fasta,)) or force:
             with make_temp_dir(root_dir = CACHE) as tmp_dir:
                 mothur_file = osp.join(tmp_dir, "script")
                 build_mothur_script(
@@ -47,22 +47,37 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                     input_fastas = trimmed,
                     input_groups = groups,
                     output_fasta = output_fasta,
-                    output_group = output_group
+                    # output_group = output_group
                 )
 
                 with ShellEnvironment(cwd = tmp_dir) as shell:
-                    code = shell("mothur %s" % mothur_file)
-                    # code = shell("cat %s > %s" % (" ".join(trimmed), output_fastq))
-                    # logger.info("Converting fastq to fasta...")
-                    # code = shell("sed -n '1~2s/^@/>/p;2~4p' %s > %s" % (output_fastq, output_fasta))
+                    # code = shell("mothur %s" % mothur_file)
+                    code = shell("cat %s > %s" % (" ".join(trimmed), output_fastq))
+                    logger.info("Converting fastq to fasta...")
+                    code = shell("sed -n '1~2s/^@/>/p;2~4p' %s > %s" % (output_fastq, output_fasta))
+
+                    logger.info("Writing group file...")
+
+                    with open(output_group, "w") as group_f:
+                        with open(output_fasta, "r") as fasta_f:
+                            for line in fasta_f:
+                                if line.startswith(">"):
+                                    id_  = line.split(" ")[0][1:]
+                                    sra  = id_.split(".")[0]
+                                    line = id_ + "\t" + sra
+
+                                    group_f.write(line)
+                                    group_f.write("\n")
+
+                    logger.success("Group file written to: %s" % output_group)
 
                     if not code:
                     #     # HACK: weird hack around failure of mothur detecting output for merge.files
-                        merged_fasta = get_files(data_dir, "merged.fasta")
-                        merged_group = get_files(data_dir, "merged.group")
+                        # merged_fasta = get_files(data_dir, "merged.fasta")
+                        # merged_group = get_files(data_dir, "merged.group")
 
-                        move(*merged_fasta, dest = output_fasta)
-                        move(*merged_group, dest = output_group)
+                        # move(*merged_fasta, dest = output_fasta)
+                        # move(*merged_group, dest = output_group)
 
                         logger.success("Successfully merged.")
 

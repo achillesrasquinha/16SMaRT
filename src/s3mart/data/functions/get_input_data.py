@@ -34,6 +34,8 @@ def get_input_data(input = None, data_dir = None, *args, **kwargs):
     else:
         input = osp.join(PATH["DATA"], "sample.csv")
 
+    logger.info("Reading input data from: %s", input)
+
     groups = {}
 
     if osp.isfile(input):

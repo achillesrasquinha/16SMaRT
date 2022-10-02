@@ -59,6 +59,8 @@ def check_data(input = None, data_dir = None, *args, **kwargs):
 
     n_groups = len(groups)
 
+    logger.info("Found %d groups." % n_groups)
+
     for group, data in tq.tqdm(iteritems(groups), total = n_groups, desc = "Checking data integrity"):
         n_sra_success = 0
         total_sra = len(data)

@@ -12,6 +12,8 @@ COPY ./user-settings.mkfg /root/.ncbi/user-settings.mkfg
 COPY ./Rpackages.json /Rpackages.json
 COPY ./script/r-setup.py /r-setup.py
 
+COPY ./requirements-dev.txt /requirements-dev.txt
+
 RUN apt-get update && \
     # SRA Toolkit
     wget -nv https://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/$SRA_TOOLKIT_VERSION/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64.tar.gz -O $HOME/sra-toolkit.tar.gz && \
@@ -43,6 +45,7 @@ RUN apt-get update && \
     wget -nv http://opengene.org/fastp/fastp -O $HOME/fastp && \
     chmod +x $HOME/fastp && \
     mv $HOME/fastp /usr/local/bin && \
+    pip install -r /requirements-dev.txt && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \

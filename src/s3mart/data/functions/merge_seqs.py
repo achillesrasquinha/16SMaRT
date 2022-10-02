@@ -28,12 +28,13 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
     logger.info("Finding files in directory: %s" % data_dir)
     
-    trimmed = get_files(data_dir, "%s.fasta" % _FILENAME_TRIMMED)
+    trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
     groups  = get_files(data_dir, "%s.group" % _FILENAME_TRIMMED)
 
     if trimmed and groups:
         logger.info("Merging %s filter and %s group files." % (len(trimmed), len(groups)))
 
+        output_fastq = osp.join(data_dir, "merged.fastq")
         output_fasta = osp.join(data_dir, "merged.fasta")
         output_group = osp.join(data_dir, "merged.group")
 
@@ -51,9 +52,12 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                 with ShellEnvironment(cwd = tmp_dir) as shell:
                     code = shell("mothur %s" % mothur_file)
+                    # code = shell("cat %s > %s" % (" ".join(trimmed), output_fastq))
+                    # logger.info("Converting fastq to fasta...")
+                    # code = shell("sed -n '1~2s/^@/>/p;2~4p' %s > %s" % (output_fastq, output_fasta))
 
                     if not code:
-                        # HACK: weird hack around failure of mothur detecting output for merge.files
+                    #     # HACK: weird hack around failure of mothur detecting output for merge.files
                         merged_fasta = get_files(data_dir, "merged.fasta")
                         merged_group = get_files(data_dir, "merged.group")
 

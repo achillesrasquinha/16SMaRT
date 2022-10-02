@@ -12,25 +12,34 @@ from bpyutils.util.system  import (
 from bpyutils import log
 
 from s3mart.data.util import build_mothur_script
+from s3mart.data.util  import install_silva
 
 logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
 
 def preprocess_seqs(data_dir = None, **kwargs):
+    logger.info("Installing SILVA...")
+    silva_paths = install_silva()
+
+    logger.success("SILVA successfully downloaded at %s." % silva_paths)
+
+    logger.info("Pre-processing FASTA + Group files...")
+
     data_dir = get_data_dir(NAME, data_dir)
     jobs     = kwargs.get("jobs", settings.get("jobs"))
 
     merged_fasta = osp.join(data_dir, "merged.fasta")
-    merged_group = osp.join(data_dir, "merged.group")
+    
+    # merged_group = osp.join(data_dir, "merged.group")
 
-    silva_seed = kwargs["silva_seed"]
-    silva_gold = kwargs["silva_gold"]
-    silva_seed_tax = kwargs["silva_seed_tax"]
+    silva_seed = kwargs.get("silva_seed", silva_paths["seed"])
+    silva_gold = kwargs.get("silva_gold", silva_paths["gold"])
+    silva_seed_tax = kwargs.get("silva_seed_tax", silva_paths["taxonomy"])
 
     cutoff_level   = settings.get("cutoff_level")
 
-    files = (merged_fasta, merged_group, silva_seed, silva_gold, silva_seed_tax)
+    files = (merged_fasta, silva_seed, silva_gold, silva_seed_tax)
     target_files = [{
         "source": "merged.unique.good.unique.precluster.pick.pick.phylip.tre",
         "target": osp.join(data_dir, "output.tre")
@@ -48,53 +57,60 @@ def preprocess_seqs(data_dir = None, **kwargs):
         "target": osp.join(data_dir, "output.shared")
     }]
 
-    with make_temp_dir(root_dir = CACHE) as tmp_dir:
-        copy(*files, dest = tmp_dir)
+    logger.info("Preprocessing sequences...")
 
-        silva_seed_splitext = osp.splitext(osp.basename(silva_seed))
+    # with make_temp_dir(root_dir = CACHE) as tmp_dir:
+    # tmp_dir = make_temp_dir(root_dir = CACHE)
+    # print(tmp_dir)
+    tmp_dir = "/tmp/s3mart"
+    makedirs(tmp_dir, exist_ok = True)
 
-        filter_taxonomy = settings.get("filter_taxonomy")
-        if not isinstance(filter_taxonomy, (list, tuple)):
-            filter_taxonomy = eval(filter_taxonomy)
-            filter_taxonomy = sequencify(filter_taxonomy)
-            
-        mothur_file = osp.join(tmp_dir, "script")
-        build_mothur_script(
-            template = "mothur/preprocess",
-            output   = mothur_file,
-            merged_fasta = osp.join(tmp_dir, osp.basename(merged_fasta)),
-            merged_group = osp.join(tmp_dir, osp.basename(merged_group)),
+    copy(*files, dest = tmp_dir)
 
-            silva_seed       = osp.join(tmp_dir, osp.basename(silva_seed)),
-            silva_seed_start = settings.get("silva_pcr_start"),
-            silva_seed_end   = settings.get("silva_pcr_end"),
+    silva_seed_splitext = osp.splitext(osp.basename(silva_seed))
 
-            silva_pcr   = osp.join(tmp_dir, "%s.pcr%s" % (silva_seed_splitext[0], silva_seed_splitext[1])),
-            
-            silva_seed_tax   = osp.join(tmp_dir, osp.basename(silva_seed_tax)),
-            silva_gold       = osp.join(tmp_dir, osp.basename(silva_gold)),
+    filter_taxonomy = settings.get("filter_taxonomy")
+    if not isinstance(filter_taxonomy, (list, tuple)):
+        filter_taxonomy = eval(filter_taxonomy)
+        filter_taxonomy = sequencify(filter_taxonomy)
+        
+    mothur_file = osp.join(tmp_dir, "script")
+    build_mothur_script(
+        template = "mothur/preprocess",
+        output   = mothur_file,
+        merged_fasta = osp.join(tmp_dir, osp.basename(merged_fasta)),
+        # merged_group = osp.join(tmp_dir, osp.basename(merged_group)),
 
-            maxhomop              = settings.get("maximum_homopolymers"),
-            classification_cutoff = settings.get("classification_cutoff"),
-            filter_taxonomy       = filter_taxonomy,
-            taxonomy_level        = settings.get("taxonomy_level"),
-            cutoff_level          = settings.get("cutoff_level"),
+        silva_seed       = osp.join(tmp_dir, osp.basename(silva_seed)),
+        silva_seed_start = settings.get("silva_pcr_start"),
+        silva_seed_end   = settings.get("silva_pcr_end"),
 
-            processors            = jobs
-        )
+        silva_pcr   = osp.join(tmp_dir, "%s.pcr%s" % (silva_seed_splitext[0], silva_seed_splitext[1])),
+        
+        silva_seed_tax   = osp.join(tmp_dir, osp.basename(silva_seed_tax)),
+        silva_gold       = osp.join(tmp_dir, osp.basename(silva_gold)),
 
-        with ShellEnvironment(cwd = tmp_dir) as shell:
-            code = shell("mothur %s" % mothur_file)
+        maxhomop              = settings.get("maximum_homopolymers"),
+        classification_cutoff = settings.get("classification_cutoff"),
+        filter_taxonomy       = filter_taxonomy,
+        taxonomy_level        = settings.get("taxonomy_level"),
+        cutoff_level          = settings.get("cutoff_level"),
 
-            if not code:
-                makedirs(data_dir, exist_ok = True)
+        processors            = jobs
+    )
 
-                for tar_file in target_files:
-                    source = osp.join(tmp_dir, tar_file["source"])
-                    target = tar_file["target"]
+    with ShellEnvironment(cwd = tmp_dir) as shell:
+        code = shell("mothur %s" % mothur_file)
 
-                    move(source, dest = target)
+        if not code:
+            makedirs(data_dir, exist_ok = True)
 
-                logger.success("Successfully preprocessed files.")
-            else:
-                logger.error("Error merging files.")
+            for tar_file in target_files:
+                source = osp.join(tmp_dir, tar_file["source"])
+                target = tar_file["target"]
+
+                move(source, dest = target)
+
+            logger.success("Successfully preprocessed files.")
+        else:
+            logger.error("Error merging files.")

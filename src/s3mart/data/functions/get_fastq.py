@@ -57,13 +57,23 @@ def get_fastq(meta, data_dir = None, *args, **kwargs):
             logger.warn("SRA %s already prefeteched." % sra)
 
         logger.info("Checking if FASTQ files for SRA %s has been downloaded..." % sra)
-        fastq_files = get_files(sra_dir, "*.fastq")
+        fastq_files = [file for file in get_files(sra_dir, "*.fastq") if "trimmed" not in file]
+
+        args = []
+
+        if layout == "paired" and len(fastq_files) < 2:
+            logger.warn("FASTQ files for SRA %s (paired) missing. Re-attempting to download..." % sra)
+            args.append("--force")
+
+            fastq_files = []
         
         if not fastq_files:
             logger.info("Downloading FASTQ file(s) for SRA %s..." % sra)
-            args = "--split-files" if layout == "paired" else "" 
-            code = shell("fasterq-dump --threads {threads} {args} {sra}".format(
-                threads = jobs, args = args, sra = sra), cwd = sra_dir)
+            if layout == "paired":
+                args.append("--split-files")
+
+            code  = shell("fasterq-dump --threads {threads} {args} {sra}".format(
+                threads = jobs, args = " ".join(args), sra = sra), cwd = sra_dir)
 
             if not code:
                 logger.success("Successfully downloaded FASTQ file(s) for SRA %s." % sra)

@@ -22,9 +22,9 @@ def get_input_data(input = None, data_dir = None, *args, **kwargs):
             response = req.get(input)
             response.raise_for_status()
 
-            content  = response.content
+            content = response.content
 
-            input    = osp.join(data_dir, "input.csv")
+            input = osp.join(data_dir, "input.csv")
             write(input, safe_decode(content))
         
         input = osp.abspath(input)

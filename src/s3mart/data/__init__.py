@@ -50,7 +50,7 @@ def check_data(input = None, data_dir = None, *args, **kwargs):
 
     data_dir = get_data_dir(NAME, data_dir)
 
-    logger.info("Checking data integrity...")
+    logger.info("Attempting to check data integrity...")
 
     stats = autodict()
 
@@ -61,23 +61,48 @@ def check_data(input = None, data_dir = None, *args, **kwargs):
 
     for group, data in tq.tqdm(iteritems(groups), total = n_groups, desc = "Checking data integrity"):
         n_sra_success = 0
-        total_sra     = len(data)
+        total_sra = len(data)
 
         for d in data:
             sra_id = d["sra"]
 
             path_sra_fastq = osp.join(data_dir, sra_id)
-            files = get_files(path_sra_fastq, "*.fastq")
+            files = [file for file in get_files(path_sra_fastq, "*.fastq") \
+                if "trimmed" not in file]
 
             if not files:
                 logger.warning("No FASTQ files found for SRA ID: %s" % sra_id)
-                stats["sra"][sra_id]["fastq"] = False
+                stats["sra"][sra_id]["fastq"] = {
+                    "status": "missing"
+                }
             else:
-                stats["sra"][sra_id]["fastq"] = [{
-                    "path": path,
-                    "size": osp.getsize(path),
-                } for path in files]
-                n_sra_success += 1
+                stats["sra"][sra_id]["fastq"] = {
+                    "status": "available"
+                }
+
+                success = True
+
+                if d["layout"] == "paired":
+                    if len(files) != 2:
+                        logger.warning("Invalid number of FASTQ files found for SRA ID: %s" % sra_id)
+                        stats["sra"][sra_id]["fastq"] = {
+                            "status": "invalid"
+                        }
+                        
+                        success = False
+
+                trimmed = False
+
+                if any(["trimmed" in file for file in get_files(path_sra_fastq, "*.fastq")]):
+                    trimmed = True
+
+                if success:
+                    stats["sra"][sra_id]["fastq"]["files"] = [{
+                        "path": path,
+                        "size": osp.getsize(path),
+                        "trimmed": trimmed
+                    } for path in files]
+                    n_sra_success += 1
 
         stats["group"][group]["sra"] = {
             "total": total_sra,

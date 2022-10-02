@@ -18,7 +18,7 @@ DEFAULT = {
     "primer_difference":        5,
     "quality_average":          35,
     "maximum_ambiguity":        0,
-    "maximum_homopolymers":     8,
+    "maximum_homopolymers":     3,
     "classification_cutoff":    80,
     "filter_taxonomy":          ["chloroplast", "mitochondria", "archaea", "eukaryota", "unknown"],
     "taxonomy_level":           6,

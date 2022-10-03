@@ -55,6 +55,7 @@ def check_data(input = None, data_dir = None, *args, **kwargs):
     stats = autodict()
 
     d = 0
+    global_total_sra = 0
     global_total_sra_available = 0
 
     n_groups = len(groups)

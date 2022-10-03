@@ -62,7 +62,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                         with open(output_fasta, "r") as fasta_f:
                             for line in fasta_f:
                                 if line.startswith(">"):
-                                    id_  = line.split(" ")[0][1:]
+                                    id_  = line.split(" ")[1:]
                                     sra  = id_.split(".")[0]
                                     line = id_ + "\t" + sra
 

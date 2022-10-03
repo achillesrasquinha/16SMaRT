@@ -1,5 +1,7 @@
 import os.path as osp
 
+from tqdm import tqdm
+
 from s3mart.config  import PATH
 from s3mart import __name__ as NAME
 
@@ -9,6 +11,7 @@ from bpyutils.util.system  import (
     make_temp_dir, get_files, move,
     remove
 )
+from bpyutils.util.types import lfilter
 from bpyutils import log
 
 from s3mart.data.functions.trim_seqs import _FILENAME_TRIMMED, _DATA_DIR_NAME_TRIMMED
@@ -52,7 +55,9 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                 with ShellEnvironment(cwd = tmp_dir) as shell:
                     # code = shell("mothur %s" % mothur_file)
-                    code = shell("cat %s > %s" % (" ".join(trimmed), output_fastq))
+                    for f in tqdm(trimmed, total = len(trimmed), desc = "Merging..."):
+                        code = shell("cat %s >> %s" % (f, output_fastq))
+
                     logger.info("Converting fastq to fasta...")
                     code = shell("sed -n '1~2s/^@/>/p;2~4p' %s > %s" % (output_fastq, output_fasta))
 
@@ -62,7 +67,12 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                         with open(output_fasta, "r") as fasta_f:
                             for line in fasta_f:
                                 if line.startswith(">"):
-                                    id_  = line.split(" ")[1:]
+                                    splits = line.split(" ")
+                                    splits = lfilter(lambda x: "length=" not in x, splits)
+
+                                    id_  = " ".join(splits)
+
+                                    id_  = id_[1:]
                                     sra  = id_.split(".")[0]
                                     line = id_ + "\t" + sra
 

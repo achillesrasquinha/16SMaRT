@@ -42,7 +42,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     else:
         trimmed = []
 
-    if trimmed or skip_fasta: #  and groups
+    if trimmed: #  and groups
         logger.info("Merging %s filter files." % len(trimmed))
 
         output_fastq = osp.join(data_dir, "merged.fastq")

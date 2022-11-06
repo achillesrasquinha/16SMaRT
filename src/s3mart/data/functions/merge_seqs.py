@@ -40,7 +40,7 @@ def align_seq(seq, silva_path):
 
 def merge_seqs(data_dir = None, force = False, **kwargs):
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
-    silva_path = kwargs.get("silva_path", settings.get("silva_path"))
+    silva_path = kwargs.get("silva_path", osp.join(data_dir, "silva"))
 
     success  = False
 

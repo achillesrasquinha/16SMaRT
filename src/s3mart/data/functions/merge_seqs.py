@@ -55,7 +55,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
 
     if check:
-        trimmed = random.sample(trimmed, min(n_check, len(trimmed)))
+        n_check = min(n_check, len(trimmed))
+        trimmed = trimmed[:n_check]
 
     logger.success("Found %s files." % len(trimmed))
 
@@ -155,9 +156,9 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                         sra = osp.basename(f).split(".")[0]
 
                         if sra in hit["from_sra"]:
-                            from_sra += "\t%s" % hit["from_sra"][sra]
+                            from_sra += " %s" % hit["from_sra"][sra]
                         else:
-                            from_sra += "\t0"
+                            from_sra += " 0"
 
                     sra = hit["id"].split(" ")[0]
                     count_table_f.write("%s\t%s%s\n" % (sra, hit["count"], from_sra))

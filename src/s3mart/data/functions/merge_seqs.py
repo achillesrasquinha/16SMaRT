@@ -65,7 +65,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                         with tqdm(total = osp.getsize(output_fastq), desc = "Converting...",
                             unit = "B", unit_scale = True, unit_divisor = 1024) as pbar:
 
-                            fastq_f  = open(output_fastq,  "w")
+                            fastq_f  = open(output_fastq,  "r")
                             fasta_f  = open(output_fasta,  "w")
                             group_f  = open(output_group,  "w")
                             unique_f = open(output_unique, "w")

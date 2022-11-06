@@ -36,6 +36,9 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     groups  = get_files(data_dir, "%s.group" % _FILENAME_TRIMMED)
 
     logger.success("Found %s files." % len(trimmed))
+    
+    skip_fasta = kwargs.get("skip_fasta", False)
+    skip_fastq = kwargs.get("skip_fastq", False)
 
     if trimmed: #  and groups
         logger.info("Merging %s filter and %s group files." % (len(trimmed), len(groups)))
@@ -58,11 +61,17 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                 with ShellEnvironment(cwd = tmp_dir) as shell:
                     # code = shell("mothur %s" % mothur_file)
-                    for f in tqdm(trimmed, total = len(trimmed), desc = "Merging..."):
-                        code = shell("cat %s >> %s" % (f, output_fastq))
-
-                    logger.info("Converting fastq to fasta...")
-                    code = shell("sed -n '1~2s/^@/>/p;2~4p' %s > %s" % (output_fastq, output_fasta))
+                    if not skip_fasta:
+                        for f in tqdm(trimmed, total = len(trimmed), desc = "Merging..."):
+                            code = shell("cat %s >> %s" % (f, output_fastq))
+                    else:
+                        logger.info("Skipping fasta file.")
+                            
+                    if not skip_fastq:
+                        logger.info("Converting fastq to fasta...")
+                        code = shell("sed -n '1~2s/^@/>/p;2~4p' %s > %s" % (output_fastq, output_fasta))
+                    else:
+                        logger.info("Skipping fastq file.")
 
                     logger.info("Writing group file...")
 

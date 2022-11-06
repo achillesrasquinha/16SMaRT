@@ -48,6 +48,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
         output_fastq = osp.join(data_dir, "merged.fastq")
         output_fasta = osp.join(data_dir, "merged.fasta")
         output_group = osp.join(data_dir, "merged.group")
+        output_unique = osp.join(data_dir, "merged.unique.fasta")
 
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
             with make_temp_dir(root_dir = CACHE) as tmp_dir:
@@ -63,39 +64,57 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                         with tqdm(total = osp.getsize(output_fastq), desc = "Converting...",
                             unit = "B", unit_scale = True, unit_divisor = 1024) as pbar:
-                            with open(output_group, "w") as group_f:
-                                with open(output_fasta, "w") as fasta_f:
-                                    with open(output_fastq, "r") as fastq_f:
-                                        skip_next = False
 
-                                        for line in fastq_f:
-                                            if not line.startswith("+"):
-                                                if not skip_next:
-                                                    if line.startswith("@"):
-                                                        line = line[1:]
+                            fastq_f  = open(output_fastq,  "w")
+                            fasta_f  = open(output_fasta,  "w")
+                            group_f  = open(output_group,  "w")
+                            unique_f = open(output_unique, "w")
 
-                                                        fasta_f.write(">%s" % line)
+                            skip_next  = False
+                            current_id = None
 
-                                                        splits = line.split(" ")
-                                                        # splits = lfilter(lambda x: 
-                                                        #     "length=" not in x, splits)
+                            unique_hits = {}
 
-                                                        id_  = " ".join(splits[0:2])
+                            try:
+                                for line in fastq_f:
+                                    if not line.startswith("+"):
+                                        if not skip_next:
+                                            if line.startswith("@"):
+                                                line = line[1:]
+                                                current_id = line
 
-                                                        # id_  = id_[1:]
-                                                        sra  = id_.split(".")[0]
-                                                        line = id_ + "\t" + sra
+                                                fasta_f.write(">%s" % line)
 
-                                                        group_f.write(line)
-                                                        group_f.write("\n")
-                                                    else:
-                                                        fasta_f.write(line)
-                                                else:
-                                                    skip_next = False
+                                                splits = line.split(" ")
+
+                                                id_  = " ".join(splits[0:2])
+
+                                                sra  = id_.split(".")[0]
+                                                line = id_ + "\t" + sra
+
+                                                group_f.write(line)
+                                                group_f.write("\n")
                                             else:
-                                                skip_next = True
+                                                fasta_f.write(line)
 
-                                            pbar.update(len(line))
+                                                hash_ = hash(line)
+
+                                                if hash_ in unique_hits:
+                                                    unique_f.write(">%s" % current_id)
+                                                    unique_f.write(line)
+                                        else:
+                                            skip_next = False
+                                    else:
+                                        skip_next = True
+
+                                    pbar.update(len(line))
+                            except Exception as e:
+                                logger.error("Error: %s" % e)
+                            finally:
+                                fasta_f.close()
+                                fastq_f.close()
+                                group_f.close()
+                                unique_f.close()
 
                         logger.success("Group file written to: %s" % output_group)
                     else:

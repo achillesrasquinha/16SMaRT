@@ -93,6 +93,8 @@ requirements: ## Build Requirements
 	@find $(BASEDIR)/requirements -maxdepth 1 -type f | grep -v 'jobs' | xargs awk '{print}' > $(BASEDIR)/requirements-dev.txt
 	@find $(BASEDIR)/requirements -maxdepth 1 -type f | xargs awk '{print}' > $(BASEDIR)/requirements-jobs.txt
 	@cat $(BASEDIR)/requirements/production.txt  > $(BASEDIR)/requirements.txt
+	
+	@find $(BASEDIR)/requirements -maxdepth 1 -type f | grep -v 'jobs' | xargs awk '{print}' > docker/files/base/requirements-dev.txt
 
 install: clean info upgrade-tools requirements ## Install dependencies and module.
 ifneq (${VERBOSE},true)

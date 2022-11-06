@@ -5,7 +5,8 @@ LABEL maintainer=achillesrasquinha@gmail.com
 ENV TERM=xterm-256color \
     SRA_TOOLKIT_VERSION=3.0.0 \
     MOTHUR_VERSION=1.48.0 \
-    VSEARCH_VERSION=2.18.0
+    VSEARCH_VERSION=2.18.0 \
+    KALIGN_VERSION=3.3.4
 
 COPY ./user-settings.mkfg /root/.ncbi/user-settings.mkfg
 
@@ -40,14 +41,19 @@ RUN apt-get update && \
     make install && \
     mkdir -p /root/.ncbi && \
     vdb-config --report-cloud-identity yes && \
-    pip install rpy2 && \
+    pip install rpy2 cmake && \
     python /r-setup.py /Rpackages.json && \
     wget -nv http://opengene.org/fastp/fastp -O $HOME/fastp && \
     chmod +x $HOME/fastp && \
     mv $HOME/fastp /usr/local/bin && \
     pip install -r /requirements-dev.txt && \
+    wget -nv https://codeload.github.com/TimoLassmann/kalign/tar.gz/refs/tags/v${KALIGN_VERSION} -O $HOME/kalign-${KALIGN_VERSION}.tar.gz && \
+    tar -zxvf kalign-${KALIGN_VERSION}.tar.gz && \
+    cd $HOME/kalign-${KALIGN_VERSION}.tar.gz && \
+    mkdir build && cd build && cmake .. && make && make test && make install && \
     rm -rf \
         $HOME/sra-toolkit.tar.gz \
         $HOME/sratoolkit.$SRA_TOOLKIT_VERSION-ubuntu64 \
         $HOME/vsearch* \
+        $HOME/kalign* \
         /var/lib/apt/lists/*

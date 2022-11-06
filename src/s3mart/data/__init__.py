@@ -151,7 +151,7 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
         logger.warning("MultiQC is disabled. Skipping quality check.")
 
     logger.info("Attempting to trim FASTQ files...")
-    trim_seqs(data_dir = data_dir, data = data, *args, **kwargs)
+    trim_seqs_fastp(data_dir = data_dir, data = data, *args, **kwargs)
 
     logger.info("Merging FASTQs...")
     merge_seqs(data_dir = data_dir)

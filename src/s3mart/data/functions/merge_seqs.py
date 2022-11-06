@@ -107,12 +107,16 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                     fasta_f.write(line)
 
                                     hash_ = hash(line)
+                                    base_sra = current_id.split(".")[0]
 
                                     if hash_ not in unique_hits:
                                         unique_hits[hash_] = {
                                             "count": 1,
                                             "seq": line,
-                                            "id": current_id
+                                            "id": current_id,
+                                            "from_sra": {
+                                                base_sra: 1
+                                            }
                                         }
                                         
                                         unique_f.write(">%s" % current_id)
@@ -125,6 +129,10 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         #     align_f.write("\n")
                                     else:
                                         unique_hits[hash_]["count"] += 1
+                                        if base_sra in unique_hits[hash_]["from_sra"]:
+                                            unique_hits[hash_]["from_sra"][base_sra] += 1
+                                        else:
+                                            unique_hits[hash_]["from_sra"][base_sra] = 1
                             else:
                                 skip_next = False
                         else:
@@ -142,8 +150,17 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                 count_table_f.write(header)
 
                 for hash_, hit in unique_hits.items():
+                    from_sra = ""
+                    for f in trimmed:
+                        sra = osp.basename(f).split(".")[0]
+
+                        if sra in hit["from_sra"]:
+                            from_sra += "\t%s" % hit["from_sra"][sra]
+                        else:
+                            from_sra += "\t0"
+
                     sra = hit["id"].split(" ")[0]
-                    count_table_f.write("%s\t%s\n" % (sra, hit["count"]))
+                    count_table_f.write("%s\t%s%s\n" % (sra, hit["count"], from_sra))
 
             logger.success("Group file written to: %s" % output_group)
     else:

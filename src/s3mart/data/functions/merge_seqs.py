@@ -84,7 +84,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                                     hash_ = hash(line)
 
-                                    if hash_ in unique_hits:
+                                    if hash_ not in unique_hits:
                                         unique_hits[hash_] += 1
                                         
                                         unique_f.write(">%s" % current_id)

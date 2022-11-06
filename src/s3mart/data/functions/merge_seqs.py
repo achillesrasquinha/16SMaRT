@@ -1,5 +1,6 @@
 import os.path as osp
 
+import random
 from tqdm import tqdm
 
 from s3mart.config  import PATH
@@ -31,8 +32,12 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     data_dir = get_data_dir(NAME, data_dir = data_dir)
 
     logger.info("Finding files in directory: %s" % data_dir)
+    check   = kwargs.get("check", False)
     
     trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
+
+    if check:
+        trimmed = random.sample(trimmed, min(10, len(trimmed)))
 
     logger.success("Found %s files." % len(trimmed))
 

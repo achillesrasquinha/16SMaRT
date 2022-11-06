@@ -1,5 +1,7 @@
 import os.path as osp
 
+from collections import defaultdict
+
 from tqdm import tqdm
 
 from s3mart.config  import PATH
@@ -50,7 +52,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
             group_f  = open(output_group,  "w")
             unique_f = open(output_unique, "w")
 
-            unique_hits = {}
+            unique_hits = defaultdict(int)
 
             for trimmed_file in tqdm(trimmed, total = len(trimmed), desc = "Converting..."):
                 trimmed_f = open(trimmed_file, "r")

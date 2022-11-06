@@ -27,9 +27,9 @@ logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
 
-db = dataset.connect('sqlite:///%s' % osp.join(CACHE, 's3mart.db'))
-
 def merge_seqs(data_dir = None, force = False, **kwargs):
+    db = dataset.connect('sqlite:///%s' % osp.join(data_dir, 's3mart.db'))
+
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
 
     success  = False

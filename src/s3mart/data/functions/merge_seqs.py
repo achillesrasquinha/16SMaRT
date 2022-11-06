@@ -109,7 +109,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                                     pbar.update(len(line))
                             except Exception as e:
-                                logger.error("Error: %s" % e)
+                                raise e
                             finally:
                                 fasta_f.close()
                                 fastq_f.close()

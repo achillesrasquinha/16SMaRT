@@ -112,11 +112,11 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         unique_f.write(">%s" % current_id)
                                         unique_f.write(line)
 
-                                        unique_aligned = align_seq(line, silva_path)
-                                        if unique_aligned:
-                                            align_f.write(">%s" % current_id)
-                                            align_f.write(unique_aligned)
-                                            align_f.write("\n")
+                                        # unique_aligned = align_seq(line, silva_path)
+                                        # if unique_aligned:
+                                        #     align_f.write(">%s" % current_id)
+                                        #     align_f.write(unique_aligned)
+                                        #     align_f.write("\n")
                                     else:
                                         unique_hits[hash_] += 1
                             else:

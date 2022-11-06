@@ -138,10 +138,11 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                     raise e
 
                 count_table_f = open(output_count_table, "w")
-                count_table_f.write("Representative_Sequence\ttotal\n%s")
+                count_table_f.write("Representative_Sequence\ttotal\n")
 
                 for hash_, hit in unique_hits.items():
-                    count_table_f.write("%s\t%s" % (hit["id"], hit["count"]))
+                    sra = hit["id"].split(" ")[0]
+                    count_table_f.write("%s\t%s\n" % (sra, hit["count"]))
 
             logger.success("Group file written to: %s" % output_group)
     else:

@@ -113,6 +113,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         unique_f.write(line)
 
                                         unique_aligned = align_seq(line, silva_path)
+                                        print(unique_aligned)
 
                                         align_f.write(">%s" % current_id)
                                         align_f.write(unique_aligned)

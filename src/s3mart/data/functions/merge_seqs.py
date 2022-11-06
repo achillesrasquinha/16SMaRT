@@ -30,10 +30,10 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
     data_dir = get_data_dir(NAME, data_dir = data_dir)
 
-    skip_fasta = kwargs.get("skip_fasta", False)
     skip_fastq = kwargs.get("skip_fastq", False)
+    skip_fasta = kwargs.get("skip_fasta", False)
 
-    if not skip_fasta:
+    if not skip_fastq:
         logger.info("Finding files in directory: %s" % data_dir)
         
         trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
@@ -52,17 +52,29 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
             with make_temp_dir(root_dir = CACHE) as tmp_dir:
                 with ShellEnvironment(cwd = tmp_dir) as shell:
-                    if not skip_fasta:
+                    if not skip_fastq:
                         for f in tqdm(trimmed, total = len(trimmed), desc = "Merging..."):
                             code = shell("cat %s >> %s" % (f, output_fastq))
                     else:
-                        logger.info("Skipping fasta file.")
-                            
-                    if not skip_fastq:
-                        logger.info("Converting fastq to fasta...")
-                        code = shell("sed -n '1~2s/^@/>/p;2~4p' %s | pv -l > %s" % (output_fastq, output_fasta))
-                    else:
                         logger.info("Skipping fastq file.")
+                            
+                    if not skip_fasta:
+                        logger.info("Converting fastq to fasta...")
+
+                        with tqdm(total = osp.getsize(output_fastq), desc = "Converting...") as pbar:
+                            with open(output_fasta, "w") as fasta_f:
+                                with open(output_fastq, "r") as fastq_f:
+                                    for line in fastq_f:
+                                        if line.startswith("@"):
+                                            fasta_f.write(">%s" % line[1:])
+                                        else:
+                                            fasta_f.write(line)
+
+                                        pbar.update(len(line))
+
+                        # code = shell("sed -n '1~2s/^@/>/p;2~4p' %s | pv -l > %s" % (output_fastq, output_fasta))
+                    else:
+                        logger.info("Skipping fasta file.")
 
                     logger.info("Writing group file...")
 

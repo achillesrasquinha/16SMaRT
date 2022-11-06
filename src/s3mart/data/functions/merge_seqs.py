@@ -11,7 +11,9 @@ from bpyutils.util.system  import (
     ShellEnvironment,
     make_temp_dir, get_files, move,
     remove,
-    wc as word_count
+    wc as word_count,
+    read,
+    write
 )
 from bpyutils.util.types import lfilter
 from bpyutils import log
@@ -23,6 +25,18 @@ from s3mart import settings
 logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
+
+def align_seq(seq, silva_path):
+    with make_temp_dir() as tmp_dir:
+        fasta = osp.join(tmp_dir, "seq.fasta")
+        content = ">\n%s" % seq
+        write(fasta, content)
+
+        with ShellEnvironment(cwd = tmp_dir) as shell:
+            shell("mothur \"#align.seqs(fasta = %s, reference = %s)\"" % (fasta, silva_path, "silva.seed_v123.pcr.align"))
+            output_file = osp.join(tmp_dir, "seq.align")
+
+            return read(output_file)
 
 def merge_seqs(data_dir = None, force = False, **kwargs):
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
@@ -47,6 +61,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
         output_fasta = osp.join(data_dir, "merged.fasta")
         output_group = osp.join(data_dir, "merged.group")
         output_unique = osp.join(data_dir, "merged.unique.fasta")
+        output_unique_align = osp.join(data_dir, "merged.unique.align")
 
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
             logger.info("Converting files...")
@@ -54,6 +69,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
             fasta_f  = open(output_fasta,  "w")
             group_f  = open(output_group,  "w")
             unique_f = open(output_unique, "w")
+            align_f  = open(output_unique_align, "w")
 
             unique_hits = {}
 
@@ -92,6 +108,11 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         
                                         unique_f.write(">%s" % current_id)
                                         unique_f.write(line)
+
+                                        unique_aligned = align_seq(line)
+
+                                        align_f.write(">%s" % current_id)
+                                        align_f.write(unique_aligned)
                                     else:
                                         unique_hits[hash_] += 1
                             else:

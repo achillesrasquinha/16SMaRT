@@ -50,11 +50,12 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
     logger.info("Finding files in directory: %s" % data_dir)
     check   = kwargs.get("check", False)
-    
+    n_check = kwargs.get("n_check", 10)
+
     trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
 
     if check:
-        trimmed = random.sample(trimmed, min(10, len(trimmed)))
+        trimmed = random.sample(trimmed, min(n_check, len(trimmed)))
 
     logger.success("Found %s files." % len(trimmed))
 

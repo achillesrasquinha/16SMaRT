@@ -83,6 +83,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                     hash_ = hash(line)
 
                                     if hash_ in unique_hits:
+                                        unique_hits[hash_] += 1
+                                        
                                         unique_f.write(">%s" % current_id)
                                         unique_f.write(line)
                             else:
@@ -94,7 +96,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                     trimmed_f.close()
                     group_f.close()
                     unique_f.close()
-                    
+
                     raise e
 
             logger.success("Group file written to: %s" % output_group)

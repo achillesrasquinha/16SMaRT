@@ -32,7 +32,7 @@ def align_seq(seq, silva_path):
         content = ">\n%s" % seq
         write(fasta, content)
 
-        with ShellEnvironment(cwd = tmp_dir, output = True) as shell:
+        with ShellEnvironment(cwd = tmp_dir, output = False) as shell:
             shell("mothur \"#align.seqs(fasta = %s, reference = %s)\"" % (fasta, osp.join(silva_path, "silva.seed_v132.pcr.align")))
             output_file = osp.join(tmp_dir, "seq.align")
 
@@ -113,10 +113,9 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         unique_f.write(line)
 
                                         unique_aligned = align_seq(line, silva_path)
-                                        print(unique_aligned)
-
-                                        align_f.write(">%s" % current_id)
-                                        align_f.write(unique_aligned)
+                                        if unique_aligned:
+                                            align_f.write(unique_aligned)
+                                            align_f.write("\n")
                                     else:
                                         unique_hits[hash_] += 1
                             else:

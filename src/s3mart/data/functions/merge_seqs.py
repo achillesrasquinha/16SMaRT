@@ -32,7 +32,7 @@ def align_seq(seq, silva_path):
         content = ">\n%s" % seq
         write(fasta, content)
 
-        with ShellEnvironment(cwd = tmp_dir, output = None) as shell:
+        with ShellEnvironment(cwd = tmp_dir, output = True) as shell:
             shell("mothur \"#align.seqs(fasta = %s, reference = %s)\"" % (fasta, osp.join(silva_path, "silva.seed_v132.pcr.align")))
             output_file = osp.join(tmp_dir, "seq.align")
 

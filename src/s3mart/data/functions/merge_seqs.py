@@ -42,7 +42,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     else:
         trimmed = []
 
-    if trimmed: #  and groups
+    if trimmed or skip_fasta or skip_fastq: #  and groups
         logger.info("Merging %s filter files." % len(trimmed))
 
         output_fastq = osp.join(data_dir, "merged.fastq")
@@ -51,18 +51,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
             with make_temp_dir(root_dir = CACHE) as tmp_dir:
-                # mothur_file = osp.join(tmp_dir, "script")
-                # build_mothur_script(
-                #     template     = "mothur/merge", 
-                #     output       = mothur_file,
-                #     input_fastas = trimmed,
-                #     input_groups = groups,
-                #     output_fasta = output_fasta,
-                #     # output_group = output_group
-                # )
-
                 with ShellEnvironment(cwd = tmp_dir) as shell:
-                    # code = shell("mothur %s" % mothur_file)
                     if not skip_fasta:
                         for f in tqdm(trimmed, total = len(trimmed), desc = "Merging..."):
                             code = shell("cat %s >> %s" % (f, output_fastq))
@@ -76,7 +65,6 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                         logger.info("Skipping fastq file.")
 
                     logger.info("Writing group file...")
-
 
                     with tqdm(total = osp.getsize(output_fasta), desc = "Writing group file...") as pbar:
                         with open(output_group, "w") as group_f:

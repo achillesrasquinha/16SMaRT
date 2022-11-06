@@ -65,40 +65,43 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                 current_id = None
 
                 try:
-                    for line in trimmed_f:
-                        if not line.startswith("+"):
-                            if not skip_next:
-                                if line.startswith("@"):
-                                    line = line[1:]
-                                    current_id = line
+                    with tqdm(total = word_count(trimmed_file), desc = "Converting %s" % trimmed_file) as pbar:
+                        for line in trimmed_f:
+                            if not line.startswith("+"):
+                                if not skip_next:
+                                    if line.startswith("@"):
+                                        line = line[1:]
+                                        current_id = line
 
-                                    fasta_f.write(">%s" % line)
+                                        fasta_f.write(">%s" % line)
 
-                                    splits = line.split(" ")
+                                        splits = line.split(" ")
 
-                                    id_  = " ".join(splits[0:2])
+                                        id_  = " ".join(splits[0:2])
 
-                                    sra  = id_.split(".")[0]
-                                    line = id_ + "\t" + sra
+                                        sra  = id_.split(".")[0]
+                                        line = id_ + "\t" + sra
 
-                                    group_f.write(line)
-                                    group_f.write("\n")
-                                else:
-                                    fasta_f.write(line)
-                                    
-                                    row = db["tabSeqUnique"].find_one(sequence = line)
-
-                                    if not row:
-                                        unique_f.write(">%s" % current_id)
-                                        unique_f.write(line)
-
-                                        db["tabSeqUnique"].insert(dict(sequence = line, count = 1))
+                                        group_f.write(line)
+                                        group_f.write("\n")
                                     else:
-                                        db["tabSeqUnique"].update(dict(id = row["id"], count = row["count"] + 1), ["id"])
+                                        fasta_f.write(line)
+                                        
+                                        row = db["tabSeqUnique"].find_one(sequence = line)
+
+                                        if not row:
+                                            unique_f.write(">%s" % current_id)
+                                            unique_f.write(line)
+
+                                            db["tabSeqUnique"].insert(dict(sequence = line, count = 1))
+                                        else:
+                                            db["tabSeqUnique"].update(dict(id = row["id"], count = row["count"] + 1), ["id"])
+                                else:
+                                    skip_next = False
                             else:
-                                skip_next = False
-                        else:
-                            skip_next = True
+                                skip_next = True
+
+                            pbar.update(len(line))
                 except Exception as e:
                     fasta_f.close()
                     trimmed_f.close()

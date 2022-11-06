@@ -66,7 +66,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                             with open(output_fasta, "w") as fasta_f:
                                 with open(output_fastq, "r") as fastq_f:
                                     skip_next = False
-                                    
+
                                     for line in fastq_f:
                                         if not line.startswith("+"):
                                             if not skip_next:
@@ -75,7 +75,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                                 else:
                                                     fasta_f.write(line)
                                                     
-                                                fasta_f.write("\n")
+                                                # fasta_f.write("\n")
                                             else:
                                                 skip_next = False
                                         else:

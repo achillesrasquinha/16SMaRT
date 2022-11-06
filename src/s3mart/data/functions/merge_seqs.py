@@ -4,6 +4,8 @@ from collections import defaultdict
 
 from tqdm import tqdm
 
+import dataset
+
 from s3mart.config  import PATH
 from s3mart import __name__ as NAME
 
@@ -24,6 +26,8 @@ from s3mart import settings
 logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
+
+db = dataset.connect('sqlite:///%s' % osp.join(CACHE, 's3mart.db'))
 
 def merge_seqs(data_dir = None, force = False, **kwargs):
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
@@ -52,7 +56,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
             group_f  = open(output_group,  "w")
             unique_f = open(output_unique, "w")
 
-            unique_hits = defaultdict(int)
+            db["tabSeqUnique"].drop()
 
             for trimmed_file in tqdm(trimmed, total = len(trimmed), desc = "Converting..."):
                 trimmed_f = open(trimmed_file, "r")
@@ -81,14 +85,16 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                     group_f.write("\n")
                                 else:
                                     fasta_f.write(line)
+                                    
+                                    row = db["tabSeqUnique"].find_one(sequence = line)
 
-                                    hash_ = hash(line)
-
-                                    if hash_ not in unique_hits:
-                                        unique_hits[hash_] += 1
-                                        
+                                    if not row:
                                         unique_f.write(">%s" % current_id)
                                         unique_f.write(line)
+
+                                        db["tabSeqUnique"].insert(dict(sequence = line, count = 1))
+                                    else:
+                                        db["tabSeqUnique"].update(dict(id = row["id"], count = row["count"] + 1), ["id"])
                             else:
                                 skip_next = False
                         else:

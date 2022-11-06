@@ -26,7 +26,9 @@ logger = log.get_logger(name = NAME)
 
 CACHE  = PATH["CACHE"]
 
-def align_seq(seq, silva_path):
+def align_seq(seq, **kwargs):
+    silva_path = kwargs.get("silva_path", settings.get("silva_path"))
+
     with make_temp_dir() as tmp_dir:
         fasta = osp.join(tmp_dir, "seq.fasta")
         content = ">\n%s" % seq
@@ -109,7 +111,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         unique_f.write(">%s" % current_id)
                                         unique_f.write(line)
 
-                                        unique_aligned = align_seq(line)
+                                        unique_aligned = align_seq(line, **kwargs)
 
                                         align_f.write(">%s" % current_id)
                                         align_f.write(unique_aligned)

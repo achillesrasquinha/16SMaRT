@@ -39,7 +39,6 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     if trimmed: #  and groups
         logger.info("Merging %s filter files." % len(trimmed))
 
-        output_fastq = osp.join(data_dir, "merged.fastq")
         output_fasta = osp.join(data_dir, "merged.fasta")
         output_group = osp.join(data_dir, "merged.group")
         output_unique = osp.join(data_dir, "merged.unique.fasta")
@@ -90,15 +89,15 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                 skip_next = False
                         else:
                             skip_next = True
-
-                    logger.success("Group file written to: %s" % output_group)
                 except Exception as e:
-                    raise e
-                finally:
                     fasta_f.close()
                     trimmed_f.close()
                     group_f.close()
                     unique_f.close()
+                    
+                    raise e
+
+            logger.success("Group file written to: %s" % output_group)
     else:
         logger.warn("No files found to merge.")
 

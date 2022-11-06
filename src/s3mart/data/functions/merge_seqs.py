@@ -66,6 +66,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
         output_group = osp.join(data_dir, "merged.group")
         output_unique = osp.join(data_dir, "merged.unique.fasta")
         output_unique_align = osp.join(data_dir, "merged.unique.align")
+        output_count_table  = osp.join(data_dir, "merged.count_table")
 
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
             logger.info("Converting files...")
@@ -73,7 +74,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
             fasta_f  = open(output_fasta,  "w")
             group_f  = open(output_group,  "w")
             unique_f = open(output_unique, "w")
-            align_f  = open(output_unique_align, "w")
+            # align_f  = open(output_unique_align, "w")
 
             unique_hits = {}
 
@@ -108,7 +109,11 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                     hash_ = hash(line)
 
                                     if hash_ not in unique_hits:
-                                        unique_hits[hash_] = 1
+                                        unique_hits[hash_] = {
+                                            "count": 1,
+                                            "seq": line,
+                                            "id": current_id
+                                        }
                                         
                                         unique_f.write(">%s" % current_id)
                                         unique_f.write(line)
@@ -119,7 +124,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         #     align_f.write(unique_aligned)
                                         #     align_f.write("\n")
                                     else:
-                                        unique_hits[hash_] += 1
+                                        unique_hits[hash_]["count"] += 1
                             else:
                                 skip_next = False
                         else:
@@ -131,6 +136,12 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                     unique_f.close()
 
                     raise e
+
+                count_table_f = open(output_count_table, "w")
+                count_table_f.write("Representative_Sequence\ttotal\n%s")
+
+                for hash_, hit in unique_hits.items():
+                    count_table_f.write("%s\t%s" % (hit["id"], hit["count"]))
 
             logger.success("Group file written to: %s" % output_group)
     else:

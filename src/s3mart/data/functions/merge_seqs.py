@@ -42,6 +42,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
     silva_path = kwargs.get("silva_path", osp.join(data_dir, "silva"))
 
+    logger.info("Using SILVA at %s." % silva_path)
+
     success  = False
 
     data_dir = get_data_dir(NAME, data_dir = data_dir)

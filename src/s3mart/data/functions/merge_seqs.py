@@ -59,54 +59,45 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                         logger.info("Skipping fastq file.")
                             
                     if not skip_fasta:
-                        logger.info("Converting fastq to fasta...")
+                        logger.info("Converting fastq to fasta and group...")
 
                         with tqdm(total = osp.getsize(output_fastq), desc = "Converting...",
                             unit = "B", unit_scale = True, unit_divisor = 1024) as pbar:
-                            with open(output_fasta, "w") as fasta_f:
-                                with open(output_fastq, "r") as fastq_f:
-                                    skip_next = False
+                            with open(output_group, "w") as group_f:
+                                with open(output_fasta, "w") as fasta_f:
+                                    with open(output_fastq, "r") as fastq_f:
+                                        skip_next = False
 
-                                    for line in fastq_f:
-                                        if not line.startswith("+"):
-                                            if not skip_next:
-                                                if line.startswith("@"):
-                                                    fasta_f.write(">%s" % line[1:])
+                                        for line in fastq_f:
+                                            if not line.startswith("+"):
+                                                if not skip_next:
+                                                    if line.startswith("@"):
+                                                        line = line[1:]
+                                                        fasta_f.write(">%s" % line)
+
+                                                        splits = line.split(" ")
+                                                        splits = lfilter(lambda x: "length=" not in x, splits)
+
+                                                        id_  = " ".join(splits)
+
+                                                        id_  = id_[1:]
+                                                        sra  = id_.split(".")[0]
+                                                        line = id_ + "\t" + sra
+
+                                                        group_f.write(line)
+                                                        group_f.write("\n")
+                                                    else:
+                                                        fasta_f.write(line)
                                                 else:
-                                                    fasta_f.write(line)
+                                                    skip_next = False
                                             else:
-                                                skip_next = False
-                                        else:
-                                            skip_next = True
+                                                skip_next = True
 
-                                        pbar.update(len(line))
+                                            pbar.update(len(line))
 
-                        # code = shell("sed -n '1~2s/^@/>/p;2~4p' %s | pv -l > %s" % (output_fastq, output_fasta))
+                        logger.success("Group file written to: %s" % output_group)
                     else:
                         logger.info("Skipping fasta file.")
-
-                    logger.info("Writing group file...")
-
-                    with tqdm(total = osp.getsize(output_fasta), desc = "Writing group file...") as pbar:
-                        with open(output_group, "w") as group_f:
-                            with open(output_fasta, "r") as fasta_f:
-                                for line in fasta_f:
-                                    if line.startswith(">"):
-                                        splits = line.split(" ")
-                                        splits = lfilter(lambda x: "length=" not in x, splits)
-
-                                        id_  = " ".join(splits)
-
-                                        id_  = id_[1:]
-                                        sra  = id_.split(".")[0]
-                                        line = id_ + "\t" + sra
-
-                                        group_f.write(line)
-                                        group_f.write("\n")
-
-                                    pbar.update(len(line))
-
-                    logger.success("Group file written to: %s" % output_group)
 
                     if not code:
                     #     # HACK: weird hack around failure of mothur detecting output for merge.files

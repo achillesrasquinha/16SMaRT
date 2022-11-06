@@ -157,7 +157,7 @@ def preprocess_data(input = None, data_dir = None, *args, **kwargs):
     merge_seqs(data_dir = data_dir)
 
     logger.info("Installing SILVA...")
-    silva_paths = install_silva()
+    silva_paths = install_silva(target_path = data_dir)
 
     logger.success("SILVA successfully downloaded at %s." % silva_paths)
 

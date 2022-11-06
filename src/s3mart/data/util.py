@@ -31,14 +31,14 @@ def build_mothur_script(*args, **kwargs):
     mothur_script = render_template(*args, **kwargs)
     write(output, mothur_script)
 
-def install_silva():
+def install_silva(target_path = None):
     silva_version = str(settings.get("silva_version"))
     silva_version_str = "v%s" % silva_version.replace(".", "_")
 
     logger.info("Installing SILVA version v%s" % silva_version)
 
-    path_silva_seed = osp.join(PATH["CACHE"], "silva.seed_%s.tgz" % silva_version_str)
-    path_target     = osp.join(PATH["CACHE"], "silva")
+    path_silva_seed = osp.join(target_path or PATH["CACHE"], "silva.seed_%s.tgz" % silva_version_str)
+    path_target     = osp.join(target_path or PATH["CACHE"], "silva")
 
     if not osp.exists(path_silva_seed):
         logger.info("Downloading SILVA seed v%s database..." % silva_version)
@@ -46,7 +46,7 @@ def install_silva():
         download_file(CONST["url_silva_seed"].format(version = silva_version_str), path_silva_seed)
         extract_all(path_silva_seed, path_target)
 
-    path_silva_gold_bacteria = osp.join(PATH["CACHE"], "silva.gold.bacteria.zip")
+    path_silva_gold_bacteria = osp.join(target_path or PATH["CACHE"], "silva.gold.bacteria.zip")
 
     if not osp.exists(path_silva_gold_bacteria):
         logger.info("Downloading SILVA for chimera...")

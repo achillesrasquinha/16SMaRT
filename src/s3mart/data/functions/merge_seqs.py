@@ -34,6 +34,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
     trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
     groups  = get_files(data_dir, "%s.group" % _FILENAME_TRIMMED)
 
+    logger.success("Found %s files." % len(trimmed))
+
     if trimmed: #  and groups
         logger.info("Merging %s filter and %s group files." % (len(trimmed), len(groups)))
 
@@ -43,15 +45,15 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
             with make_temp_dir(root_dir = CACHE) as tmp_dir:
-                mothur_file = osp.join(tmp_dir, "script")
-                build_mothur_script(
-                    template     = "mothur/merge", 
-                    output       = mothur_file,
-                    input_fastas = trimmed,
-                    input_groups = groups,
-                    output_fasta = output_fasta,
-                    # output_group = output_group
-                )
+                # mothur_file = osp.join(tmp_dir, "script")
+                # build_mothur_script(
+                #     template     = "mothur/merge", 
+                #     output       = mothur_file,
+                #     input_fastas = trimmed,
+                #     input_groups = groups,
+                #     output_fasta = output_fasta,
+                #     # output_group = output_group
+                # )
 
                 with ShellEnvironment(cwd = tmp_dir) as shell:
                     # code = shell("mothur %s" % mothur_file)

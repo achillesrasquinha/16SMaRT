@@ -73,14 +73,16 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                                 if not skip_next:
                                                     if line.startswith("@"):
                                                         line = line[1:]
+
                                                         fasta_f.write(">%s" % line)
 
                                                         splits = line.split(" ")
-                                                        splits = lfilter(lambda x: "length=" not in x, splits)
+                                                        splits = lfilter(lambda x: 
+                                                            "length=" not in x or "merged_" not in x, splits)
 
                                                         id_  = " ".join(splits)
 
-                                                        id_  = id_[1:]
+                                                        # id_  = id_[1:]
                                                         sra  = id_.split(".")[0]
                                                         line = id_ + "\t" + sra
 

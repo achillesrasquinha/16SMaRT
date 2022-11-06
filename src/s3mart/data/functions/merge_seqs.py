@@ -1,10 +1,6 @@
 import os.path as osp
 
-from collections import defaultdict
-
 from tqdm import tqdm
-
-import dataset
 
 from s3mart.config  import PATH
 from s3mart import __name__ as NAME
@@ -28,8 +24,6 @@ logger = log.get_logger(name = NAME)
 CACHE  = PATH["CACHE"]
 
 def merge_seqs(data_dir = None, force = False, **kwargs):
-    db = dataset.connect('sqlite:///%s' % osp.join(data_dir, 's3mart.db'))
-
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
 
     success  = False
@@ -56,7 +50,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
             group_f  = open(output_group,  "w")
             unique_f = open(output_unique, "w")
 
-            db["tabSeqUnique"].drop()
+            unique_hits = {}
 
             for trimmed_file in tqdm(trimmed, total = len(trimmed), desc = "Converting..."):
                 trimmed_f = open(trimmed_file, "r")
@@ -65,43 +59,40 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                 current_id = None
 
                 try:
-                    with tqdm(total = word_count(trimmed_file), desc = "Converting %s" % trimmed_file) as pbar:
-                        for line in trimmed_f:
-                            if not line.startswith("+"):
-                                if not skip_next:
-                                    if line.startswith("@"):
-                                        line = line[1:]
-                                        current_id = line
+                    for line in trimmed_f:
+                        if not line.startswith("+"):
+                            if not skip_next:
+                                if line.startswith("@"):
+                                    line = line[1:]
+                                    current_id = line
 
-                                        fasta_f.write(">%s" % line)
+                                    fasta_f.write(">%s" % line)
 
-                                        splits = line.split(" ")
+                                    splits = line.split(" ")
 
-                                        id_  = " ".join(splits[0:2])
+                                    id_  = " ".join(splits[0:2])
 
-                                        sra  = id_.split(".")[0]
-                                        line = id_ + "\t" + sra
+                                    sra  = id_.split(".")[0]
+                                    line = id_ + "\t" + sra
 
-                                        group_f.write(line)
-                                        group_f.write("\n")
-                                    else:
-                                        fasta_f.write(line)
-                                        
-                                        row = db["tabSeqUnique"].find_one(sequence = line)
-
-                                        if not row:
-                                            unique_f.write(">%s" % current_id)
-                                            unique_f.write(line)
-
-                                            db["tabSeqUnique"].insert(dict(sequence = line, count = 1))
-                                        else:
-                                            db["tabSeqUnique"].update(dict(id = row["id"], count = row["count"] + 1), ["id"])
+                                    group_f.write(line)
+                                    group_f.write("\n")
                                 else:
-                                    skip_next = False
-                            else:
-                                skip_next = True
+                                    fasta_f.write(line)
 
-                            pbar.update(len(line))
+                                    hash_ = hash(line)
+
+                                    if hash_ not in unique_hits:
+                                        unique_hits[hash_] = 1
+                                        
+                                        unique_f.write(">%s" % current_id)
+                                        unique_f.write(line)
+                                    else:
+                                        unique_hits[hash_] += 1
+                            else:
+                                skip_next = False
+                        else:
+                            skip_next = True
                 except Exception as e:
                     fasta_f.close()
                     trimmed_f.close()

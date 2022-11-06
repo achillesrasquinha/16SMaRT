@@ -77,21 +77,25 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                     logger.info("Writing group file...")
 
-                    with open(output_group, "w") as group_f:
-                        with open(output_fasta, "r") as fasta_f:
-                            for line in tqdm(fasta_f, total = word_count(output_fasta), desc = "Writing group file..."):
-                                if line.startswith(">"):
-                                    splits = line.split(" ")
-                                    splits = lfilter(lambda x: "length=" not in x, splits)
 
-                                    id_  = " ".join(splits)
+                    with tqdm(total = osp.getsize(output_fasta), desc = "Writing group file...") as pbar:
+                        with open(output_group, "w") as group_f:
+                            with open(output_fasta, "r") as fasta_f:
+                                for line in fasta_f:
+                                    if line.startswith(">"):
+                                        splits = line.split(" ")
+                                        splits = lfilter(lambda x: "length=" not in x, splits)
 
-                                    id_  = id_[1:]
-                                    sra  = id_.split(".")[0]
-                                    line = id_ + "\t" + sra
+                                        id_  = " ".join(splits)
 
-                                    group_f.write(line)
-                                    group_f.write("\n")
+                                        id_  = id_[1:]
+                                        sra  = id_.split(".")[0]
+                                        line = id_ + "\t" + sra
+
+                                        group_f.write(line)
+                                        group_f.write("\n")
+
+                                    pbar.update(len(line))
 
                     logger.success("Group file written to: %s" % output_group)
 

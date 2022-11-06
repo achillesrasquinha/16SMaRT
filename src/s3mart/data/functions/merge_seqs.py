@@ -72,7 +72,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
             fasta_f  = open(output_fasta,  "w")
             group_f  = open(output_group,  "w")
             unique_f = open(output_unique, "w")
-            align_f  = open(output_unique_align, "w")
+            # align_f  = open(output_unique_align, "w")
 
             unique_hits = {}
 
@@ -112,10 +112,10 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         unique_f.write(">%s" % current_id)
                                         unique_f.write(line)
 
-                                        unique_aligned = align_seq(line, silva_path)
-                                        if unique_aligned:
-                                            align_f.write(unique_aligned)
-                                            align_f.write("\n")
+                                        # unique_aligned = align_seq(line, silva_path)
+                                        # if unique_aligned:
+                                        #     align_f.write(unique_aligned)
+                                        #     align_f.write("\n")
                                     else:
                                         unique_hits[hash_] += 1
                             else:

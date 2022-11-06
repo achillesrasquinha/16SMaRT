@@ -62,7 +62,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                         logger.info("Converting fastq to fasta...")
 
                         with tqdm(total = osp.getsize(output_fastq), desc = "Converting...",
-                            units = "B", unit_scale = True, unit_divisor = 1024) as pbar:
+                            unit = "B", unit_scale = True, unit_divisor = 1024) as pbar:
                             with open(output_fasta, "w") as fasta_f:
                                 with open(output_fastq, "r") as fastq_f:
                                     for line in fastq_f:

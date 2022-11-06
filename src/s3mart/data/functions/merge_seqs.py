@@ -66,10 +66,13 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                             with open(output_fasta, "w") as fasta_f:
                                 with open(output_fastq, "r") as fastq_f:
                                     for line in fastq_f:
-                                        if line.startswith("@"):
-                                            fasta_f.write(">%s" % line[1:])
-                                        else:
-                                            fasta_f.write(line)
+                                        if not line.startswith("+"):
+                                            if line.startswith("@"):
+                                                fasta_f.write(">%s" % line[1:])
+                                            else:
+                                                fasta_f.write(line)
+                                                
+                                            fasta_f.write("\n")
 
                                         pbar.update(len(line))
 

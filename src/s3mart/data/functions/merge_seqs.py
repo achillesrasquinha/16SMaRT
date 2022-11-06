@@ -77,10 +77,10 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                                         fasta_f.write(">%s" % line)
 
                                                         splits = line.split(" ")
-                                                        splits = lfilter(lambda x: 
-                                                            "length=" not in x or "merged_" not in x, splits)
+                                                        # splits = lfilter(lambda x: 
+                                                        #     "length=" not in x, splits)
 
-                                                        id_  = " ".join(splits)
+                                                        id_  = " ".join(splits[0:2])
 
                                                         # id_  = id_[1:]
                                                         sra  = id_.split(".")[0]

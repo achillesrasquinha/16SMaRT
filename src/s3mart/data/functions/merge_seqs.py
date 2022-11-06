@@ -83,6 +83,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                     fasta_f.write(line)
 
                                     hash_ = hash(line)
+                                    print(hash_)
 
                                     if hash_ in unique_hits:
                                         unique_hits[hash_] += 1

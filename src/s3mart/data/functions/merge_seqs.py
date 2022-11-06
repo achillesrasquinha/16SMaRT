@@ -60,7 +60,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                             
                     if not skip_fastq:
                         logger.info("Converting fastq to fasta...")
-                        code = shell("sed -n '1~2s/^@/>/p;2~4p' %s > %s" % (output_fastq, output_fasta))
+                        code = shell("sed -n '1~2s/^@/>/p;2~4p' %s | pv > %s" % (output_fastq, output_fasta))
                     else:
                         logger.info("Skipping fastq file.")
 

@@ -74,8 +74,6 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                                     fasta_f.write(">%s" % line[1:])
                                                 else:
                                                     fasta_f.write(line)
-                                                    
-                                                # fasta_f.write("\n")
                                             else:
                                                 skip_next = False
                                         else:

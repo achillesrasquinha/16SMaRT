@@ -30,19 +30,13 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
     data_dir = get_data_dir(NAME, data_dir = data_dir)
 
-    skip_fastq = kwargs.get("skip_fastq", False)
-    skip_fasta = kwargs.get("skip_fasta", False)
+    logger.info("Finding files in directory: %s" % data_dir)
+    
+    trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
 
-    if not skip_fastq:
-        logger.info("Finding files in directory: %s" % data_dir)
-        
-        trimmed = get_files(data_dir, "*%s.fastq" % _FILENAME_TRIMMED)
+    logger.success("Found %s files." % len(trimmed))
 
-        logger.success("Found %s files." % len(trimmed))
-    else:
-        trimmed = []
-
-    if trimmed or skip_fasta or skip_fastq: #  and groups
+    if trimmed: #  and groups
         logger.info("Merging %s filter files." % len(trimmed))
 
         output_fastq = osp.join(data_dir, "merged.fastq")
@@ -51,88 +45,60 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
         output_unique = osp.join(data_dir, "merged.unique.fasta")
 
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
-            with make_temp_dir(root_dir = CACHE) as tmp_dir:
-                with ShellEnvironment(cwd = tmp_dir) as shell:
-                    if not skip_fastq:
-                        for f in tqdm(trimmed, total = len(trimmed), desc = "Merging..."):
-                            code = shell("cat %s >> %s" % (f, output_fastq))
-                    else:
-                        logger.info("Skipping fastq file.")
-                            
-                    if not skip_fasta:
-                        logger.info("Converting fastq to fasta and group...")
+            logger.info("Converting files...")
 
-                        with tqdm(total = osp.getsize(output_fastq), desc = "Converting...",
-                            unit = "B", unit_scale = True, unit_divisor = 1024) as pbar:
+            fasta_f  = open(output_fasta,  "w")
+            group_f  = open(output_group,  "w")
+            unique_f = open(output_unique, "w")
 
-                            fastq_f  = open(output_fastq,  "r")
-                            fasta_f  = open(output_fasta,  "w")
-                            group_f  = open(output_group,  "w")
-                            unique_f = open(output_unique, "w")
+            unique_hits = {}
 
-                            skip_next  = False
-                            current_id = None
+            for trimmed_file in tqdm(trimmed, total = len(trimmed), desc = "Converting..."):
+                trimmed_f = open(trimmed_file, "r")
 
-                            unique_hits = {}
+                skip_next  = False
+                current_id = None
 
-                            try:
-                                for line in fastq_f:
-                                    if not line.startswith("+"):
-                                        if not skip_next:
-                                            if line.startswith("@"):
-                                                line = line[1:]
-                                                current_id = line
+                try:
+                    for line in trimmed_f:
+                        if not line.startswith("+"):
+                            if not skip_next:
+                                if line.startswith("@"):
+                                    line = line[1:]
+                                    current_id = line
 
-                                                fasta_f.write(">%s" % line)
+                                    fasta_f.write(">%s" % line)
 
-                                                splits = line.split(" ")
+                                    splits = line.split(" ")
 
-                                                id_  = " ".join(splits[0:2])
+                                    id_  = " ".join(splits[0:2])
 
-                                                sra  = id_.split(".")[0]
-                                                line = id_ + "\t" + sra
+                                    sra  = id_.split(".")[0]
+                                    line = id_ + "\t" + sra
 
-                                                group_f.write(line)
-                                                group_f.write("\n")
-                                            else:
-                                                fasta_f.write(line)
+                                    group_f.write(line)
+                                    group_f.write("\n")
+                                else:
+                                    fasta_f.write(line)
 
-                                                hash_ = hash(line)
+                                    hash_ = hash(line)
 
-                                                if hash_ in unique_hits:
-                                                    unique_f.write(">%s" % current_id)
-                                                    unique_f.write(line)
-                                        else:
-                                            skip_next = False
-                                    else:
-                                        skip_next = True
+                                    if hash_ in unique_hits:
+                                        unique_f.write(">%s" % current_id)
+                                        unique_f.write(line)
+                            else:
+                                skip_next = False
+                        else:
+                            skip_next = True
 
-                                    pbar.update(len(line))
-                            except Exception as e:
-                                raise e
-                            finally:
-                                fasta_f.close()
-                                fastq_f.close()
-                                group_f.close()
-                                unique_f.close()
-
-                        logger.success("Group file written to: %s" % output_group)
-                    else:
-                        logger.info("Skipping fasta file.")
-
-                    if not code:
-                    #     # HACK: weird hack around failure of mothur detecting output for merge.files
-                        # merged_fasta = get_files(data_dir, "merged.fasta")
-                        # merged_group = get_files(data_dir, "merged.group")
-
-                        # move(*merged_fasta, dest = output_fasta)
-                        # move(*merged_group, dest = output_group)
-
-                        logger.success("Successfully merged.")
-
-                        success = True
-                    else:
-                        logger.error("Error merging files.")
+                    logger.success("Group file written to: %s" % output_group)
+                except Exception as e:
+                    raise e
+                finally:
+                    fasta_f.close()
+                    trimmed_f.close()
+                    group_f.close()
+                    unique_f.close()
     else:
         logger.warn("No files found to merge.")
 

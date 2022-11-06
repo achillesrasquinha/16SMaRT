@@ -138,7 +138,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                     raise e
 
                 count_table_f = open(output_count_table, "w")
-                count_table_f.write("Representative_Sequence\ttotal\n")
+                header = "Representative_Sequence\ttotal\t%s\n" % "\t".join([osp.basename(f) for f in trimmed])
+                count_table_f.write(header)
 
                 for hash_, hit in unique_hits.items():
                     sra = hit["id"].split(" ")[0]

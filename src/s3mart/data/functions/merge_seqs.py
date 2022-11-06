@@ -9,7 +9,8 @@ from bpyutils.util.ml      import get_data_dir
 from bpyutils.util.system  import (
     ShellEnvironment,
     make_temp_dir, get_files, move,
-    remove
+    remove,
+    wc as word_count
 )
 from bpyutils.util.types import lfilter
 from bpyutils import log
@@ -67,7 +68,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                     with open(output_group, "w") as group_f:
                         with open(output_fasta, "r") as fasta_f:
-                            for line in fasta_f:
+                            for line in tqdm(fasta_f, total = word_count(output_fasta), desc = "Writing group file..."):
                                 if line.startswith(">"):
                                     splits = line.split(" ")
                                     splits = lfilter(lambda x: "length=" not in x, splits)

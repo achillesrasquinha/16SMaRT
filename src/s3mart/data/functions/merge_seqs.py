@@ -2,6 +2,7 @@ import os.path as osp
 
 import random
 from tqdm import tqdm
+import gc
 
 from s3mart.config  import PATH
 from s3mart import __name__ as NAME
@@ -135,6 +136,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                 skip_next = False
                         else:
                             skip_next = True
+
+                        gc.collect()
                 except Exception as e:
                     fasta_f.close()
                     trimmed_f.close()

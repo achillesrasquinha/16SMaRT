@@ -130,7 +130,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                         #     align_f.write("\n")
                                     else:
                                         unique_hits[hash_]["count"] += 1
-                                        unique_hits[hash_]["from_sra"][base_sra] += 1
+                                        unique_hits[hash_]["from_sra"][base_sra] = unique_hits[hash_]["from_sra"].get(base_sra, 0) + 1
                             else:
                                 skip_next = False
                         else:

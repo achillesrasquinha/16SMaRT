@@ -54,6 +54,8 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
 
     group      = config.pop("group")
 
+    root_tmp_dir = kwargs.get("root_tmp_dir", CACHE)
+
     success    = False
 
     minimal_output = kwargs.get("minimal_output", settings.get("minimal_output"))
@@ -65,7 +67,7 @@ def _mothur_trim_files(config, data_dir = None, **kwargs):
     )
 
     if not all(osp.exists(x) for x in itervalues(target_path)):
-        with make_temp_dir(root_dir = CACHE) as tmp_dir:
+        with make_temp_dir(root_dir = root_tmp_dir) as tmp_dir:
             logger.info("[group %s] Copying FASTQ files %s for pre-processing at %s." % (group, files, tmp_dir))
             copy(*files, dest = tmp_dir)
 

@@ -87,9 +87,9 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                 current_id = None
 
                 try:
-                    logger.info("Converting %s..." % trimmed_file)
+                    num_lines = sum(1 for line in open(trimmed_file))
 
-                    for line in trimmed_f:
+                    for line in tqdm(trimmed_f, total = num_lines, desc = "Converting %s..." % trimmed_file):
                         if not line.startswith("+"):
                             if not skip_next:
                                 if line.startswith("@"):

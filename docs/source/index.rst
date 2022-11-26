@@ -1,6 +1,6 @@
 s3mart
 
-Release v\ |version|. (:ref:`Installation <install:>`)
+Release v\ |version|. (:ref:`Installation <install>`)
 
 =======
 

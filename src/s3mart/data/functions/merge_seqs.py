@@ -71,7 +71,7 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
         output_count_table  = osp.join(data_dir, "merged.count_table")
 
         if not any(osp.exists(f) for f in (output_fasta,)) or force:
-            logger.info("Converting files...")
+            logger.info("Converting %s files..." % len(trimmed))
 
             fasta_f  = open(output_fasta,  "w")
             group_f  = open(output_group,  "w")

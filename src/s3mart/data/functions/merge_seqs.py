@@ -75,10 +75,10 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
             fasta_f  = open(output_fasta,  "w")
             group_f  = open(output_group,  "w")
-            # unique_f = open(output_unique, "w")
-            # align_f  = open(output_unique_align, "w")
+            unique_f = open(output_unique, "w")
+            align_f  = open(output_unique_align, "w")
 
-            # unique_hits = {}
+            unique_hits = {}
 
             for trimmed_file in tqdm(trimmed, total = len(trimmed), desc = "Converting..."):
                 trimmed_f = open(trimmed_file, "r")
@@ -108,30 +108,30 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                                 else:
                                     fasta_f.write(line)
 
-                                    # hash_ = hash(line)
-                                    # base_sra = current_id.split(".")[0]
+                                    hash_ = hash(line)
+                                    base_sra = current_id.split(".")[0]
 
-                                    # if hash_ not in unique_hits:
-                                    #     unique_hits[hash_] = {
-                                    #         "count": 1,
-                                    #         "seq": line,
-                                    #         "id": current_id,
-                                    #         "from_sra": {
-                                    #             base_sra: 1
-                                    #         }
-                                    #     }
+                                    if hash_ not in unique_hits:
+                                        unique_hits[hash_] = {
+                                            "count": 1,
+                                            "seq": line,
+                                            "id": current_id,
+                                            "from_sra": {
+                                                base_sra: 1
+                                            }
+                                        }
                                         
-                                    #     unique_f.write(">%s" % current_id)
-                                    #     unique_f.write(line)
+                                        unique_f.write(">%s" % current_id)
+                                        unique_f.write(line)
 
-                                    #     # unique_aligned = align_seq(line, silva_path)
-                                    #     # if unique_aligned:
-                                    #     #     align_f.write(">%s" % current_id)
-                                    #     #     align_f.write(unique_aligned)
-                                    #     #     align_f.write("\n")
-                                    # else:
-                                    #     unique_hits[hash_]["count"] += 1
-                                    #     unique_hits[hash_]["from_sra"][base_sra] = unique_hits[hash_]["from_sra"].get(base_sra, 0) + 1
+                                        unique_aligned = align_seq(line, silva_path)
+                                        if unique_aligned:
+                                            align_f.write(">%s" % current_id)
+                                            align_f.write(unique_aligned)
+                                            align_f.write("\n")
+                                    else:
+                                        unique_hits[hash_]["count"] += 1
+                                        unique_hits[hash_]["from_sra"][base_sra] = unique_hits[hash_]["from_sra"].get(base_sra, 0) + 1
                             else:
                                 skip_next = False
                         else:
@@ -142,26 +142,26 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                     fasta_f.close()
                     trimmed_f.close()
                     group_f.close()
-                    # unique_f.close()
+                    unique_f.close()
 
                     raise e
 
-                # count_table_f = open(output_count_table, "w")
-                # header = "Representative_Sequence\ttotal\t%s\n" % "\t".join([osp.basename(f).split(".")[0] for f in trimmed])
-                # count_table_f.write(header)
+                count_table_f = open(output_count_table, "w")
+                header = "Representative_Sequence\ttotal\t%s\n" % "\t".join([osp.basename(f).split(".")[0] for f in trimmed])
+                count_table_f.write(header)
 
-                # for hash_, hit in unique_hits.items():
-                #     from_sra = ""
-                #     for f in trimmed:
-                #         sra = osp.basename(f).split(".")[0]
+                for hash_, hit in unique_hits.items():
+                    from_sra = ""
+                    for f in trimmed:
+                        sra = osp.basename(f).split(".")[0]
 
-                #         if sra in hit["from_sra"]:
-                #             from_sra += " %s" % hit["from_sra"][sra]
-                #         else:
-                #             from_sra += " 0"
+                        if sra in hit["from_sra"]:
+                            from_sra += " %s" % hit["from_sra"][sra]
+                        else:
+                            from_sra += " 0"
 
-                #     sra = hit["id"].split(" ")[0]
-                #     count_table_f.write("%s\t%s%s\n" % (sra, hit["count"], from_sra))
+                    sra = hit["id"].split(" ")[0]
+                    count_table_f.write("%s\t%s%s\n" % (sra, hit["count"], from_sra))
 
             logger.success("Group file written to: %s" % output_group)
     else:

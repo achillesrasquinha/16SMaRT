@@ -87,6 +87,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
                 current_id = None
 
                 try:
+                    logger.info("Converting %s..." % trimmed_file)
+
                     for line in trimmed_f:
                         if not line.startswith("+"):
                             if not skip_next:
@@ -139,6 +141,8 @@ def merge_seqs(data_dir = None, force = False, **kwargs):
 
                         gc.collect()
                 except Exception as e:
+                    logger.error("Error while converting %s: %s" % (trimmed_file, e))
+                    
                     fasta_f.close()
                     trimmed_f.close()
                     group_f.close()
